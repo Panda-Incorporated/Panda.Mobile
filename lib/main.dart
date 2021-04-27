@@ -1,4 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:panda/widgets/pie_chart_sections.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,18 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -29,16 +25,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -46,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final lightBlue = const Color(0xFFEBFAFF);
 
   void _incrementCounter() {
     setState(() {
@@ -55,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
     });
   }
 
@@ -68,46 +53,220 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: Image(
+              height: 400,
+              image: AssetImage('assets/panda.png'),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          Container(
+            width: 450,
+            margin: EdgeInsets.only(left: 15, right: 15),
+            child: Container(
+              child: Column(
+                children: [
+                  Container(
+                    child: Text(
+                      "Welkom {Insert Name here}",
+                      style: TextStyle(
+                        fontSize: 34,
+
+                        // fontFamily: "lettertype",
+                        // color: Colors.blue,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    // margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                  ),
+                  Container(
+                    // margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Lopende doelen:",
+                      style: TextStyle(
+                        fontSize: 26,
+                        // fontFamily: "lettertype",
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    // als er op het blauwe wordt geklikt
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10),
+                      height: 150,
+                      width: 400,
+                      color: lightBlue,
+                      // kleur knop
+                      child: Column(
+                        // je hebt de bovenste en (divider)en onderste laag
+                        children: [
+                          Row(
+                            // naam en doel moeten van links naar rechts
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // helemaal links helemaal rechts
+                            children: [
+                              Container(
+                                // linkerdeel
+                                child: Column(
+                                  // 2 zinnen onderelkaar
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "Marathon",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "25 km in 2,5 uur",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 15),
+                                //2de deel van de row
+                                child: Text(
+                                  "75%",
+                                  style: TextStyle(
+                                    fontSize: 35,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Divider(
+                            indent: 14,
+                            endIndent: 14,
+                            height: 10,
+                            // zwarte lijn dat nog in de main column zit
+                            color: Colors.green,
+                          ),
+                          Container(
+                            child: Column(
+                              //tekst datum en doel moeten onder elkaar
+                              children: [
+                                // Column(
+                                //   children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 15),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Morgen 7 april",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 50),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "5km in 30 minuten",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Afgeronde doelen:",
+                      style: TextStyle(
+                        fontSize: 26,
+                        // fontFamily: "lettertype",
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10),
+                      color: lightBlue,
+                      // kleur knop
+                      height: 100,
+                      width: 400,
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // helemaal links helemaal rechts
+                          children: [
+                            Column(
+                              //tekst datum en doel moeten onder elkaar
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 20.0),
+                                      child: Text(
+                                        "Marathon",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 20.0),
+                                      child: Text(
+                                        "5km in 30 minuten",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            // hier zou dan de check moeten komen
+                            Container(
+                                width: 80,
+                                height: 80,
+                                child: PieChart(
+                                  PieChartData(
+                                    borderData: FlBorderData(show: false),
+                                    sections: getSections(),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
