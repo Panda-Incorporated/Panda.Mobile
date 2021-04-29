@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:panda/Pages/Home.dart';
+import 'package:panda/Pages/Fitbitselection.dart';
+
+import 'Pages/fitbitselection2.dart';
 
 void main() {
   runApp(MyApp());

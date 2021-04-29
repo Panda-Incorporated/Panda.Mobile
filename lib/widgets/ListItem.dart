@@ -39,7 +39,7 @@ class _ListItemState extends State<ListItem> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => print("Hallo"), //werkt
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
