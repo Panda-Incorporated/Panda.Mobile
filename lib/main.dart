@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/Fitbitselection.dart';
-
+import 'package:panda/Pages/GoalSummaryPage.dart';
+import 'package:panda/Pages/SeePredictionsmallPage.dart';
 import 'Pages/fitbitselection2.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Home(),
+      home: GoalSummaryPage(),
     );
   }
 }
