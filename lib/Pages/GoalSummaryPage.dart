@@ -64,7 +64,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 "in",
                 style: TextStyle(fontSize: 12),
               ),
-              Text("2,5 uur"),
+              Text("3 uur"),
             ],
           ),
 
