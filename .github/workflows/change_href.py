@@ -1,7 +1,8 @@
 import sys
 arg=sys.argv[1]
 lines=[]
-with open('./index.html', 'r') as f:
+file= sys.argv[2]
+with open(file, 'r') as f:
     # Get the previous contents
     lines = f.readlines()
     # print(lines, arg)
@@ -11,7 +12,7 @@ with open('./index.html', 'r') as f:
             lines[i]="\t<base href=\"/"+str(arg)+"\">\n"
             break
 print(lines)
-with open('index.html', 'w') as f:
+with open(file, 'w') as f:
     for i in range(len(lines)):
         f.write(lines[i])
        
