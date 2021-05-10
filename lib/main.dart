@@ -34,7 +34,7 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 1;
 
   List<Widget> _widgetOptions = [
     Home(),

@@ -1,5 +1,9 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/widgets/Logo.dart';
+
+import '../data/pie_data.dart';
+import '../widgets/pie_chart_sections.dart';
 
 class Fitbitselection extends StatefulWidget {
   @override
@@ -100,31 +104,59 @@ class _FitbitselectionState extends State<Fitbitselection> {
                                   ],
                                 ),
                                 // de check
+                                // Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: Container(
+                                //     margin: const EdgeInsets.symmetric(
+                                //         horizontal: 10.0, vertical: 0),
+                                //     width: 60,
+                                //     height: 60,
+                                //     decoration: BoxDecoration(
+                                //         color: Theme.of(context).primaryColor,
+                                //         border: Border.all(
+                                //             color: Colors.green, width: 6.0),
+                                //         borderRadius: BorderRadius.all(
+                                //             Radius.circular(100))),
+                                //     child: Center(
+                                //       child: Text(
+                                //         "percentage",
+                                //         //widget.percentage.toString() + "%",
+                                //         textAlign: TextAlign.center,
+                                //         style: TextStyle(
+                                //           fontSize: 14,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10.0, vertical: 0),
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context).primaryColor,
-                                        border: Border.all(
-                                            color: Colors.green, width: 6.0),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(100))),
-                                    child: Center(
-                                      child: Text(
-                                        "percentage",
-                                        //widget.percentage.toString() + "%",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                          width: 80,
+                                          height: 80,
+                                          child: PieChart(
+                                            PieChartData(
+                                              sectionsSpace: 0,
+                                              centerSpaceRadius: 30,
+
+                                              // startDegreeOffset: 0,
+                                              borderData: FlBorderData(
+                                                show: false,
+                                              ),
+                                              sections: getSections(),
+                                            ),
+                                          )),
+                                      Text(
+                                        "${PieData.data[1].percent}%",
+                                        style: TextStyle(fontSize: 14),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ],

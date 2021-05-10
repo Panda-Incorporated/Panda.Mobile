@@ -7,7 +7,8 @@ List<PieChartSectionData> getSections() => PieData.data
       final value = PieChartSectionData(
         color: data.color,
         value: data.percent,
-        radius: 20,
+        title: "",
+        radius: 10,
       );
 
       return MapEntry(index, value);
