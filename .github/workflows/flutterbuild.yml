@@ -21,7 +21,7 @@ jobs:
         shell: bash
         working-directory: .
       - name: Change the base href to repo name
-        run: python ./.github/workflows/change_href.py ${{ github.event.repository.name }}
+        run: python ./.github/workflows/change_href.py ${{ github.event.repository.name }} "./build/web/index.html"
       - run: git config user.name github-actions
         shell: bash
         working-directory: .
