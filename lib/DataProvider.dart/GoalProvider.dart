@@ -12,32 +12,33 @@ class GoalProvider {
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 20
         ..doneMaxDuration = Duration(minutes: 50)
-        ..listPlanning = [
-          Planning()
-            ..distance = 5
-            ..title = "Morgen"
-            ..duration = Duration(minutes: 15),
-          Planning()
-            ..distance = 10
-            ..title = "Overmorgen"
-            ..duration = Duration(minutes: 30)
-        ],
+      // ..listPlanning = [
+      //   Planning()
+      //     ..distance = 5
+      //     ..title = "Morgen"
+      //     ..duration = Duration(minutes: 15),
+      //   Planning()
+      //     ..distance = 10
+      //     ..title = "Overmorgen"
+      //     ..duration = Duration(minutes: 30)
+      // ]
+      ,
       Goal()
         ..finished = true
         ..title = "Marathon"
         ..distance = 10.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 10
-        ..doneMaxDuration = Duration(minutes: 30)
-        ..listPlanning = [],
+        ..doneMaxDuration = Duration(minutes: 30),
+      // ..listPlanning = [],
       Goal()
         ..finished = true
         ..title = "Marathon"
         ..distance = 5.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 5
-        ..doneMaxDuration = Duration(minutes: 30)
-        ..listPlanning = [],
+        ..doneMaxDuration = Duration(minutes: 30),
+      // ..listPlanning = [],
       Goal()
         ..finished = true
         ..title = "Marathon"
@@ -45,7 +46,7 @@ class GoalProvider {
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 2
         ..doneMaxDuration = Duration(minutes: 30)
-        ..listPlanning = [],
+      // ..listPlanning = [],
     ];
   }
 
