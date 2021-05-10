@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -82,7 +84,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                           child: Padding(
                             padding:
                                 const EdgeInsets.only(right: 16.0, left: 6.0),
-                            child: LineChart(sampleData1()),
+                            child: LineChart(
+                                sampleData1(begin: 580, goal: 520, weeks: 10)),
                           ),
                         ),
                         const SizedBox(
@@ -100,8 +103,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  LineChartData sampleData1() {
+  LineChartData sampleData1({begin, goal, weeks}) {
     return LineChartData(
+      lineTouchData: LineTouchData(
+        enabled: false,
+      ),
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
           interval: 2,
@@ -133,41 +139,20 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       // minX altijd 0
       minX: 0,
       //maxX altijd duur training
-      maxX: 10,
+      maxX: weeks,
       // max y = nulmeting begin + 20
-      maxY: 500,
+      maxY: begin + 20,
       //minY altijd doel -20
-      minY: 440,
-      lineBarsData: linesBarData1(),
+      minY: goal - 20,
+      lineBarsData: linesBarData1(begin, goal, weeks),
     );
   }
 
-  List<FlSpot> spotsL1 = <FlSpot>[
-    FlSpot(0, 480),
-    FlSpot(7, 470),
-    FlSpot(10, 460),
-  ];
-  List<FlSpot> spotsL2 = <FlSpot>[
-    FlSpot(0, 480),
-    FlSpot(3, 478),
-    FlSpot(10, 475),
-  ];
-  List<FlSpot> spotsL3 = <FlSpot>[
-    FlSpot(0, 480),
-    FlSpot(3, 460),
-    FlSpot(10, 450)
-  ];
-
-  Color colorL1 = Color(0xff4af699);
-  Color colorL2 = Color(0xffaa4cfc);
-  Color colorL3 = Color(0xff27b6fc);
-
-  LineChartBarData lines(List<FlSpot> spots, Color color) {
+  LineChartBarData lines(Color color, int begin, int goal, int weeks) {
     return LineChartBarData(
-      spots: spots,
+      spots: generateSpots(begin, goal, weeks),
       isCurved: false,
       colors: [color],
-
       barWidth: 2,
       // display dots uit
       dotData: FlDotData(
@@ -180,14 +165,21 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  List<LineChartBarData> linesBarData1() {
-    final LineChartBarData ln1 = lines(spotsL1, colorL1);
-    final LineChartBarData ln2 = lines(spotsL2, colorL2);
-    final LineChartBarData ln3 = lines(spotsL3, colorL3);
+  List<LineChartBarData> linesBarData1(int begin, int goal, int weeks) {
     return [
-      ln1,
-      ln2,
-      ln3,
+      lines(Color(0xff4af699), begin, goal, weeks),
+      lines(Color(0xffaa4cfc), begin, goal, weeks),
+      lines(Color(0xff27b6fc), begin, goal, weeks),
     ];
   }
+}
+
+List<FlSpot> generateSpots(int begin, int goal, int weeks) {
+  List<FlSpot> list = [];
+  for (var i = 0; i < weeks; i++) {
+    var y = (goal - begin) / sqrt(weeks) * sqrt(i) + begin;
+    list.add(FlSpot(i.toDouble(), y));
+  }
+
+  return list;
 }
