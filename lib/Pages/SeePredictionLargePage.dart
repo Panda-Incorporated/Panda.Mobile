@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
   const SeePredictionLargePage({Key key}) : super(key: key);
@@ -19,27 +20,27 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     return Scaffold(
       backgroundColor: Colors.cyan[700],
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Row(
               children: [
-                Container(
-                  height: 90,
-                  width: 90,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      border: Border.all(color: Colors.green[700], width: 6.0),
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                  child: Center(
-                    child: Text(
-                      "75%",
-                      textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircularPercentIndicator(
+                    radius: 80.0,
+                    lineWidth: 6.0,
+                    backgroundColor: Colors.green[100],
+                    percent: 0.7,
+                    progressColor: Colors.green[800],
+                    circularStrokeCap: CircularStrokeCap.round,
+                    animation: true,
+                    center: Text(
+                      "70%",
                       style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.w400,
-                      ),
+                          color: Colors.green[800],
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -103,7 +104,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  LineChartData sampleData1({begin, goal, weeks}) {
+  LineChartData sampleData1({int begin, int goal, int weeks}) {
     return LineChartData(
       lineTouchData: LineTouchData(
         enabled: false,
@@ -139,11 +140,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       // minX altijd 0
       minX: 0,
       //maxX altijd duur training
-      maxX: weeks,
+      maxX: weeks.toDouble(),
       // max y = nulmeting begin + 20
-      maxY: begin + 20,
+      maxY: (begin + 20).toDouble(),
       //minY altijd doel -20
-      minY: goal - 20,
+      minY: (goal - 20).toDouble(),
       lineBarsData: linesBarData1(begin, goal, weeks),
     );
   }
@@ -176,7 +177,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
 
 List<FlSpot> generateSpots(int begin, int goal, int weeks) {
   List<FlSpot> list = [];
-  for (var i = 0; i < weeks; i++) {
+  for (var i = 0; i < weeks + 1; i++) {
     var y = (goal - begin) / sqrt(weeks) * sqrt(i) + begin;
     list.add(FlSpot(i.toDouble(), y));
   }

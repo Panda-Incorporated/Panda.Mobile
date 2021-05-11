@@ -54,13 +54,11 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   Container(
-                    // margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Lopende doelen:",
                       style: TextStyle(
                         fontSize: 26,
-                        // fontFamily: "lettertype",
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -76,7 +74,6 @@ class _HomeState extends State<Home> {
                       "Afgeronde doelen:",
                       style: TextStyle(
                         fontSize: 26,
-                        // fontFamily: "lettertype",
                         fontWeight: FontWeight.w600,
                       ),
                     ),
