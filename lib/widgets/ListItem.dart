@@ -1,7 +1,6 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Utils/Pair.dart';
-import 'package:panda/widgets/pie_chart_sections.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ListItem extends StatefulWidget {
   ListItem({
@@ -9,28 +8,13 @@ class ListItem extends StatefulWidget {
     this.title,
     this.subTitle,
     this.percentage,
-  }) : super(key: key) {
-    this.extended = false;
-    this.extendedItems = const [];
-  }
-  ListItem.extended(
-      {Key key,
-      this.title,
-      this.subTitle,
-      this.percentage,
-      List<Pair<String, String>> extendedItems})
-      : super(key: key) {
-    this.extended = true;
-    this.extendedItems = extendedItems;
-  }
+  }) : super(key: key) {}
 
   @override
   _ListItemState createState() => _ListItemState();
   final String title;
   final String subTitle;
   final int percentage;
-  bool extended;
-  List<Pair<String, String>> extendedItems;
 }
 
 class _ListItemState extends State<ListItem> {
@@ -83,90 +67,26 @@ class _ListItemState extends State<ListItem> {
                         ),
                       ],
                     ),
-                    // hier zou dan de check moeten komen
+                    // %
                     Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                border:
-                                    Border.all(color: Colors.green, width: 6.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100))),
-                            child: Center(
-                              child: Text(
-                                widget.percentage.toString() + "%",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
+                          child: CircularPercentIndicator(
+                            radius: 50.0,
+                            lineWidth: 5.0,
+                            backgroundColor: Colors.white,
+                            percent: widget.percentage.toDouble() / 100,
+                            progressColor: Colors.green,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            animation: true,
+                            center: Text("${widget.percentage.toDouble()}"),
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                if (widget.extended)
-                  Divider(
-                    thickness: 0.5,
-                    indent: 6,
-                    endIndent: 6,
-                    height: 10,
-                    // zwarte lijn dat nog in de main column zit
-                    color: Colors.cyan[900],
-                  ),
-                if (widget.extended)
-                  for (var item in widget.extendedItems)
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 2.0, bottom: 8.0),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    item.first ?? "",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                                Container(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        item.last ?? "",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        )
-                      ],
-                    )
               ],
             ),
           ),

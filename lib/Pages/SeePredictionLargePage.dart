@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
   const SeePredictionLargePage({Key key}) : super(key: key);
@@ -24,22 +25,22 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
           children: [
             Row(
               children: [
-                Container(
-                  height: 90,
-                  width: 90,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      border: Border.all(color: Colors.green[700], width: 6.0),
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                  child: Center(
-                    child: Text(
-                      "75%",
-                      textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircularPercentIndicator(
+                    radius: 80.0,
+                    lineWidth: 6.0,
+                    backgroundColor: Colors.green[100],
+                    percent: 0.7,
+                    progressColor: Colors.green[800],
+                    circularStrokeCap: CircularStrokeCap.round,
+                    animation: true,
+                    center: Text(
+                      "70%",
                       style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.w400,
-                      ),
+                          color: Colors.green[800],
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),

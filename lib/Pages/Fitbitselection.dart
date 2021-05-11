@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/widgets/Logo.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../data/pie_data.dart';
 import '../widgets/pie_chart_sections.dart';
@@ -67,97 +68,115 @@ class _FitbitselectionState extends State<Fitbitselection> {
                       child: Container(
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // helemaal links helemaal rechts
-                              children: [
-                                Column(
-                                  //tekst datum en doel moeten onder elkaar
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 0),
-                                          child: Text(
-                                            "Titel",
-                                            style: TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 10.0, vertical: 0),
-                                          child: Text(
-                                            "subtitle",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                // de check
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Container(
-                                //     margin: const EdgeInsets.symmetric(
-                                //         horizontal: 10.0, vertical: 0),
-                                //     width: 60,
-                                //     height: 60,
-                                //     decoration: BoxDecoration(
-                                //         color: Theme.of(context).primaryColor,
-                                //         border: Border.all(
-                                //             color: Colors.green, width: 6.0),
-                                //         borderRadius: BorderRadius.all(
-                                //             Radius.circular(100))),
-                                //     child: Center(
-                                //       child: Text(
-                                //         "percentage",
-                                //         //widget.percentage.toString() + "%",
-                                //         textAlign: TextAlign.center,
-                                //         style: TextStyle(
-                                //           fontSize: 14,
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Stack(
-                                    alignment: Alignment.center,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                // helemaal links helemaal rechts
+                                children: [
+                                  Column(
+                                    //tekst datum en doel moeten onder elkaar
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Container(
-                                          width: 80,
-                                          height: 80,
-                                          child: PieChart(
-                                            PieChartData(
-                                              sectionsSpace: 0,
-                                              centerSpaceRadius: 30,
-
-                                              // startDegreeOffset: 0,
-                                              borderData: FlBorderData(
-                                                show: false,
-                                              ),
-                                              sections: getSections(),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 0),
+                                            child: Text(
+                                              "{naam doel}",
+                                              style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.w500),
                                             ),
-                                          )),
-                                      Text(
-                                        "${PieData.data[1].percent}%",
-                                        style: TextStyle(fontSize: 14),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10.0, vertical: 0),
+                                            child: Text(
+                                              "{..km in 2,5 uur}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                )
-                              ],
+                                  // de check
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(8.0),
+                                  //   child: Container(
+                                  //     margin: const EdgeInsets.symmetric(
+                                  //         horizontal: 10.0, vertical: 0),
+                                  //     width: 60,
+                                  //     height: 60,
+                                  //     decoration: BoxDecoration(
+                                  //         color: Theme.of(context).primaryColor,
+                                  //         border: Border.all(
+                                  //             color: Colors.green, width: 6.0),
+                                  //         borderRadius: BorderRadius.all(
+                                  //             Radius.circular(100))),
+                                  //     child: Center(
+                                  //       child: Text(
+                                  //         "percentage",
+                                  //         //widget.percentage.toString() + "%",
+                                  //         textAlign: TextAlign.center,
+                                  //         style: TextStyle(
+                                  //           fontSize: 14,
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
+
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(8.0),
+                                  //   child: Stack(
+                                  //     alignment: Alignment.center,
+                                  //     children: [
+                                  //       Container(
+                                  //           width: 80,
+                                  //           height: 80,
+                                  //           child: PieChart(
+                                  //             PieChartData(
+                                  //               sectionsSpace: 0,
+                                  //               centerSpaceRadius: 30,
+                                  //
+                                  //               // startDegreeOffset: 0,
+                                  //               borderData: FlBorderData(
+                                  //                 show: false,
+                                  //               ),
+                                  //               sections: getSections(),
+                                  //             ),
+                                  //           )),
+                                  //       Text(
+                                  //         "${PieData.data[1].percent}%",
+                                  //         style: TextStyle(fontSize: 14),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // )
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CircularPercentIndicator(
+                                      radius: 50.0,
+                                      lineWidth: 5.0,
+                                      backgroundColor: Colors.white,
+                                      percent: 0.7,
+                                      progressColor: Colors.green,
+                                      circularStrokeCap:
+                                          CircularStrokeCap.round,
+                                      animation: true,
+                                      center: Text("70%"),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
