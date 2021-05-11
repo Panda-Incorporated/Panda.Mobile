@@ -1,5 +1,4 @@
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Models/Planning.dart';
 
 class GoalProvider {
   static List<Goal> getGoals() {

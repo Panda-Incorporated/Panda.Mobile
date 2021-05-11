@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/widgets/ListItem.dart';
+import 'package:panda/widgets/GoalItem.dart';
 
 class ShowGoals extends StatelessWidget {
   const ShowGoals({
@@ -19,10 +19,6 @@ class ShowGoals extends StatelessWidget {
             title: goal.title,
             subTitle: goal.getString() ?? "",
             percentage: GoalProvider.getPercentage(goal).toInt(),
-            //   extendedItems: [
-            // for (var planning in goal.listPlanning ?? [])
-            //   Pair(planning.title, planning.getString())
-            //   ],
           )
         else
           ListItem(

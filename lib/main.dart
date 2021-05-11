@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:panda/DataProvider.dart/GoalProvider.dart';
 import 'package:panda/Pages/Fitbitselection.dart';
 import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
+import 'package:panda/Pages/SeePredictionsmallPage.dart';
 import 'package:panda/Pages/fitbitselection2.dart';
 
 void main() {
@@ -40,7 +42,10 @@ class _NavigationState extends State<Navigation> {
     Home(),
     Fitbitselection(),
     Fitbitselection2(),
-    GoalSummaryPage(),
+    SeePredictionsmall(),
+    GoalSummaryPage(
+      goal: GoalProvider.getGoals()[0],
+    ),
     SeePredictionLargePage(),
   ];
   void _onItemTap(int index) {
@@ -89,6 +94,13 @@ class _NavigationState extends State<Navigation> {
               Icons.home,
             ),
             label: "Scherm 5",
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ),
+            label: "Scherm 6",
             backgroundColor: Colors.blue,
           ),
         ],

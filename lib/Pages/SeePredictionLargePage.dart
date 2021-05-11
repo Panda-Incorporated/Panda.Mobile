@@ -169,8 +169,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   List<LineChartBarData> linesBarData1(int begin, int goal, int weeks) {
     return [
       lines(Color(0xff4af699), begin, goal, weeks),
-      lines(Color(0xffaa4cfc), begin, goal, weeks),
-      lines(Color(0xff27b6fc), begin, goal, weeks),
+      lines(Color(0xffaa4cfc), begin + 4, goal, weeks),
+      lines(Color(0xff27b6fc), begin - 10, goal, weeks),
     ];
   }
 }
