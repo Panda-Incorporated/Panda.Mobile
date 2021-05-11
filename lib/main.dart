@@ -36,7 +36,7 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 5;
 
   List<Widget> _widgetOptions = [
     Home(),
@@ -46,7 +46,10 @@ class _NavigationState extends State<Navigation> {
     GoalSummaryPage(
       goal: GoalProvider.getGoals()[0],
     ),
-    SeePredictionLargePage(),
+    SeePredictionLargePage(
+      goal: GoalProvider.getGoals()[0],
+      doel: 500,
+    ),
   ];
   void _onItemTap(int index) {
     setState(() {

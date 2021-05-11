@@ -2,10 +2,16 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
-  const SeePredictionLargePage({Key key}) : super(key: key);
+  final Goal goal;
+  //tijdelijk
+  final int doel;
+  const SeePredictionLargePage(
+      {Key key, @required this.goal, @required this.doel})
+      : super(key: key);
 
   @override
   _SeePredictionLargePageState createState() => _SeePredictionLargePageState();
@@ -17,91 +23,98 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   @override
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.cyan[700],
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularPercentIndicator(
-                    radius: 80.0,
-                    lineWidth: 6.0,
-                    backgroundColor: Colors.green[100],
-                    percent: 0.7,
-                    progressColor: Colors.green[800],
-                    circularStrokeCap: CircularStrokeCap.round,
-                    animation: true,
-                    center: Text(
-                      "70%",
+    if (widget.goal.getSecondsPerKilometer() < widget.doel)
+      return Text("goal al bereikt");
+    else
+      return Scaffold(
+        backgroundColor: Colors.cyan[700],
+        body: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularPercentIndicator(
+                      radius: 80.0,
+                      lineWidth: 6.0,
+                      backgroundColor: Colors.green[100],
+                      percent: 0.7,
+                      progressColor: Colors.green[800],
+                      circularStrokeCap: CircularStrokeCap.round,
+                      animation: true,
+                      center: Text(
+                        "${widget.goal.getSecondsPerKilometer()}",
+                        style: TextStyle(
+                            color: Colors.green[800],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 40),
+                    child: Text(
+                      "${widget.goal.title}",
                       style: TextStyle(
-                          color: Colors.green[800],
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                        fontSize: 26,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 40),
-                  child: Text(
-                    "{Naam doel}",
-                    style: TextStyle(
-                      fontSize: 26,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-              alignment: Alignment.centerLeft,
-              child: Text("Voorspelling"),
-            ),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff2c274c),
-                      Color(0xff46426c),
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(right: 16.0, left: 6.0),
-                            child: LineChart(
-                                sampleData1(begin: 580, goal: 520, weeks: 10)),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16, bottom: 16),
+                alignment: Alignment.centerLeft,
+                child: Text("Voorspelling"),
+              ),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff2c274c),
+                        Color(0xff46426c),
                       ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
-                  ],
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 16.0, left: 6.0),
+                              child: LineChart(sampleData1(
+                                  begin: widget.goal.getSecondsPerKilometer(),
+                                  goal: widget.doel,
+                                  weeks: widget.goal.endday
+                                      .difference(widget.goal.beginday)
+                                      .inDays)),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
   }
 
   LineChartData sampleData1({int begin, int goal, int weeks}) {

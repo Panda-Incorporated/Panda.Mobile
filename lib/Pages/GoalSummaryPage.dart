@@ -34,7 +34,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "${widget.goal.getPercentage()}%",
+                  "${widget.goal.getPercentage() / 100}%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -65,7 +65,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 "in",
                 style: TextStyle(fontSize: 12),
               ),
-              Text("${widget.goal.doneMaxDistance} minuten/"),
+              Text("${widget.goal.doneMaxDistance} minuten"),
             ],
           ),
 

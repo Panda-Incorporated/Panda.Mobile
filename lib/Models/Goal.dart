@@ -7,6 +7,10 @@ class Goal extends DistanceDuration {
   double doneMaxDistance;
   Duration doneMaxDuration;
   Duration duration;
+  DateTime beginday;
+  DateTime endday;
+  //tijdelijk
+  int secondsperkilometer;
   getString() {
     return getCombination(distance.toInt(), duration.inMinutes);
   }
@@ -17,5 +21,12 @@ class Goal extends DistanceDuration {
                     this.doneMaxDuration.inMicroseconds) *
                 100)) /
         2;
+  }
+
+  // 1km in 1 uur
+  //60x60 = 360
+  // kilometers / seconds
+  int getSecondsPerKilometer() {
+    return (duration.inSeconds / distance * 1000).toInt();
   }
 }

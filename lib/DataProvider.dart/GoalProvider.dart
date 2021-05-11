@@ -6,10 +6,13 @@ class GoalProvider {
       Goal()
         ..finished = false
         ..title = "Marathon"
-        ..distance = 25.0
-        ..doneMaxDistance = 20.0
-        ..duration = Duration(minutes: 30)
-        ..doneMaxDistance = 20
+        ..distance = 1000
+        ..doneMaxDistance = 1.0
+        ..duration = Duration(minutes: 9, seconds: 39)
+        ..doneMaxDistance = 1
+        ..secondsperkilometer = 370
+        ..beginday = DateTime(2021, DateTime.may, 11)
+        ..endday = DateTime(2021, DateTime.may, 31)
         ..doneMaxDuration = Duration(minutes: 50),
       Goal()
         ..finished = true
@@ -17,6 +20,8 @@ class GoalProvider {
         ..distance = 10.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 10
+        ..beginday = DateTime(2021, DateTime.may, 11)
+        ..endday = DateTime(2022, DateTime.may, 31)
         ..doneMaxDuration = Duration(minutes: 30),
       Goal()
         ..finished = true
@@ -24,6 +29,8 @@ class GoalProvider {
         ..distance = 5.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 5
+        ..beginday = DateTime(2021, 5, 11)
+        ..endday = DateTime(2021, 5, 11)
         ..doneMaxDuration = Duration(minutes: 30),
       Goal()
         ..finished = false
@@ -31,6 +38,8 @@ class GoalProvider {
         ..distance = 2.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 1.7
+        ..beginday = DateTime(2021, 5, 11)
+        ..endday = DateTime(2021, 5, 11)
         ..doneMaxDuration = Duration(minutes: 30)
     ];
   }
