@@ -7,7 +7,7 @@ class ShowActivities extends StatelessWidget {
     Key key,
     this.currentActvities,
   }) : super(key: key);
-
+//TODO Review vgm af
   final List<Activity> currentActvities;
   @override
   Widget build(BuildContext context) {

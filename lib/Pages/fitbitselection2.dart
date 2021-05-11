@@ -8,6 +8,8 @@ class Fitbitselection2 extends StatefulWidget {
   _Fitbitselection2State createState() => _Fitbitselection2State();
 }
 
+//TODO: fix eenheden
+//TODO: generiek maken met fitbitselection
 class _Fitbitselection2State extends State<Fitbitselection2> {
   @override
   Widget build(BuildContext context) {

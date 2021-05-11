@@ -8,6 +8,7 @@ class Fitbitselection extends StatefulWidget {
   _FitbitselectionState createState() => _FitbitselectionState();
 }
 
+// TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
 class _FitbitselectionState extends State<Fitbitselection> {
   @override
   Widget build(BuildContext context) {

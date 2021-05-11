@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//TODO verwijderen
 class TomorrowSummary extends StatelessWidget {
   TomorrowSummary(this.date, this.goal);
 

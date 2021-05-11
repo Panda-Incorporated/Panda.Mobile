@@ -43,9 +43,12 @@ class _NavigationState extends State<Navigation> {
     Fitbitselection(),
     Fitbitselection2(),
     SeePredictionsmall(),
+
+    // NIET VERANDEREN desnoods comment onder aan de pagina
     GoalSummaryPage(
       goal: GoalProvider.getGoals()[0],
     ),
+    // NIET VERANDEREN desnoods comment onder aan de pagina
     SeePredictionLargePage(
       goal: GoalProvider.getGoals()[0],
       doel: 500,
@@ -61,6 +64,7 @@ class _NavigationState extends State<Navigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
+      //TODO: bottennavigationbar mooi maken
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.orange,
         items: [

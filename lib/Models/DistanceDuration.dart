@@ -1,20 +1,24 @@
 class DistanceDuration {
   DistanceKind distanceKind = DistanceKind.km;
   getDistanceString() {
-   String str = distanceKind.toString();
-    return str.substring(str.indexOf(".")+1, str.length);
+    String str = distanceKind.toString();
+    return str.substring(str.indexOf(".") + 1, str.length);
   }
 
+//TODO: gebruiken
   DurationKind durationKind = DurationKind.minutes;
   getDurationString() {
     String str = durationKind.toString();
-    return str.substring(str.indexOf(".")+1, str.length);
+    return str.substring(str.indexOf(".") + 1, str.length);
   }
 
   getCombination(int distance, int duration) {
-    return distance.toString() +" "+
-        getDistanceString() +" in "+
-        duration.toString() +" "+
+    return distance.toString() +
+        " " +
+        getDistanceString() +
+        " in " +
+        duration.toString() +
+        " " +
         getDurationString();
   }
 }

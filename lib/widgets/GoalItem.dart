@@ -16,6 +16,7 @@ class ListItem extends StatefulWidget {
   final int percentage;
 }
 
+//TODO: singel goal meegeven (netzoals bij activity gedaan)
 class _ListItemState extends State<ListItem> {
   @override
   Widget build(BuildContext context) {

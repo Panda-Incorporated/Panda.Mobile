@@ -13,6 +13,7 @@ class ActivityItem extends StatefulWidget {
   _ActivityItemState createState() => _ActivityItemState();
 }
 
+//TODO: Fix formatting units
 class _ActivityItemState extends State<ActivityItem> {
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class _ActivityItemState extends State<ActivityItem> {
                               ),
                             ),
                             Text(
-                              "${widget.activity.seconds} secondes",
+                              "${widget.activity.totalactivitytime} secondes",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,

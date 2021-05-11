@@ -1,7 +1,9 @@
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 
 class GoalProvider {
   static List<Goal> getGoals() {
+    //TODO: NIET GOAL 1 AANPASSEN IS TEST UNIT
     return [
       Goal()
         ..finished = false
@@ -10,10 +12,21 @@ class GoalProvider {
         ..doneMaxDistance = 1.0
         ..duration = Duration(minutes: 9, seconds: 39)
         ..doneMaxDistance = 1
-        ..secondsperkilometer = 370
+        //doel
+        ..secondsperkilometer = 500
         ..beginday = DateTime(2021, DateTime.may, 11)
         ..endday = DateTime(2021, DateTime.may, 31)
-        ..doneMaxDuration = Duration(minutes: 50),
+        ..doneMaxDuration = Duration(minutes: 50)
+        ..doneActivity = [
+          Activity()
+            ..meters = 2000
+            ..totalactivitytime = Duration(minutes: 19)
+            ..date = DateTime(2021, DateTime.may, 14),
+          Activity()
+            ..meters = 1500
+            ..totalactivitytime = Duration(minutes: 12, seconds: 40)
+            ..date = DateTime(2021, DateTime.may, 15)
+        ],
       Goal()
         ..finished = true
         ..title = "Marathon"
