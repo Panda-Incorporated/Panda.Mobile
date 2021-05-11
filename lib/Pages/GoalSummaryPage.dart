@@ -65,7 +65,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 "in",
                 style: TextStyle(fontSize: 12),
               ),
-              Text("${widget.goal.doneMaxDistance} minuten"),
+              Text("${widget.goal.doneMaxDistance} minuten/"),
             ],
           ),
 
