@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/TomorrowSummary.dart';
 

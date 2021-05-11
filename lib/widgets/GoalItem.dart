@@ -7,7 +7,7 @@ class ListItem extends StatefulWidget {
     this.title,
     this.subTitle,
     this.percentage,
-  }) : super(key: key) {}
+  }) : super(key: key);
 
   @override
   _ListItemState createState() => _ListItemState();
