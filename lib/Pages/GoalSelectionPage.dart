@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
+import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/ActivitySelectionPage.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
 
-class Fitbitselection extends StatefulWidget {
+class GoalSelectionPage extends StatefulWidget {
   @override
-  _FitbitselectionState createState() => _FitbitselectionState();
+  _GoalSelectionPageState createState() => _GoalSelectionPageState();
 }
 
 // TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
-class _FitbitselectionState extends State<Fitbitselection> {
+class _GoalSelectionPageState extends State<GoalSelectionPage> {
+  Goal currentGoal;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +58,15 @@ class _FitbitselectionState extends State<Fitbitselection> {
             delegate: SliverChildListDelegate(
               [
                 ShowGoals(
+                  onGoalSelected: (goal) {
+                    currentGoal = goal;
+                    print(goal.title);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ActivitySelectionPage()),
+                    );
+                  },
                   currentGoals: GoalProvider.getGoals()
                       .where((e) => !e.finished)
                       .toList(),

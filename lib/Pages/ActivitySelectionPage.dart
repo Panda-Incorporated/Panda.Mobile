@@ -3,14 +3,14 @@ import 'package:panda/DataProvider.dart/ActivityProvider.dart';
 import 'package:panda/widgets/CurrentActivities.dart';
 import 'package:panda/widgets/Logo.dart';
 
-class Fitbitselection2 extends StatefulWidget {
+class ActivitySelectionPage extends StatefulWidget {
   @override
-  _Fitbitselection2State createState() => _Fitbitselection2State();
+  _ActivitySelectionPageState createState() => _ActivitySelectionPageState();
 }
 
 //TODO: fix eenheden
 //TODO: generiek maken met fitbitselection
-class _Fitbitselection2State extends State<Fitbitselection2> {
+class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +67,7 @@ class _Fitbitselection2State extends State<Fitbitselection2> {
   }
 }
 
-Widget FitBitActivityRow(context) {
+Widget fitBitActivityRow(context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(

@@ -7,6 +7,7 @@ class ListItem extends StatefulWidget {
     this.title,
     this.subTitle,
     this.percentage,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -14,6 +15,7 @@ class ListItem extends StatefulWidget {
   final String title;
   final String subTitle;
   final int percentage;
+  final Function onTap;
 }
 
 //TODO: singel goal meegeven (netzoals bij activity gedaan)
@@ -23,8 +25,8 @@ class _ListItemState extends State<ListItem> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => print(
-            "Hallo"), //navigeren naar goal summaary page en dan goal meegeven
+        onTap: widget
+            .onTap, //navigeren naar goal summaary page en dan goal meegeven
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
