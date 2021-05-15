@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+
+import 'ActivitySelectionPage.dart';
 
 class GoalSummaryPage extends StatefulWidget {
   final Goal goal;
 
   const GoalSummaryPage({Key key, @required this.goal}) : super(key: key);
+
   @override
   _GoalSummaryPageState createState() => _GoalSummaryPageState();
 }
@@ -33,7 +37,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "${widget.goal.getPercentage() / 100}%",
+                  "${widget.goal.getPercentage()}%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -75,8 +79,17 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 left: 12.0, right: 12.0, bottom: 8.0, top: 18.0),
             child: Column(
               children: [
-                ShowGraph(data: "Voorspelling"),
-                ShowGraph(data: "Voortgang")
+                ShowGraph(
+                  title: "Voorspelling",
+                  onTap: SeePredictionLargePage(goal: widget.goal),
+                ),
+                ShowGraph(
+                    title: "Voortgang",
+                    onTap: SeePredictionLargePage(goal: widget.goal)),
+                ShowGraph(
+                  title: "Activiteiten",
+                  onTap: ActivitySelectionPage(),
+                ),
               ],
             ),
           ),

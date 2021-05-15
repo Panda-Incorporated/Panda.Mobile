@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Pages/ActivitySelectionPage.dart';
+import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
 
@@ -64,7 +64,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ActivitySelectionPage()),
+                          builder: (context) => GoalSummaryPage(goal: goal)),
                     );
                   },
                   currentGoals: GoalProvider.getGoals()

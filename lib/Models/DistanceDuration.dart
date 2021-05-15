@@ -5,7 +5,7 @@ class DistanceDuration {
     return str.substring(str.indexOf(".") + 1, str.length);
   }
 
-//TODO: gebruiken
+//TODO: (Reindert) uitleggen
   DurationKind durationKind = DurationKind.minutes;
   getDurationString() {
     String str = durationKind.toString();

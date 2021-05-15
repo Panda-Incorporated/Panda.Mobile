@@ -3,7 +3,7 @@ import 'package:panda/Models/Goal.dart';
 
 class GoalProvider {
   static List<Goal> getGoals() {
-    //TODO: NIET GOAL 1 AANPASSEN IS TEST UNIT
+    //NIET GOAL 1 AANPASSEN IS TEST UNIT
     return [
       Goal()
         ..finished = false

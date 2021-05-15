@@ -1,13 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:panda/widgets/GoalSummary.dart';
-import 'package:panda/widgets/TomorrowSummary.dart';
 
 class SeePredictionsmall extends StatefulWidget {
   @override
   _SeePredictionsmallState createState() => _SeePredictionsmallState();
 }
 
-//TODO: Niet aangepast door bart
 //TODO: circel progressbar implmenteren door goal mee te geven
 class _SeePredictionsmallState extends State<SeePredictionsmall> {
   @override
@@ -53,7 +51,6 @@ class _SeePredictionsmallState extends State<SeePredictionsmall> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TomorrowSummary("morgen 7 april", "5 km in 30 minuten"),
                   Padding(
                     padding: EdgeInsets.only(top: 12.0, bottom: 10.0),
                     child: Text(

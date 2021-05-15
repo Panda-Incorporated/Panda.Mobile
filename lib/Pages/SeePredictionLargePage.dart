@@ -8,10 +8,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
   final Goal goal;
-  //tijdelijk
-  final int doel;
-  const SeePredictionLargePage(
-      {Key key, @required this.goal, @required this.doel})
+
+  const SeePredictionLargePage({Key key, @required this.goal})
       : super(key: key);
 
   @override
@@ -167,7 +165,6 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  //TODO: alleen sports is anders
   LineChartBarData goalline(Color color, Goal goal) {
     return LineChartBarData(
       spots: generateSpots(
