@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//TODO widget meegeven (kan weg?)
 class GoalSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

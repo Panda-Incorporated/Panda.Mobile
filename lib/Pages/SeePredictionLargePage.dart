@@ -2,10 +2,17 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Activity.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
-  const SeePredictionLargePage({Key key}) : super(key: key);
+  final Goal goal;
+  //tijdelijk
+  final int doel;
+  const SeePredictionLargePage(
+      {Key key, @required this.goal, @required this.doel})
+      : super(key: key);
 
   @override
   _SeePredictionLargePageState createState() => _SeePredictionLargePageState();
@@ -17,94 +24,103 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   @override
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.cyan[700],
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularPercentIndicator(
-                    radius: 80.0,
-                    lineWidth: 6.0,
-                    backgroundColor: Colors.green[100],
-                    percent: 0.7,
-                    progressColor: Colors.green[800],
-                    circularStrokeCap: CircularStrokeCap.round,
-                    animation: true,
-                    center: Text(
-                      "70%",
+    if (widget.goal.getSecondsPerKilometer() < widget.goal.secondsperkilometer)
+      return Text(
+          "goal al bereikt"); // placeholder om een glitchende grafiek tegen te gaan
+    else
+      return Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularPercentIndicator(
+                      radius: 80.0,
+                      lineWidth: 6.0,
+                      backgroundColor: Colors.green[100],
+                      percent: widget.goal.getPercentage() / 100,
+                      progressColor: Colors.green[800],
+                      circularStrokeCap: CircularStrokeCap.round,
+                      animation: true,
+                      center: Text(
+                        "${widget.goal.getPercentage()}",
+                        style: TextStyle(
+                            color: Colors.green[800],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 40),
+                    child: Text(
+                      "${widget.goal.title}",
                       style: TextStyle(
-                          color: Colors.green[800],
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                        fontSize: 26,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 40),
-                  child: Text(
-                    "{Naam doel}",
-                    style: TextStyle(
-                      fontSize: 26,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-              alignment: Alignment.centerLeft,
-              child: Text("Voorspelling"),
-            ),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff2c274c),
-                      Color(0xff46426c),
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(right: 16.0, left: 6.0),
-                            child: LineChart(
-                                sampleData1(begin: 580, goal: 520, weeks: 10)),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16, bottom: 16),
+                alignment: Alignment.centerLeft,
+                child: Text("Voorspelling"),
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.grey[200],
+                        Colors.grey[200],
                       ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
-                  ],
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 16.0, left: 6.0),
+                              child: LineChart(displayData(
+                                  begin: widget.goal.getSecondsPerKilometer(),
+                                  goal: widget.goal.secondsperkilometer,
+                                  days: widget.goal.endday
+                                      .difference(widget.goal.beginday)
+                                      .inDays)),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
   }
 
-  LineChartData sampleData1({int begin, int goal, int weeks}) {
+  // main functie data weergeven (//TODO: kan vervangen worden door goal)
+  LineChartData displayData({int begin, int goal, int days}) {
     return LineChartData(
       lineTouchData: LineTouchData(
         enabled: false,
@@ -140,18 +156,24 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       // minX altijd 0
       minX: 0,
       //maxX altijd duur training
-      maxX: weeks.toDouble(),
+      maxX: days.toDouble(),
       // max y = nulmeting begin + 20
       maxY: (begin + 20).toDouble(),
       //minY altijd doel -20
       minY: (goal - 20).toDouble(),
-      lineBarsData: linesBarData1(begin, goal, weeks),
+      //TODO: kan nog vervangen worden door single goal (days is present-future)
+      lineBarsData: generateLines(
+          begin, goal, days, widget.goal, widget.goal.doneActivity),
     );
   }
 
-  LineChartBarData lines(Color color, int begin, int goal, int weeks) {
+  //TODO: alleen sports is anders
+  LineChartBarData goalline(Color color, Goal goal) {
     return LineChartBarData(
-      spots: generateSpots(begin, goal, weeks),
+      spots: generateSpots(
+          goal.getSecondsPerKilometer(),
+          goal.secondsperkilometer,
+          widget.goal.endday.difference(widget.goal.beginday).inDays),
       isCurved: false,
       colors: [color],
       barWidth: 2,
@@ -166,20 +188,71 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  List<LineChartBarData> linesBarData1(int begin, int goal, int weeks) {
+  LineChartBarData activityline(Color color, Goal goal) {
+    return LineChartBarData(
+      spots: generateActivitySpots(goal),
+      isCurved: false,
+      colors: [color],
+      barWidth: 2,
+      // display dots uit
+      dotData: FlDotData(
+        show: false,
+      ),
+      //display alles onder de lijn false
+      belowBarData: BarAreaData(
+        show: false,
+      ),
+    );
+  }
+
+  //TODO: hier een predictielijn van maken met single goal
+  LineChartBarData lines(Color color, int begin, int goal, int days) {
+    return LineChartBarData(
+      spots: generateSpots(begin, goal, days),
+      isCurved: false,
+      colors: [color],
+      barWidth: 2,
+      // display dots uit
+      dotData: FlDotData(
+        show: false,
+      ),
+      //display alles onder de lijn false
+      belowBarData: BarAreaData(
+        show: false,
+      ),
+    );
+  }
+
+  //genereerd alle 3 de lijnen TODO: single goal
+  List<LineChartBarData> generateLines(
+      int begin, int goal, int days, Goal goal2, List<Activity> activity) {
     return [
-      lines(Color(0xff4af699), begin, goal, weeks),
-      lines(Color(0xffaa4cfc), begin, goal, weeks),
-      lines(Color(0xff27b6fc), begin, goal, weeks),
+      activityline(Color(0xff4af699), goal2),
+      goalline(Color(0xffaa4cfc), goal2),
+      lines(Color(0xff27b6fc), begin - 10, goal, days),
     ];
   }
 }
 
-List<FlSpot> generateSpots(int begin, int goal, int weeks) {
+// genereert ideale lijnen TODO: single goal
+List<FlSpot> generateSpots(int begin, int goal, int days) {
   List<FlSpot> list = [];
-  for (var i = 0; i < weeks + 1; i++) {
-    var y = (goal - begin) / sqrt(weeks) * sqrt(i) + begin;
+  for (var i = 0; i < days + 1; i++) {
+    var y = (goal - begin) / sqrt(days) * sqrt(i) + begin;
     list.add(FlSpot(i.toDouble(), y));
+  }
+
+  return list;
+}
+
+// genereert voltooide activiteiten lijn
+List<FlSpot> generateActivitySpots(Goal goal) {
+  List<FlSpot> list = [];
+  for (var i = 0; i < goal.doneActivity.length; i++) {
+    var y = goal.doneActivity[i].getSecondsPerKilometer();
+    list.add(FlSpot(
+        goal.doneActivity[i].getDaysFromStartDay(goal.beginday).toDouble(),
+        y.toDouble()));
   }
 
   return list;

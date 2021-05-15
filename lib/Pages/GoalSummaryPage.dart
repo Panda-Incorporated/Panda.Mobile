@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:panda/widgets/ShowGraph.dart';
-import 'package:panda/widgets/TomorrowSummary.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class GoalSummaryPage extends StatefulWidget {
+  final Goal goal;
+
+  const GoalSummaryPage({Key key, @required this.goal}) : super(key: key);
   @override
   _GoalSummaryPageState createState() => _GoalSummaryPageState();
 }
@@ -25,12 +28,12 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 radius: 150.0,
                 lineWidth: 4.0,
                 backgroundColor: Colors.green[100],
-                percent: 0.7,
+                percent: widget.goal.getPercentage() / 100,
                 progressColor: Colors.green[800],
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "70%",
+                  "${widget.goal.getPercentage() / 100}%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -45,7 +48,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
               Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "{Naam van doel}",
+                  widget.goal.title,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w500,
@@ -55,12 +58,13 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
               Icon(
                 Icons.outlined_flag,
               ),
-              Text("18,75 km van 25 km"),
+              Text(
+                  "${widget.goal.doneMaxDistance} km van ${widget.goal.distance} km"),
               Text(
                 "in",
                 style: TextStyle(fontSize: 12),
               ),
-              Text("2,5 uur"),
+              Text("${widget.goal.doneMaxDistance} minuten"),
             ],
           ),
 

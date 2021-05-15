@@ -1,23 +1,40 @@
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Models/Planning.dart';
 
 class GoalProvider {
   static List<Goal> getGoals() {
+    //TODO: NIET GOAL 1 AANPASSEN IS TEST UNIT
     return [
       Goal()
         ..finished = false
         ..title = "Marathon"
-        ..distance = 25.0
-        ..doneMaxDistance = 20.0
-        ..duration = Duration(minutes: 30)
-        ..doneMaxDistance = 20
-        ..doneMaxDuration = Duration(minutes: 50),
+        ..distance = 1000
+        ..doneMaxDistance = 1.0
+        ..duration = Duration(minutes: 9, seconds: 39)
+        ..doneMaxDistance = 1
+        //doel
+        ..secondsperkilometer = 500
+        ..beginday = DateTime(2021, DateTime.may, 11)
+        ..endday = DateTime(2021, DateTime.may, 31)
+        ..doneMaxDuration = Duration(minutes: 50)
+        ..doneActivity = [
+          Activity()
+            ..meters = 2000
+            ..totalactivitytime = Duration(minutes: 19)
+            ..date = DateTime(2021, DateTime.may, 14),
+          Activity()
+            ..meters = 1500
+            ..totalactivitytime = Duration(minutes: 12, seconds: 40)
+            ..date = DateTime(2021, DateTime.may, 15)
+        ],
       Goal()
         ..finished = true
         ..title = "Marathon"
         ..distance = 10.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 10
+        ..beginday = DateTime(2021, DateTime.may, 11)
+        ..endday = DateTime(2022, DateTime.may, 31)
         ..doneMaxDuration = Duration(minutes: 30),
       Goal()
         ..finished = true
@@ -25,6 +42,8 @@ class GoalProvider {
         ..distance = 5.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 5
+        ..beginday = DateTime(2021, 5, 11)
+        ..endday = DateTime(2021, 5, 11)
         ..doneMaxDuration = Duration(minutes: 30),
       Goal()
         ..finished = false
@@ -32,6 +51,8 @@ class GoalProvider {
         ..distance = 2.0
         ..duration = Duration(minutes: 30)
         ..doneMaxDistance = 1.7
+        ..beginday = DateTime(2021, 5, 11)
+        ..endday = DateTime(2021, 5, 11)
         ..doneMaxDuration = Duration(minutes: 30)
     ];
   }

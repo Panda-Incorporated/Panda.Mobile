@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/TomorrowSummary.dart';
 
@@ -8,6 +7,8 @@ class SeePredictionsmall extends StatefulWidget {
   _SeePredictionsmallState createState() => _SeePredictionsmallState();
 }
 
+//TODO: Niet aangepast door bart
+//TODO: circel progressbar implmenteren door goal mee te geven
 class _SeePredictionsmallState extends State<SeePredictionsmall> {
   @override
   Widget build(BuildContext context) {

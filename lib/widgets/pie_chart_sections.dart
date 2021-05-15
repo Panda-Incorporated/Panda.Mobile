@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:panda/data/pie_data.dart';
 
+//TODO: verwijderen
 List<PieChartSectionData> getSections() => PieData.data
     .asMap()
     .map<int, PieChartSectionData>((index, data) {

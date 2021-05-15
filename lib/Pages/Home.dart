@@ -10,6 +10,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+//TODO: navigation onTap() (en data doorgeven)
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:panda/Pages/Fitbitselection.dart';
+import 'package:glyphicon/glyphicon.dart';
+import 'package:panda/DataProvider.dart/GoalProvider.dart';
+import 'package:panda/Pages/GoalSelectionPage.dart';
 import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
-import 'package:panda/Pages/fitbitselection2.dart';
+import 'package:panda/Pages/SeePredictionsmallPage.dart';
+import 'package:panda/Pages/ActivitySelectionPage.dart';
+import 'package:panda/Pages/Settings.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,14 +38,24 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 4;
-
+  int _selectedIndex = 0;
+  bool buttonsShown = false;
   List<Widget> _widgetOptions = [
     Home(),
-    Fitbitselection(),
-    Fitbitselection2(),
-    GoalSummaryPage(),
-    SeePredictionLargePage(),
+    SettingsPage(),
+    // GoalSelectionPage(),
+    // ActivitySelectionPage(),
+    // SeePredictionsmall(),
+
+    // NIET VERANDEREN desnoods comment onder aan de pagina
+    // GoalSummaryPage(
+    //   goal: GoalProvider.getGoals()[0],
+    // ),
+    // // NIET VERANDEREN desnoods comment onder aan de pagina
+    // SeePredictionLargePage(
+    //   goal: GoalProvider.getGoals()[0],
+    //   doel: 500,
+    // ),
   ];
   void _onItemTap(int index) {
     setState(() {
@@ -52,43 +66,84 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 40.0),
+        child: Stack(children: [
+          _widgetOptions.elementAt(_selectedIndex),
+          if (buttonsShown)
+            Positioned(
+              bottom: 30,
+              right: 0,
+              left: 0,
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: 200,
+                  color: Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FloatingActionButton(
+                        heroTag: "GoalSelection",
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GoalSelectionPage()),
+                          )
+                        },
+                        child: Container(
+                          width: 100.0,
+                          height: 100.0,
+                          child: Icon(
+                            Glyphicon.lightning_charge,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      FloatingActionButton(
+                        heroTag: "GoalCreate",
+                        onPressed: () => {},
+                        child: Icon(
+                          Glyphicon.flag,
+                          size: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          setState(() {
+            buttonsShown = !buttonsShown;
+          });
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
             ),
-            label: "Scherm 1",
+            label: "Home",
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.settings,
             ),
-            label: "Scherm 2",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: "Scherm 3",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: "Scherm 4",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: "Scherm 5",
+            label: "Settings",
             backgroundColor: Colors.blue,
           ),
         ],
