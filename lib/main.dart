@@ -4,6 +4,7 @@ import 'package:glyphicon/glyphicon.dart';
 import 'package:panda/Pages/GoalSelectionPage.dart';
 import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/Settings.dart';
+import 'Pages/NewGoal.dart';
 
 void main() {
   runApp(MyApp());
