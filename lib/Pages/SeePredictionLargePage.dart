@@ -40,12 +40,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                       radius: 80.0,
                       lineWidth: 6.0,
                       backgroundColor: Colors.green[100],
-                      percent: widget.goal.getPercentage() / 100,
+                      percent: widget.goal.getPercentage(),
                       progressColor: Colors.green[800],
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
-                        "${widget.goal.getPercentage()}",
+                        "${widget.goal.getPercentage() * 100}",
                         style: TextStyle(
                             color: Colors.green[800],
                             fontSize: 20,
@@ -187,7 +187,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
           goal,
           generateSpots(goal.getMesurement(), goal.goal,
               widget.goal.endday.difference(widget.goal.beginday).inDays)),
-      drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
+      //drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
     ];
   }
 }

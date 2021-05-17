@@ -69,6 +69,7 @@ class _HomeState extends State<Home> {
                         .where((e) => !e.finished)
                         .toList(),
                   ),
+                  Text("${GoalProvider.getGoals()[0].getPercentage()}"),
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(

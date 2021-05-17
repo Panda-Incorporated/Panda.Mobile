@@ -22,12 +22,13 @@ class GoalSummary extends StatelessWidget {
         Icon(
           Icons.outlined_flag,
         ),
-        Text("${goal.doneMaxDistance} km van ${goal.distance} km"),
+        Text(
+            "{km/s last activity door Tichel formule} km van ${goal.distance} km"),
         Text(
           "in",
           style: TextStyle(fontSize: 12),
         ),
-        Text("${goal.doneMaxDistance} minuten"),
+        Text("${goal.duration.inMinutes} minuten"),
       ],
     );
   }

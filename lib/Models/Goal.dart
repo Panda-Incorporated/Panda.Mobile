@@ -5,8 +5,8 @@ class Goal extends DistanceDuration {
   bool finished;
   String title;
   double distance; // hoeveel heeft de sporter afgelegd met de nulmeting
-  double doneMaxDistance;
-  Duration doneMaxDuration;
+  // double doneMaxDistance;
+  // Duration doneMaxDuration;
   Duration duration; // hoelang duurde de nulmeting
 
   DateTime beginday; // begin dag van de eerste nulmeting
@@ -20,16 +20,21 @@ class Goal extends DistanceDuration {
     return getCombination(distance.toInt(), duration.inMinutes);
   }
 
-  int getPercentage() {
+  double getPercentage() {
     // percentage done moet vervangen worden door nieuwe formule staat in documentatie onedrive
-    // TODO: Veranderen naar laatste activiteit
-    return (((this.doneMaxDistance / this.distance) * 100) +
-            ((this.duration.inMicroseconds /
-                    this.doneMaxDuration.inMicroseconds) *
-                100)) ~/
-        2;
+
+    var nulmeting = doneActivity.first.getSecondsPerKilometer();
+    var nu_punt = doneActivity.last.getSecondsPerKilometer();
+
+    var verschil = nulmeting - goal;
+    var progressie = nulmeting - nu_punt;
+
+    var percentage = progressie / verschil;
+    return percentage;
   }
 
   int getMesurement() => // nulmeting (TODO: aanpassen naar eerste activiteit)
-      (duration.inSeconds / distance * 1000).toInt();
+
+      doneActivity.first.getSecondsPerKilometer();
+// (duration.inSeconds / distance * 1000).toInt();
 }
