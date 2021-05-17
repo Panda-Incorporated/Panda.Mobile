@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
-import 'package:panda/Pages/GoalSelectionPage.dart';
-import 'package:panda/Pages/Home.dart';
-import 'package:panda/Pages/Settings.dart';
-import 'Pages/NewGoal.dart';
+import 'package:panda/Pages/pages.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,7 +33,9 @@ class _NavigationState extends State<Navigation> {
   bool buttonsShown = false;
   List<Widget> _widgetOptions = [
     Home(),
-    SettingsPage(),
+    // SeePredictionLargePage(goal: GoalProvider.getGoals()[0]),
+    SettingsPage()
+
     // GoalSelectionPage(),
     // ActivitySelectionPage(),
     // SeePredictionsmall(),
@@ -80,12 +79,13 @@ class _NavigationState extends State<Navigation> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FloatingActionButton(
-                          heroTag: "GoalSelection",
+                          heroTag: "Actvityselection",
                           onPressed: () => {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => GoalSelectionPage()),
+                                  builder: (context) =>
+                                      ActivitySelectionPage()),
                             )
                           },
                           child: Container(

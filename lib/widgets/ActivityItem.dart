@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
+import 'package:panda/Pages/pages.dart';
 
 class ActivityItem extends StatefulWidget {
   final Activity activity;
@@ -19,7 +20,12 @@ class _ActivityItemState extends State<ActivityItem> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => print("Hallo"), //werkt
+        onTap: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GoalSelectionPage()),
+          )
+        }, //werkt
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,

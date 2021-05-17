@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
@@ -10,7 +11,6 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-//TODO: navigation onTap() (en data doorgeven)
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
@@ -65,6 +65,13 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   ShowGoals(
+                    onGoalSelected: (goal) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GoalSummaryPage(goal: goal)),
+                      );
+                    },
                     currentGoals: GoalProvider.getGoals()
                         .where((e) => !e.finished)
                         .toList(),
@@ -81,6 +88,13 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   ShowGoals(
+                    // onGoalSelected: (goal) {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => GoalSummaryPage(goal: goal)),
+                    //   );
+                    // },
                     currentGoals: GoalProvider.getGoals()
                         .where((e) => e.finished)
                         .toList(),
