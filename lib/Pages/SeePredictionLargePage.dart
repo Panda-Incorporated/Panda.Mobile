@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -17,12 +18,10 @@ class SeePredictionLargePage extends StatefulWidget {
 }
 
 class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
-  bool isShowingMainData;
-
   @override
   @override
   Widget build(BuildContext context) {
-    if (widget.goal.getMesurement() < widget.goal.goal)
+    if ((widget.goal.getPercentage() * 100) >= 100)
       return Text(
           "goal al bereikt"); // placeholder om een glitchende grafiek tegen te gaan
     else
@@ -64,10 +63,14 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
-                alignment: Alignment.centerLeft,
-                child: Text("Voorspelling"),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    alignment: Alignment.centerLeft,
+                    child: Text("Voorspelling"),
+                  ),
+                ],
               ),
               Expanded(
                 child: Container(
@@ -83,6 +86,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                     ),
                   ),
                   child: Stack(
+                    alignment: Alignment.topRight,
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,6 +106,13 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                           ),
                         ],
                       ),
+                      Column(
+                        children: [
+                          legenda(Color(0xff4af699), "Gelopen"),
+                          legenda(Color(0xffaa4cfc), "Goal"),
+                          legenda(Color(0xff27b6fc), "Predictie")
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -187,7 +198,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
           goal,
           generateSpots(goal.getMesurement(), goal.goal,
               widget.goal.endday.difference(widget.goal.beginday).inDays)),
-      //drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
+      drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
     ];
   }
 }
@@ -234,10 +245,39 @@ List<FlSpot> generatePredictLine(Goal goal) {
 
   int predictionday = 2;
 
+  double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
+
   List<FlSpot> list = [];
   list.add(FlSpot(beginpunt, y.toDouble()));
   list.add(FlSpot(beginpunt + predictionday,
-      kmslastpoint - progressionperquantum * diffrencedays));
+      kmsPredicted > goal.goal ? kmsPredicted : goal.goal));
 
   return list;
+}
+
+Widget legenda(Color color, String name) {
+  return Container(
+    padding: const EdgeInsets.all(2.0),
+    height: 30,
+    width: 110,
+    color: Colors.grey[200],
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          color: color,
+          height: 10,
+          width: 40,
+        ),
+        SizedBox(width: 5),
+        Container(
+          alignment: Alignment.center,
+          child: Text(
+            name + " lijn",
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+      ],
+    ),
+  );
 }

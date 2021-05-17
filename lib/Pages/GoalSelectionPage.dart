@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Pages/GoalSummaryPage.dart';
-import 'package:panda/widgets/CurrentGoals.dart';
-import 'package:panda/widgets/Logo.dart';
+import 'package:panda/widgets/widgets.dart';
+
+import 'pages.dart';
 
 class GoalSelectionPage extends StatefulWidget {
   @override
@@ -13,6 +13,7 @@ class GoalSelectionPage extends StatefulWidget {
 // TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
 class _GoalSelectionPageState extends State<GoalSelectionPage> {
   Goal currentGoal;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +61,10 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                 ShowGoals(
                   onGoalSelected: (goal) {
                     currentGoal = goal;
-                    print(goal.title);
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => GoalSummaryPage(goal: goal)),
+                      MaterialPageRoute(builder: (context) => Home()),
                     );
                   },
                   currentGoals: GoalProvider.getGoals()

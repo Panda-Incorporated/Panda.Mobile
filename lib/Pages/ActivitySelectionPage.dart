@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/ActivityProvider.dart';
-import 'package:panda/widgets/CurrentActivities.dart';
-import 'package:panda/widgets/Logo.dart';
+import 'package:panda/widgets/widgets.dart';
 
 class ActivitySelectionPage extends StatefulWidget {
   @override
