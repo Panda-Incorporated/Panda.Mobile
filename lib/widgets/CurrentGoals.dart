@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:panda/DataProvider.dart/GoalProvider.dart';
+import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/widgets/GoalItem.dart';
 

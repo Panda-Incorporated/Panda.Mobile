@@ -24,7 +24,8 @@ class _StartPageState extends State<StartPage> {
       context,
       MaterialPageRoute(builder: (context) => AuthenticationPage()),
     );
-    DBProvider.helper.getDatabase().loading = false;
+    DBProvider.helper.getDatabase();
+    loading = false;
     setState(() {});
   }
 

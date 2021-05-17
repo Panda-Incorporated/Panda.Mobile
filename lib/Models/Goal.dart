@@ -4,10 +4,8 @@ import 'package:panda/Models/DistanceDuration.dart';
 class Goal extends DistanceDuration {
   bool finished;
   String title;
-  double distance; // hoeveel heeft de sporter afgelegd met de nulmeting
-  // double doneMaxDistance;
-  // Duration doneMaxDuration;
-  Duration duration; // hoelang duurde de nulmeting
+  double distance;
+  Duration duration;
 
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
@@ -16,7 +14,6 @@ class Goal extends DistanceDuration {
   List<Activity>
       doneActivity; // lijst met activiteiten die sporter heeft toegevoegd aan doel
   getString() {
-    // method van reidert
     return getCombination(distance.toInt(), duration.inMinutes);
   }
 
