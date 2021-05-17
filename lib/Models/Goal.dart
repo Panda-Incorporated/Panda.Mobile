@@ -12,7 +12,7 @@ class Goal extends DistanceDuration {
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
-  int secondsperkilometer; // doel
+  int goal; // doel
   List<Activity>
       doneActivity; // lijst met activiteiten die sporter heeft toegevoegd aan doel
   getString() {
@@ -22,6 +22,7 @@ class Goal extends DistanceDuration {
 
   int getPercentage() {
     // percentage done moet vervangen worden door nieuwe formule staat in documentatie onedrive
+    // TODO: Veranderen naar laatste activiteit
     return (((this.doneMaxDistance / this.distance) * 100) +
             ((this.duration.inMicroseconds /
                     this.doneMaxDuration.inMicroseconds) *
@@ -29,6 +30,6 @@ class Goal extends DistanceDuration {
         2;
   }
 
-  int getSecondsPerKilometer() => // krijg seconds/km van de nulmeting
+  int getMesurement() => // nulmeting (TODO: aanpassen naar eerste activiteit)
       (duration.inSeconds / distance * 1000).toInt();
 }

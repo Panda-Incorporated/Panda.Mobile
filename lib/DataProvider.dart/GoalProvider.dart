@@ -13,7 +13,7 @@ class GoalProvider {
         ..duration = Duration(minutes: 9, seconds: 39)
         ..doneMaxDistance = 1
         //doel
-        ..secondsperkilometer = 500
+        ..goal = 500
         ..beginday = DateTime(2021, DateTime.may, 11)
         ..endday = DateTime(2021, DateTime.may, 31)
         ..doneMaxDuration = Duration(minutes: 50)
