@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
+import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -46,33 +47,8 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
               ),
             ),
           ),
+          GoalSummary(goal: widget.goal),
 
-          Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: Text(
-                  widget.goal.title,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.outlined_flag,
-              ),
-              Text(
-                  "${widget.goal.doneMaxDistance} km van ${widget.goal.distance} km"),
-              Text(
-                "in",
-                style: TextStyle(fontSize: 12),
-              ),
-              Text("${widget.goal.doneMaxDistance} minuten"),
-            ],
-          ),
-
-          // Eerst volgende activiteit
           Padding(
             // buiten het scherm en iets meer onder de 2,5 uur
             padding: EdgeInsets.only(

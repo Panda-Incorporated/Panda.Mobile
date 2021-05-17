@@ -19,13 +19,13 @@ class GoalProvider {
         ..doneMaxDuration = Duration(minutes: 50)
         ..doneActivity = [
           Activity()
+            ..meters = 1500
+            ..totalactivitytime = Duration(minutes: 13, seconds: 40)
+            ..date = DateTime(2021, DateTime.may, 17),
+          Activity()
             ..meters = 2000
             ..totalactivitytime = Duration(minutes: 19)
             ..date = DateTime(2021, DateTime.may, 14),
-          Activity()
-            ..meters = 1500
-            ..totalactivitytime = Duration(minutes: 12, seconds: 40)
-            ..date = DateTime(2021, DateTime.may, 15)
         ],
       Goal()
         ..finished = true

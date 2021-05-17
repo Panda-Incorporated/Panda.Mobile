@@ -160,8 +160,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       //minY altijd doel -20
       minY: (goal - 20).toDouble(),
       //TODO: kan nog vervangen worden door single goal (days is present-future)
-      lineBarsData: generateLines(
-          begin, goal, days, widget.goal, widget.goal.doneActivity),
+      lineBarsData: generateLines(widget.goal),
     );
   }
 
@@ -202,6 +201,23 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
+  LineChartBarData predictLine(Color color, Goal goal) {
+    return LineChartBarData(
+      spots: generatePredictLine(goal),
+      isCurved: false,
+      colors: [color],
+      barWidth: 2,
+      // display dots uit
+      dotData: FlDotData(
+        show: false,
+      ),
+      //display alles onder de lijn false
+      belowBarData: BarAreaData(
+        show: false,
+      ),
+    );
+  }
+
   //TODO: hier een predictielijn van maken met single goal
   LineChartBarData lines(Color color, int begin, int goal, int days) {
     return LineChartBarData(
@@ -221,12 +237,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   }
 
   //genereerd alle 3 de lijnen TODO: single goal
-  List<LineChartBarData> generateLines(
-      int begin, int goal, int days, Goal goal2, List<Activity> activity) {
+  List<LineChartBarData> generateLines(Goal goal) {
     return [
-      activityline(Color(0xff4af699), goal2),
-      goalline(Color(0xffaa4cfc), goal2),
-      lines(Color(0xff27b6fc), begin - 10, goal, days),
+      activityline(Color(0xff4af699), goal),
+      goalline(Color(0xffaa4cfc), goal),
+      predictLine(Color(0xff27b6fc), goal),
     ];
   }
 }
@@ -251,6 +266,32 @@ List<FlSpot> generateActivitySpots(Goal goal) {
         goal.doneActivity[i].getDaysFromStartDay(goal.beginday).toDouble(),
         y.toDouble()));
   }
+
+  return list;
+}
+
+List<FlSpot> generatePredictLine(Goal goal) {
+  goal.doneActivity.sort((a, b) => a.date.compareTo(b.date));
+  Activity lastactivity = goal.doneActivity.last;
+  int kmslastpoint = lastactivity.getSecondsPerKilometer();
+  Activity secondlastactivity = goal.doneActivity[goal.doneActivity.length - 2];
+
+  int kmsfirstpoint = secondlastactivity.getSecondsPerKilometer();
+
+  double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
+
+  double diffrencedays =
+      lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+  double progressionperquantum = diffrencekms / diffrencedays;
+  int y = lastactivity.getSecondsPerKilometer();
+  double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
+
+  int predictionday = 2;
+
+  List<FlSpot> list = [];
+  list.add(FlSpot(beginpunt, y.toDouble()));
+  list.add(FlSpot(beginpunt + predictionday,
+      kmslastpoint - progressionperquantum * diffrencedays));
 
   return list;
 }

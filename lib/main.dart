@@ -6,9 +6,7 @@ import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/Settings.dart';
 import 'Pages/NewGoal.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -53,6 +51,7 @@ class _NavigationState extends State<Navigation> {
     //   doel: 500,
     // ),
   ];
+
   void _onItemTap(int index) {
     setState(() {
       _selectedIndex = index;
