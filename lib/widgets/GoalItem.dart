@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:panda/Utils/Pair.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ListItem extends StatefulWidget {
@@ -8,6 +7,7 @@ class ListItem extends StatefulWidget {
     this.title,
     this.subTitle,
     this.percentage,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -15,15 +15,18 @@ class ListItem extends StatefulWidget {
   final String title;
   final String subTitle;
   final int percentage;
+  final Function onTap;
 }
 
+//TODO: singel goal meegeven (netzoals bij activity gedaan)
 class _ListItemState extends State<ListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => print("Hallo"), //werkt
+        onTap: widget
+            .onTap, //navigeren naar goal summaary page en dan goal meegeven
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,

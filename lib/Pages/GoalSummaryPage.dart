@@ -1,10 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/SeePredictionLargePage.dart';
+import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
-import 'package:panda/widgets/TomorrowSummary.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import 'ActivitySelectionPage.dart';
+
 class GoalSummaryPage extends StatefulWidget {
+  final Goal goal;
+
+  const GoalSummaryPage({Key key, @required this.goal}) : super(key: key);
+
   @override
   _GoalSummaryPageState createState() => _GoalSummaryPageState();
 }
@@ -25,12 +33,12 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 radius: 150.0,
                 lineWidth: 4.0,
                 backgroundColor: Colors.green[100],
-                percent: 0.7,
+                percent: widget.goal.getPercentage() / 100,
                 progressColor: Colors.green[800],
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "70%",
+                  "${widget.goal.getPercentage()}%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -39,40 +47,25 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
               ),
             ),
           ),
+          GoalSummary(goal: widget.goal),
 
-          Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "{Naam van doel}",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.outlined_flag,
-              ),
-              Text("18,75 km van 25 km"),
-              Text(
-                "in",
-                style: TextStyle(fontSize: 12),
-              ),
-              Text("2,5 uur"),
-            ],
-          ),
-
-          // Eerst volgende activiteit
           Padding(
             // buiten het scherm en iets meer onder de 2,5 uur
             padding: EdgeInsets.only(
                 left: 12.0, right: 12.0, bottom: 8.0, top: 18.0),
             child: Column(
               children: [
-                ShowGraph(data: "Voorspelling"),
-                ShowGraph(data: "Voortgang")
+                ShowGraph(
+                  title: "Voorspelling",
+                  onTap: SeePredictionLargePage(goal: widget.goal),
+                ),
+                ShowGraph(
+                    title: "Voortgang",
+                    onTap: SeePredictionLargePage(goal: widget.goal)),
+                ShowGraph(
+                  title: "Activiteiten",
+                  onTap: ActivitySelectionPage(),
+                ),
               ],
             ),
           ),

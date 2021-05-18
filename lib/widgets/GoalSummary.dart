@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Goal.dart';
 
 class GoalSummary extends StatelessWidget {
+  final Goal goal;
+
+  const GoalSummary({Key key, this.goal}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -8,7 +12,7 @@ class GoalSummary extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           child: Text(
-            "{Naam van doel}",
+            goal.title,
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w500,
@@ -18,12 +22,13 @@ class GoalSummary extends StatelessWidget {
         Icon(
           Icons.outlined_flag,
         ),
-        Text("18,75 km van 25 km"),
+        Text(
+            "{km/s last activity door Tichel formule} km van ${goal.distance} km"),
         Text(
           "in",
           style: TextStyle(fontSize: 12),
         ),
-        Text("2,5 uur"),
+        Text("${goal.duration.inMinutes} minuten"),
       ],
     );
   }
