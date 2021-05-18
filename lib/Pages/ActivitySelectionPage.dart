@@ -100,11 +100,11 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                       _selectDate(context);
                     }),
                 if (loading)
-                  CircularProgressIndicator()
+                  Center(child: CircularProgressIndicator())
                 else if (activities != null)
                   ShowActivities(currentActvities: activities)
                 else
-                  Text("Geen activiteiten om weer te geven.")
+                  Center(child: Text("Geen activiteiten om weer te geven."))
               ],
             ),
           ),

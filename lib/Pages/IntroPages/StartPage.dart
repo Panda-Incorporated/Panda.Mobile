@@ -6,6 +6,9 @@ import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 
 class StartPage extends StatefulWidget {
+  final Function onDone;
+
+  const StartPage({Key key, this.onDone}) : super(key: key);
   @override
   _StartPageState createState() => _StartPageState();
 }
@@ -74,10 +77,7 @@ class _StartPageState extends State<StartPage> {
             OutlinedButton(
                 child: Text("Next"),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
+                  if (widget.onDone != null) widget.onDone();
                 })
           ]
         ],

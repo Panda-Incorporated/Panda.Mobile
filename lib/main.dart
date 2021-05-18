@@ -66,7 +66,14 @@ class _InitialPageState extends State<InitialPage> {
     return loading
         ? Center(child: CircularProgressIndicator())
         : isFirstStart
-            ? StartPage()
+            ? StartPage(
+                onDone: () {
+                  setState(() {
+                    loading = false;
+                    isFirstStart = false;
+                  });
+                },
+              )
             : Navigation();
   }
 }
