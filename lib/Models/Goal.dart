@@ -1,7 +1,10 @@
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/DistanceDuration.dart';
 
+//WARNING DB file: if changed, toMap also needs to be changed and DB rebuild.
 class Goal extends DistanceDuration {
+  int id;
+
   bool finished;
   String title;
   double distance;
@@ -13,6 +16,8 @@ class Goal extends DistanceDuration {
   int goal; // doel
   List<Activity>
       doneActivity; // lijst met activiteiten die sporter heeft toegevoegd aan doel
+  Goal();
+  Goal.fill({this.id, this.duration, this.title, this.distance});
   getString() {
     return getCombination(distance.toInt(), duration.inMinutes);
   }
@@ -30,8 +35,12 @@ class Goal extends DistanceDuration {
     return percentage;
   }
 
-  int getMesurement() => // nulmeting (TODO: aanpassen naar eerste activiteit)
-
-      doneActivity.first.getSecondsPerKilometer();
-// (duration.inSeconds / distance * 1000).toInt();
+  int getMesurement() => doneActivity.first.getSecondsPerKilometer();
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'distance': distance,
+      'duration': duration.inSeconds,
+    };
+  }
 }

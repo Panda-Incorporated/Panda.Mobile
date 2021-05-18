@@ -19,20 +19,20 @@ class GoalProvider {
         //   ..doneMaxDuration = Duration(minutes: 50)
         ..doneActivity = [
           Activity()
-            ..meters = 1000
-            ..totalactivitytime = Duration(minutes: 10)
+            ..distance = 1000
+            ..duration = Duration(minutes: 10)
             ..date = DateTime(2021, DateTime.may, 11),
           Activity()
-            ..meters = 1000
-            ..totalactivitytime = Duration(minutes: 9, seconds: 50)
+            ..distance = 1000
+            ..duration = Duration(minutes: 9, seconds: 50)
             ..date = DateTime(2021, DateTime.may, 17),
           Activity()
-            ..meters = 1000
-            ..totalactivitytime = Duration(minutes: 9, seconds: 20)
+            ..distance = 1000
+            ..duration = Duration(minutes: 9, seconds: 20)
             ..date = DateTime(2021, DateTime.may, 18),
           Activity()
-            ..meters = 1000
-            ..totalactivitytime = Duration(minutes: 8, seconds: 30)
+            ..distance = 1000
+            ..duration = Duration(minutes: 8, seconds: 30)
             ..date = DateTime(2021, DateTime.may, 23),
         ],
       Goal()

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
+import 'package:panda/Models/AuthState.dart';
+import 'package:panda/Pages/IntroPages/StartPage.dart';
 import 'package:panda/Pages/pages.dart';
+import 'package:panda/Providers/DBProvider.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,8 +19,55 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Navigation(),
+      home: InitialPage(),
     );
+  }
+}
+
+class InitialPage extends StatefulWidget {
+  @override
+  _InitialPageState createState() => _InitialPageState();
+}
+
+class _InitialPageState extends State<InitialPage> {
+  bool isFirstStart = true;
+  bool loading = true;
+  @override
+  void initState() {
+    super.initState();
+    getAutState();
+  }
+
+  getAutState() async {
+    AuthState authState;
+    if (await DBProvider.helper.databaseExists()) {
+      authState = await DBProvider.helper.getAuthState();
+    } else {
+      DBProvider.helper.initialize();
+      authState = null;
+    }
+    if (authState == null) {
+      setState(() {
+        isFirstStart = true;
+        loading = false;
+      });
+      print("App started first time ");
+    } else {
+      setState(() {
+        isFirstStart = false;
+        loading = false;
+      });
+      print("Signed in with username: " + authState.username ?? "");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : isFirstStart
+            ? StartPage()
+            : Navigation();
   }
 }
 

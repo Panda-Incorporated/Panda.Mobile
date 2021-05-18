@@ -6,17 +6,17 @@ class ActivityProvider {
     return [
       Activity()
         ..date = DateTime(2021, 5, 11)
-        ..meters = 1000
-        ..totalactivitytime = Duration(minutes: 6, seconds: 10),
+        ..distance = 1000
+        ..duration = Duration(minutes: 6, seconds: 10),
       Activity()
         ..date = DateTime(2021, 5, 11)
-        ..meters = 1000
-        ..totalactivitytime = Duration(minutes: 6, seconds: 10),
+        ..distance = 1000
+        ..duration = Duration(minutes: 6, seconds: 10),
     ];
   }
 
   static double getSecondsPerKilometer(Activity activity) {
     //sec/km van activity
-    return activity.totalactivitytime.inSeconds / activity.meters * 1000;
+    return activity.duration.inSeconds / activity.distance * 1000;
   }
 }

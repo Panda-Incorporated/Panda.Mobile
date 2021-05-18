@@ -77,7 +77,7 @@ class _ActivityItemState extends State<ActivityItem> {
                         child: Column(
                           children: [
                             Text(
-                              "${widget.activity.meters} m",
+                              "${widget.activity.distance} m",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,

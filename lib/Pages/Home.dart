@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:panda/Models/AuthState.dart';
 import 'package:panda/Pages/GoalSummaryPage.dart';
+import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
@@ -12,6 +14,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  AuthState authState;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+    authState = await DBProvider.helper.getAuthState();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +39,7 @@ class _HomeState extends State<Home> {
             backgroundColor: Colors.transparent,
             centerTitle: false,
             title: Text(
-              "Welkom Panda",
+              "Welkom " + (authState?.username ?? ""),
               style: TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.w400,
