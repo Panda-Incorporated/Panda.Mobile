@@ -58,7 +58,7 @@ class ApiProvider {
             DateFormat("yyyy-MM-dd").format(dateTime)));
     if (resp.statusCode == 200) {
       return (jsonDecode(resp.body) as List)
-          .map((e) => Activity.fromMap(e))
+          .map((e) => Activity.fromMap(e, dateTime: dateTime))
           .toList();
     } else {
       return List.empty();

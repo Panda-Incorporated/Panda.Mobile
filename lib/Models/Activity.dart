@@ -41,11 +41,11 @@ class Activity {
     };
   }
 
-  factory Activity.fromMap(Map<String, dynamic> map) {
+  factory Activity.fromMap(Map<String, dynamic> map, {DateTime dateTime}) {
     return Activity.fill(
-      date: DateTime.parse(map['date']),
+      date: dateTime != null ? dateTime : DateTime.parse(map['date']),
       distance: map['distance'],
-      duration: map['duration'],
+      duration: Duration(milliseconds: map['duration']),
     );
   }
 }

@@ -77,7 +77,8 @@ class _ActivityItemState extends State<ActivityItem> {
                         child: Column(
                           children: [
                             Text(
-                              "${widget.activity.distance} m",
+                              widget.activity.distance.toStringAsFixed(1) +
+                                  "km",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
