@@ -193,21 +193,20 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   List<LineChartBarData> generateLines(Goal goal) {
     return [
       drawLine(Color(0xff4af699), goal, generateActivitySpots(goal)),
-      drawLine(
-          Color(0xffaa4cfc),
-          goal,
-          generateSpots(goal.getMesurement(), goal.goal,
-              widget.goal.endday.difference(widget.goal.beginday).inDays)),
+      drawLine(Color(0xffaa4cfc), goal, generateSpots(goal)),
       drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
     ];
   }
 }
 
 // genereert ideale lijnen TODO: single goal
-List<FlSpot> generateSpots(int begin, int goal, int days) {
+List<FlSpot> generateSpots(Goal goal) {
+  var days = goal.endday.difference(goal.beginday).inDays;
+
   List<FlSpot> list = [];
   for (var i = 0; i < days + 1; i++) {
-    var y = (goal - begin) / sqrt(days) * sqrt(i) + begin;
+    var y = (goal.goal - goal.getMesurement()) / sqrt(days) * sqrt(i) +
+        goal.getMesurement();
     list.add(FlSpot(i.toDouble(), y));
   }
 
@@ -230,27 +229,16 @@ List<FlSpot> generateActivitySpots(Goal goal) {
 List<FlSpot> generatePredictLine(Goal goal) {
   goal.doneActivity.sort((a, b) => a.date.compareTo(b.date));
   Activity lastactivity = goal.doneActivity.last;
-  int kmslastpoint = lastactivity.getSecondsPerKilometer();
-  Activity secondlastactivity = goal.doneActivity[goal.doneActivity.length - 2];
-
-  int kmsfirstpoint = secondlastactivity.getSecondsPerKilometer();
-
-  double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
-
-  double diffrencedays =
-      lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
-  double progressionperquantum = diffrencekms / diffrencedays;
   int y = lastactivity.getSecondsPerKilometer();
   double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
 
   int predictionday = 2;
-
-  double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
+  double kmsPredicted = goal.getNextPoint();
+  print(kmsPredicted);
 
   List<FlSpot> list = [];
   list.add(FlSpot(beginpunt, y.toDouble()));
-  list.add(FlSpot(beginpunt + predictionday,
-      kmsPredicted > goal.goal ? kmsPredicted : goal.goal));
+  list.add(FlSpot(beginpunt + predictionday, kmsPredicted));
 
   return list;
 }

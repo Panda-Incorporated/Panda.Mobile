@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/widgets/widgets.dart';
-
-import 'pages.dart';
+import 'package:panda/Pages/GiveStarScreen.dart';
+import 'package:panda/widgets/CurrentGoals.dart';
+import 'package:panda/widgets/Logo.dart';
 
 class GoalSelectionPage extends StatefulWidget {
+  final Activity act;
+
+  const GoalSelectionPage({Key key, @required this.act}) : super(key: key);
+
   @override
   _GoalSelectionPageState createState() => _GoalSelectionPageState();
 }
 
-// TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
 class _GoalSelectionPageState extends State<GoalSelectionPage> {
   Goal currentGoal;
 
@@ -64,7 +68,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GiveStarPage(goal: goal, activity: widget.act)),
                     );
                   },
                   currentGoals: GoalProvider.getGoals()

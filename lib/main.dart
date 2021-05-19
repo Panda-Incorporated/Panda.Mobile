@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
+import 'package:panda/DataProvider.dart/GoalProvider.dart';
+import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/pages.dart';
 
 void main() => runApp(MyApp());
@@ -33,8 +35,9 @@ class _NavigationState extends State<Navigation> {
   bool buttonsShown = false;
   List<Widget> _widgetOptions = [
     Home(),
+    // GiveStarPage(goal: GoalProvider.getGoals()[0]),
     // SeePredictionLargePage(goal: GoalProvider.getGoals()[0]),
-    SettingsPage()
+    PlanningPage(goal: GoalProvider.getGoals()[0])
 
     // GoalSelectionPage(),
     // ActivitySelectionPage(),

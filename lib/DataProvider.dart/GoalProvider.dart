@@ -8,14 +8,14 @@ class GoalProvider {
       Goal()
         ..finished = false
         ..title = "Marathon"
-        ..distance = 1000
+        ..distance = 11000
         // ..doneMaxDistance = 1.0
-        ..duration = Duration(minutes: 7, seconds: 39)
+        ..duration = Duration(hours: 1, minutes: 16, seconds: 30)
         // ..doneMaxDistance = 1
         //doel
         ..goal = 500
         ..beginday = DateTime(2021, DateTime.may, 11)
-        ..endday = DateTime(2021, DateTime.june, 31)
+        ..endday = DateTime(2021, DateTime.may, 31)
         //   ..doneMaxDuration = Duration(minutes: 50)
         ..doneActivity = [
           Activity()
@@ -30,10 +30,10 @@ class GoalProvider {
             ..meters = 1000
             ..totalactivitytime = Duration(minutes: 9, seconds: 20)
             ..date = DateTime(2021, DateTime.may, 18),
-          Activity()
-            ..meters = 1000
-            ..totalactivitytime = Duration(minutes: 8, seconds: 30)
-            ..date = DateTime(2021, DateTime.may, 23),
+          // Activity()
+          //   ..meters = 1000
+          //   ..totalactivitytime = Duration(minutes: 8, seconds: 30)
+          //   ..date = DateTime(2021, DateTime.may, 23),
         ],
       Goal()
         ..finished = true

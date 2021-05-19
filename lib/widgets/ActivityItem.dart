@@ -23,7 +23,8 @@ class _ActivityItemState extends State<ActivityItem> {
         onTap: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => GoalSelectionPage()),
+            MaterialPageRoute(
+                builder: (context) => GoalSelectionPage(act: widget.activity)),
           )
         }, //werkt
         child: Container(
