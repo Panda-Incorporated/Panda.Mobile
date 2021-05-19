@@ -2,17 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
 import 'package:panda/DataProvider.dart/GoalProvider.dart';
-import 'package:panda/Pages/GoalSelectionPage.dart';
-import 'package:panda/Pages/GoalSummaryPage.dart';
-import 'package:panda/Pages/Home.dart';
-import 'package:panda/Pages/SeePredictionLargePage.dart';
-import 'package:panda/Pages/SeePredictionsmallPage.dart';
-import 'package:panda/Pages/ActivitySelectionPage.dart';
-import 'package:panda/Pages/Settings.dart';
+import 'package:panda/Pages/PlanningPage.dart';
+import 'package:panda/Pages/pages.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -42,7 +35,10 @@ class _NavigationState extends State<Navigation> {
   bool buttonsShown = false;
   List<Widget> _widgetOptions = [
     Home(),
-    SettingsPage(),
+    // GiveStarPage(goal: GoalProvider.getGoals()[0]),
+    // SeePredictionLargePage(goal: GoalProvider.getGoals()[0]),
+    PlanningPage(goal: GoalProvider.getGoals()[0])
+
     // GoalSelectionPage(),
     // ActivitySelectionPage(),
     // SeePredictionsmall(),
@@ -57,6 +53,7 @@ class _NavigationState extends State<Navigation> {
     //   doel: 500,
     // ),
   ];
+
   void _onItemTap(int index) {
     setState(() {
       _selectedIndex = index;
@@ -65,90 +62,93 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 40.0),
-        child: Stack(children: [
-          _widgetOptions.elementAt(_selectedIndex),
-          if (buttonsShown)
-            Positioned(
-              bottom: 30,
-              right: 0,
-              left: 0,
-              child: Center(
-                child: Container(
-                  height: 40,
-                  width: 200,
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FloatingActionButton(
-                        heroTag: "GoalSelection",
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GoalSelectionPage()),
-                          )
-                        },
-                        child: Container(
-                          width: 100.0,
-                          height: 100.0,
-                          child: Icon(
-                            Glyphicon.lightning_charge,
-                            size: 20,
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Stack(children: [
+            _widgetOptions.elementAt(_selectedIndex),
+            if (buttonsShown)
+              Positioned(
+                bottom: 30,
+                right: 0,
+                left: 0,
+                child: Center(
+                  child: Container(
+                    height: 40,
+                    width: 200,
+                    color: Colors.transparent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          heroTag: "Actvityselection",
+                          onPressed: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ActivitySelectionPage()),
+                            )
+                          },
+                          child: Container(
+                            width: 100.0,
+                            height: 100.0,
+                            child: Icon(
+                              Glyphicon.lightning_charge,
+                              size: 20,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      FloatingActionButton(
-                        heroTag: "GoalCreate",
-                        onPressed: () => {},
-                        child: Icon(
-                          Glyphicon.flag,
-                          size: 20,
+                        SizedBox(
+                          width: 30,
                         ),
-                      )
-                    ],
+                        FloatingActionButton(
+                          heroTag: "GoalCreate",
+                          onPressed: () => {},
+                          child: Icon(
+                            Glyphicon.flag,
+                            size: 20,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
+          ]),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              buttonsShown = !buttonsShown;
+            });
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+              ),
+              label: "Home",
+              backgroundColor: Colors.blue,
             ),
-        ]),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          setState(() {
-            buttonsShown = !buttonsShown;
-          });
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.settings,
+              ),
+              label: "Settings",
+              backgroundColor: Colors.blue,
             ),
-            label: "Home",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings,
-            ),
-            label: "Settings",
-            backgroundColor: Colors.blue,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTap,
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTap,
+        ),
       ),
     );
   }

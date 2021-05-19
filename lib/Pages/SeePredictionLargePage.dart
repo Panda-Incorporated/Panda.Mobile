@@ -2,16 +2,15 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class SeePredictionLargePage extends StatefulWidget {
   final Goal goal;
-  //tijdelijk
-  final int doel;
-  const SeePredictionLargePage(
-      {Key key, @required this.goal, @required this.doel})
+
+  const SeePredictionLargePage({Key key, @required this.goal})
       : super(key: key);
 
   @override
@@ -19,12 +18,10 @@ class SeePredictionLargePage extends StatefulWidget {
 }
 
 class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
-  bool isShowingMainData;
-
   @override
   @override
   Widget build(BuildContext context) {
-    if (widget.goal.getSecondsPerKilometer() < widget.goal.secondsperkilometer)
+    if ((widget.goal.getPercentage() * 100) >= 100)
       return Text(
           "goal al bereikt"); // placeholder om een glitchende grafiek tegen te gaan
     else
@@ -42,12 +39,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                       radius: 80.0,
                       lineWidth: 6.0,
                       backgroundColor: Colors.green[100],
-                      percent: widget.goal.getPercentage() / 100,
+                      percent: widget.goal.getPercentage(),
                       progressColor: Colors.green[800],
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
-                        "${widget.goal.getPercentage()}",
+                        "${widget.goal.getPercentage() * 100}",
                         style: TextStyle(
                             color: Colors.green[800],
                             fontSize: 20,
@@ -66,10 +63,14 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
-                alignment: Alignment.centerLeft,
-                child: Text("Voorspelling"),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    alignment: Alignment.centerLeft,
+                    child: Text("Voorspelling"),
+                  ),
+                ],
               ),
               Expanded(
                 child: Container(
@@ -85,6 +86,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                     ),
                   ),
                   child: Stack(
+                    alignment: Alignment.topRight,
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,12 +98,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.only(right: 16.0, left: 6.0),
-                              child: LineChart(displayData(
-                                  begin: widget.goal.getSecondsPerKilometer(),
-                                  goal: widget.goal.secondsperkilometer,
-                                  days: widget.goal.endday
-                                      .difference(widget.goal.beginday)
-                                      .inDays)),
+                              child: chart(),
                             ),
                           ),
                           const SizedBox(
@@ -109,6 +106,13 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                           ),
                         ],
                       ),
+                      Column(
+                        children: [
+                          legenda(Color(0xff4af699), "Gelopen"),
+                          legenda(Color(0xffaa4cfc), "Goal"),
+                          legenda(Color(0xff27b6fc), "Predictie")
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -119,61 +123,59 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       );
   }
 
-  // main functie data weergeven (//TODO: kan vervangen worden door goal)
-  LineChartData displayData({int begin, int goal, int days}) {
-    return LineChartData(
-      lineTouchData: LineTouchData(
-        enabled: false,
-      ),
-      titlesData: FlTitlesData(
-        bottomTitles: SideTitles(
-          interval: 2,
-          showTitles: true,
-          reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff72719b),
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          // afstand X as met lijntejs
-          margin: 10,
+  Widget chart() {
+    return LineChart(
+      LineChartData(
+        lineTouchData: LineTouchData(
+          enabled: false,
         ),
-        leftTitles: SideTitles(
-          interval: 5,
-          showTitles: true,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff75729e),
-            fontWeight: FontWeight.bold,
-            fontSize: 17,
+        titlesData: FlTitlesData(
+          bottomTitles: SideTitles(
+            interval: 2,
+            showTitles: true,
+            reservedSize: 22,
+            getTextStyles: (value) => const TextStyle(
+              color: Color(0xff72719b),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            // afstand X as met lijntjes
+            margin: 10,
           ),
-          reservedSize: 30,
+          leftTitles: SideTitles(
+            interval: 5,
+            showTitles: true,
+            getTextStyles: (value) => const TextStyle(
+              color: Color(0xff75729e),
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+            reservedSize: 30,
+          ),
         ),
+        borderData: FlBorderData(
+          show: true,
+          border: Border.all(color: Color(0xff4e4965)),
+        ),
+        // minX altijd 0
+        minX: 0,
+        //maxX altijd duur training
+        maxX: widget.goal.endday
+            .difference(widget.goal.beginday)
+            .inDays
+            .toDouble(),
+        // max y = nulmeting begin + 20
+        maxY: (widget.goal.getMesurement() + 20).toDouble(),
+        //minY altijd doel -20
+        minY: (widget.goal.goal - 20).toDouble(),
+        lineBarsData: generateLines(widget.goal),
       ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: Color(0xff4e4965)),
-      ),
-      // minX altijd 0
-      minX: 0,
-      //maxX altijd duur training
-      maxX: days.toDouble(),
-      // max y = nulmeting begin + 20
-      maxY: (begin + 20).toDouble(),
-      //minY altijd doel -20
-      minY: (goal - 20).toDouble(),
-      //TODO: kan nog vervangen worden door single goal (days is present-future)
-      lineBarsData: generateLines(
-          begin, goal, days, widget.goal, widget.goal.doneActivity),
     );
   }
 
-  //TODO: alleen sports is anders
-  LineChartBarData goalline(Color color, Goal goal) {
+  LineChartBarData drawLine(Color color, Goal goal, List<FlSpot> spots) {
     return LineChartBarData(
-      spots: generateSpots(
-          goal.getSecondsPerKilometer(),
-          goal.secondsperkilometer,
-          widget.goal.endday.difference(widget.goal.beginday).inDays),
+      spots: spots,
       isCurved: false,
       colors: [color],
       barWidth: 2,
@@ -188,57 +190,23 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  LineChartBarData activityline(Color color, Goal goal) {
-    return LineChartBarData(
-      spots: generateActivitySpots(goal),
-      isCurved: false,
-      colors: [color],
-      barWidth: 2,
-      // display dots uit
-      dotData: FlDotData(
-        show: false,
-      ),
-      //display alles onder de lijn false
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    );
-  }
-
-  //TODO: hier een predictielijn van maken met single goal
-  LineChartBarData lines(Color color, int begin, int goal, int days) {
-    return LineChartBarData(
-      spots: generateSpots(begin, goal, days),
-      isCurved: false,
-      colors: [color],
-      barWidth: 2,
-      // display dots uit
-      dotData: FlDotData(
-        show: false,
-      ),
-      //display alles onder de lijn false
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    );
-  }
-
-  //genereerd alle 3 de lijnen TODO: single goal
-  List<LineChartBarData> generateLines(
-      int begin, int goal, int days, Goal goal2, List<Activity> activity) {
+  List<LineChartBarData> generateLines(Goal goal) {
     return [
-      activityline(Color(0xff4af699), goal2),
-      goalline(Color(0xffaa4cfc), goal2),
-      lines(Color(0xff27b6fc), begin - 10, goal, days),
+      drawLine(Color(0xff4af699), goal, generateActivitySpots(goal)),
+      drawLine(Color(0xffaa4cfc), goal, generateSpots(goal)),
+      drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
     ];
   }
 }
 
 // genereert ideale lijnen TODO: single goal
-List<FlSpot> generateSpots(int begin, int goal, int days) {
+List<FlSpot> generateSpots(Goal goal) {
+  var days = goal.endday.difference(goal.beginday).inDays;
+
   List<FlSpot> list = [];
   for (var i = 0; i < days + 1; i++) {
-    var y = (goal - begin) / sqrt(days) * sqrt(i) + begin;
+    var y = (goal.goal - goal.getMesurement()) / sqrt(days) * sqrt(i) +
+        goal.getMesurement();
     list.add(FlSpot(i.toDouble(), y));
   }
 
@@ -256,4 +224,48 @@ List<FlSpot> generateActivitySpots(Goal goal) {
   }
 
   return list;
+}
+
+List<FlSpot> generatePredictLine(Goal goal) {
+  goal.doneActivity.sort((a, b) => a.date.compareTo(b.date));
+  Activity lastactivity = goal.doneActivity.last;
+  int y = lastactivity.getSecondsPerKilometer();
+  double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
+
+  int predictionday = 2;
+  double kmsPredicted = goal.getNextPoint();
+  print(kmsPredicted);
+
+  List<FlSpot> list = [];
+  list.add(FlSpot(beginpunt, y.toDouble()));
+  list.add(FlSpot(beginpunt + predictionday, kmsPredicted));
+
+  return list;
+}
+
+Widget legenda(Color color, String name) {
+  return Container(
+    padding: const EdgeInsets.all(2.0),
+    height: 30,
+    width: 110,
+    color: Colors.grey[200],
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          color: color,
+          height: 10,
+          width: 40,
+        ),
+        SizedBox(width: 5),
+        Container(
+          alignment: Alignment.center,
+          child: Text(
+            name + " lijn",
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+      ],
+    ),
+  );
 }

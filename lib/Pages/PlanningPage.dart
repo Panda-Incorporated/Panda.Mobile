@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:panda/DataProvider.dart/GoalProvider.dart';
-import 'package:panda/Pages/GoalSummaryPage.dart';
-import 'package:panda/widgets/widgets.dart';
+import 'package:panda/Models/Goal.dart';
+import 'package:panda/widgets/CurrentPlanning.dart';
+import 'package:panda/widgets/Logo.dart';
 
-class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
+class PlanningPage extends StatefulWidget {
+  final Goal goal;
+
+  const PlanningPage({Key key, @required this.goal}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _PlanningPageState createState() => _PlanningPageState();
 }
 
-class _HomeState extends State<Home> {
+class _PlanningPageState extends State<PlanningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,48 +58,37 @@ class _HomeState extends State<Home> {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Lopende doelen:",
+                      "Duur doelen:",
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  ShowGoals(
-                    onGoalSelected: (goal) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GoalSummaryPage(goal: goal)),
-                      );
-                    },
-                    currentGoals: GoalProvider.getGoals()
-                        .where((e) => !e.finished)
-                        .toList(),
-                  ),
-                  Text("${GoalProvider.getGoals()[0].getPercentage()}"),
+                  ShowPlanning(planner: "Time", goal: widget.goal),
+                  //  Text("${GoalProvider.getGoals()[0].getPercentage()}"),
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Afgeronde doelen:",
+                      "Afstands doelen:",
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  ShowGoals(
-                    // onGoalSelected: (goal) {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => GoalSummaryPage(goal: goal)),
-                    //   );
-                    // },
-                    currentGoals: GoalProvider.getGoals()
-                        .where((e) => e.finished)
-                        .toList(),
+                  ShowPlanning(planner: "Distance", goal: widget.goal),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Nulmetingen:",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
+                  ShowPlanning(planner: "Nulmeting", goal: widget.goal),
                 ],
               ),
             ),

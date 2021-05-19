@@ -2,7 +2,7 @@ import 'package:panda/Models/Activity.dart';
 
 class ActivityProvider {
   static List<Activity> getActivity() {
-    //TODO: NIET EERSTE TWEE ACTIVITIES AANPASSEN ZIJN TEST UNITS
+    //NIET EERSTE TWEE ACTIVITIES AANPASSEN ZIJN TEST UNITS
     return [
       Activity()
         ..date = DateTime(2021, 5, 11)

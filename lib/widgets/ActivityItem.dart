@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
+import 'package:panda/Pages/pages.dart';
 
 class ActivityItem extends StatefulWidget {
   final Activity activity;
@@ -13,14 +14,19 @@ class ActivityItem extends StatefulWidget {
   _ActivityItemState createState() => _ActivityItemState();
 }
 
-//TODO: Fix formatting units
 class _ActivityItemState extends State<ActivityItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => print("Hallo"), //werkt
+        onTap: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GoalSelectionPage(act: widget.activity)),
+          )
+        }, //werkt
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -53,7 +59,7 @@ class _ActivityItemState extends State<ActivityItem> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 0),
                               child: Text(
-                                "${widget.activity.date}",
+                                "${widget.activity.dayFormat()}",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w500),
                               ),
@@ -79,7 +85,7 @@ class _ActivityItemState extends State<ActivityItem> {
                               ),
                             ),
                             Text(
-                              "${widget.activity.totalactivitytime} secondes",
+                              "${widget.activity.timeFormat()} tijd",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
