@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/Home.dart';
 
 class ShowPlanning extends StatelessWidget {
   const ShowPlanning({Key key, this.planner, this.goal}) : super(key: key);
@@ -63,7 +64,10 @@ class _PlanningItemState extends State<PlanningItem> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
-        onTap: () {}, // TODO: SET Star TO CURRENT SUBGOAL
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }, // TODO: SET Star TO CURRENT SUBGOAL
         child: Container(
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,

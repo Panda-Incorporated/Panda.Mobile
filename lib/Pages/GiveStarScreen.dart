@@ -6,6 +6,8 @@ import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/widgets/Logo.dart';
 
+import 'Home.dart';
+
 class GiveStarPage extends StatefulWidget {
   final Goal goal;
   final Activity activity;
@@ -111,18 +113,19 @@ class Litem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
-        onTap: () => {
+        onTap: () =>
+        {
           print(amountOfStarsMPSEC(
               activity.getSecondsPerKilometer(), kmsdif, goal.goal)),
           print(amountOfStarsDistance(
               activity.meters, multiplier, goal.distance)),
           print(amountOfStarsTime(activity.totalactivitytime.inMinutes,
               multiplier, goal.duration.inMinutes)),
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()))
         },
         // {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => Home()),
+
         //     //TODO (REINDERT) sterren toevoegen aan persoon sterrren krijg je door functie uit te voeren onder aan de pagina of boven beschreven
         //
         //   )
