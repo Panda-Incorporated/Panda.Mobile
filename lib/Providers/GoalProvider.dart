@@ -9,14 +9,10 @@ class GoalProvider {
         ..finished = false
         ..title = "Marathon"
         ..distance = 1000
-        // ..doneMaxDistance = 1.0
         ..duration = Duration(minutes: 7, seconds: 39)
-        // ..doneMaxDistance = 1
-        //doel
         ..goal = 500
         ..beginday = DateTime(2021, DateTime.may, 11)
-        ..endday = DateTime(2021, DateTime.june, 31)
-        //   ..doneMaxDuration = Duration(minutes: 50)
+        ..endday = DateTime(2021, DateTime.may, 31)
         ..doneActivity = [
           Activity()
             ..distance = 1000

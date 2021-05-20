@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
-import 'package:panda/Models/AuthState.dart';
-import 'package:panda/Pages/IntroPages/StartPage.dart';
-import 'package:panda/Pages/pages.dart';
-import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Providers/GoalProvider.dart';
+
+import 'Models/AuthState.dart';
+import 'Pages/ActivitySelectionPage.dart';
+import 'Pages/Home.dart';
+import 'Pages/IntroPages/StartPage.dart';
+import 'Pages/PlanningPage.dart';
+import 'Providers/DBProvider.dart';
 
 void main() => runApp(MyApp());
 
@@ -91,7 +94,8 @@ class _NavigationState extends State<Navigation> {
   List<Widget> _widgetOptions = [
     Home(),
     // SeePredictionLargePage(goal: GoalProvider.getGoals()[0]),
-    SettingsPage()
+    PlanningPage(goal: GoalProvider.getGoals()[0])
+    // SettingsPage()
 
     // GoalSelectionPage(),
     // ActivitySelectionPage(),

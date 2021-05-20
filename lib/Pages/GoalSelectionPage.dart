@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:panda/Providers/GoalProvider.dart';
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/GiveStarScreen.dart';
+import 'package:panda/Providers/GoalProvider.dart';
+import 'package:panda/widgets/CurrentGoals.dart';
+import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/widgets.dart';
 
-import 'pages.dart';
-
 class GoalSelectionPage extends StatefulWidget {
+  final Activity act;
+
+  const GoalSelectionPage({Key key, @required this.act}) : super(key: key);
+
   @override
   _GoalSelectionPageState createState() => _GoalSelectionPageState();
 }
@@ -64,7 +70,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GiveStarPage(goal: goal, activity: widget.act)),
                     );
                   },
                   currentGoals: GoalProvider.getGoals()
