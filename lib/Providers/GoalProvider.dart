@@ -39,28 +39,28 @@ class GoalProvider {
     ];
   }
 
-  static getTempActivitiesByGoal(int goalId) {
+  static List<Activity> getTempActivitiesByGoal(int goalId) {
     return [
       Activity()
-        ..distance = 1000
+        ..distance = 1001
         ..duration = Duration(minutes: 10)
         ..goalId = goalId
         ..name = "Activiteit 1"
         ..date = DateTime(2021, DateTime.may, 11),
       Activity()
-        ..distance = 1000
+        ..distance = 1002
         ..duration = Duration(minutes: 9, seconds: 50)
         ..goalId = goalId
         ..name = "Activiteit 2"
         ..date = DateTime(2021, DateTime.may, 17),
       Activity()
-        ..distance = 1000
+        ..distance = 1003
         ..duration = Duration(minutes: 9, seconds: 20)
         ..goalId = goalId
         ..name = "Activiteit 3"
         ..date = DateTime(2021, DateTime.may, 18),
       Activity()
-        ..distance = 1000
+        ..distance = 1004
         ..duration = Duration(minutes: 8, seconds: 30)
         ..goalId = goalId
         ..name = "Activiteit 4"

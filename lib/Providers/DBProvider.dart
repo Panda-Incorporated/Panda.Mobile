@@ -14,14 +14,14 @@ class DBHelper {
     _database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-        """CREATE TABLE AuthState(id INTEGER PRIMARY KEY, userName TEXT, accessToken TEXT, refreshToken TEXT, expires DATETIME);""",
+        """CREATE TABLE AuthState(id INTEGER PRIMARY KEY AUTOINCREMENT , userName TEXT, accessToken TEXT, refreshToken TEXT, expires DATETIME);""",
       );
       await db.execute(
-        """CREATE TABLE Goal(id INTEGER PRIMARY KEY, title TEXT, distance DOUBLE, duration INTEGER, totalAmountOfStars INTEGER, currentAmoutOfStars INTEGER);
+        """CREATE TABLE Goal(id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, distance DOUBLE, duration INTEGER, totalAmountOfStars INTEGER, currentAmountOfStars INTEGER, beginday DATETIME, endday DATETIME);
         """,
       );
       await db.execute(
-        """CREATE TABLE Activity(id INTEGER PRIMARY KEY, name TEXT, date DATETIME, distance DOUBLE, duration INTEGER, goalId INTEGER);""",
+        """CREATE TABLE Activity(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT, date DATETIME, distance DOUBLE, duration INTEGER, goalId INTEGER);""",
       );
     });
     return _database;
@@ -75,6 +75,10 @@ class DBHelper {
           title: maps[i]['title'],
           distance: maps[i]['distance'],
           duration: Duration(seconds: maps[i]['duration']),
+          beginday: DateTime.parse(maps[i]['beginday']),
+          endday: DateTime.parse(maps[i]['endday']),
+          totalAmountOfStars: maps[i]['totalAmountOfStars'],
+          currentAmountOfStars: maps[i]['currentAmountOfStars'],
         );
       });
     } catch (e) {
@@ -95,6 +99,7 @@ class DBHelper {
           name: maps[i]['name'],
           distance: maps[i]['distance'],
           duration: Duration(seconds: maps[i]['duration']),
+          date: DateFormat().parse(maps[i]['date']),
           goalId: maps[i]['goalId'],
           goal: null,
         );

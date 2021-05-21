@@ -19,6 +19,8 @@ class _StartPageState extends State<StartPage> {
   TextEditingController controller;
   String username;
   bool done = false;
+  final _formKey = GlobalKey<FormState>();
+  bool everythingDone = false;
   @override
   void initState() {
     super.initState();
@@ -45,15 +47,18 @@ class _StartPageState extends State<StartPage> {
             username: username));
         loading = false;
         done = true;
+        everythingDone = true;
         setState(() {});
       } else {
         loading = false;
         done = false;
+        everythingDone = false;
         setState(() {});
       }
     } else {
       loading = false;
       done = false;
+      everythingDone = false;
       setState(() {});
     }
   }
@@ -94,19 +99,46 @@ class _StartPageState extends State<StartPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              TextFormField(
-                                style: TextStyle(),
-                                controller: controller,
-                                decoration: InputDecoration(
-                                    labelText: 'Name',
+                              Form(
+                                key: _formKey,
+                                autovalidateMode: AutovalidateMode.always,
+                                child: TextFormField(
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return "Naam is verplicht";
+                                    }
+                                    return null;
+                                  },
+                                  style: TextStyle(),
+                                  controller: controller,
+                                  decoration: InputDecoration(
+                                    labelText: 'Naam',
                                     border: OutlineInputBorder(),
-                                    hintText: 'How do we call you?...'),
+                                    hintText: 'Hoe mogen we je noemen?...',
+                                  ),
+                                ),
                               ),
                               Container(
                                 height: 15,
                               ),
                               Text(
                                   "This app uses FitBit to access your activities. Sign in using your FitBit account below."),
+                              Center(
+                                child: OutlinedButton(
+                                    child: Text("Inloggen via Fitbit"),
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        saveData();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                content: Text(
+                                                    'Er is nog geen naam ingevuld')));
+                                      }
+                                    }),
+                              )
                             ],
                           ),
                         ),
@@ -116,11 +148,14 @@ class _StartPageState extends State<StartPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              OutlinedButton(
-                                  child: Text("Next"),
-                                  onPressed: () {
-                                    if (widget.onDone != null) widget.onDone();
-                                  })
+                              everythingDone
+                                  ? OutlinedButton(
+                                      child: Text("Volgende"),
+                                      onPressed: () {
+                                        if (widget.onDone != null)
+                                          widget.onDone();
+                                      })
+                                  : Container(),
                             ],
                           ),
                         )

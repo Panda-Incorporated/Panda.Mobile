@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
           child: Column(children: [
             loading
                 ? Center(child: CircularProgressIndicator())
-                : goals != null && goals.length > 0
+                : goals != null && goals.where((e) => e.finished).length > 0
                     ? ShowGoals(
                         onGoalSelected: (goal) {
                           Navigator.push(

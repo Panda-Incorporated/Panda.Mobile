@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/DistanceDuration.dart';
 import 'package:panda/Providers/DBProvider.dart';
@@ -5,12 +6,15 @@ import 'package:panda/Providers/DBProvider.dart';
 //WARNING DB file: if changed, toMap also needs to be changed and DB rebuild.
 class Goal extends DistanceDuration {
   int id;
-  bool get finished => currentAmoutOfStars == totalAmountOfStars;
+  bool get finished =>
+      currentAmountOfStars == totalAmountOfStars &&
+      totalAmountOfStars != 0 &&
+      totalAmountOfStars != null;
   String title;
   double distance;
   Duration duration;
-  int currentAmoutOfStars;
-  int totalAmountOfStars;
+  int currentAmountOfStars = 0;
+  int totalAmountOfStars = 0;
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
@@ -18,11 +22,19 @@ class Goal extends DistanceDuration {
       duration != null ? duration.inSeconds ~/ (distance ~/ 1000) : 0; // doel
   Future<List<Activity>> activities() async {
     return await DBProvider.helper
-        .getActivities(where: "id = ?", whereArgs: [id]);
+        .getActivities(where: "goalid = ?", whereArgs: [id]);
   } // lijst met activiteiten die sporter heeft toegevoegd aan doel
 
   Goal();
-  Goal.fill({this.id, this.duration, this.title, this.distance});
+  Goal.fill(
+      {this.id,
+      this.duration,
+      this.title,
+      this.distance,
+      this.beginday,
+      this.endday,
+      this.totalAmountOfStars,
+      this.currentAmountOfStars});
   getString() {
     return getCombination(distance.toInt(), duration.inMinutes);
   }
@@ -68,8 +80,10 @@ class Goal extends DistanceDuration {
       'title': title,
       'distance': distance,
       'duration': duration.inSeconds,
-      'currentAmoutOfStars': currentAmoutOfStars,
+      'currentAmountOfStars': currentAmountOfStars,
       'totalAmountOfStars': totalAmountOfStars,
+      'endday': DateFormat("yyyy-MM-dd hh:mm:ss").format(endday),
+      'beginday': DateFormat("yyyy-MM-dd hh:mm:ss").format(beginday),
     };
   }
 }

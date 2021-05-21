@@ -51,7 +51,7 @@ class Activity {
   factory Activity.fromMap(Map<String, dynamic> map, {DateTime dateTime}) {
     return Activity.fill(
       name: map['name'],
-      date: dateTime != null ? dateTime : DateTime.parse(map['date']),
+      date: dateTime != null ? dateTime : DateFormat().parse(map['date']),
       distance: map['distance'],
       duration: Duration(milliseconds: map['duration']),
     );
