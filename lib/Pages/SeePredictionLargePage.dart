@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:panda/Models/Activity.dart';
@@ -59,7 +60,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
-                        "${percentage * 100}",
+                        "${(percentage * 100).toStringAsFixed(1)}%",
                         style: TextStyle(
                             color: Colors.green[800],
                             fontSize: 20,
@@ -188,7 +189,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  LineChartBarData drawLine(Color color, Goal goal, List<FlSpot> spots) {
+  LineChartBarData drawLine(Color color, List<FlSpot> spots) {
     return LineChartBarData(
       spots: spots,
       isCurved: false,
@@ -207,14 +208,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
 
   Future<List<LineChartBarData>> generateLines(Goal goal) async {
     return [
-      drawLine(Color(0xff4af699), goal, await generateActivitySpots(goal)),
-      drawLine(Color(0xffaa4cfc), goal, await generateSpots(goal)),
-      drawLine(Color(0xff27b6fc), goal, await generatePredictLine(goal)),
+      drawLine(Color(0xff4af699), await generateActivitySpots(goal)),
+      drawLine(Color(0xffaa4cfc), await generateSpots(goal)),
+      drawLine(Color(0xff27b6fc), await generatePredictLine(goal)),
     ];
   }
 }
-
-// genereert ideale lijnen TODO: single goal
 
 Future<List<FlSpot>> generateSpots(Goal goal) async {
   var days = goal.endday.difference(goal.beginday).inDays;
@@ -262,12 +261,11 @@ Future<List<FlSpot>> generatePredictLine(Goal goal) async {
 
 Widget legenda(Color color, String name) {
   return Container(
-    padding: const EdgeInsets.all(2.0),
+    padding: const EdgeInsets.all(6.0),
     height: 30,
-    width: 110,
+    width: 130,
     color: Colors.grey[200],
     child: Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           color: color,
@@ -276,7 +274,6 @@ Widget legenda(Color color, String name) {
         ),
         SizedBox(width: 5),
         Container(
-          alignment: Alignment.center,
           child: Text(
             name + " lijn",
             style: TextStyle(fontSize: 10),

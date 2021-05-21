@@ -47,12 +47,12 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 radius: 150.0,
                 lineWidth: 4.0,
                 backgroundColor: Colors.green[100],
-                percent: percentage / 100,
+                percent: percentage,
                 progressColor: Colors.green[800],
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "$percentage%",
+                  "${(percentage * 100).toStringAsFixed(1)}%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -70,12 +70,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
             child: Column(
               children: [
                 FullPageButton(
-                  title: "Voorspelling/voorgang weergeven",
+                  title: "Grafiek weergeven",
                   onTap: SeePredictionLargePage(goal: widget.goal),
                 ),
-                FullPageButton(
-                    title: "Voortgang weergeven",
-                    onTap: SeePredictionLargePage(goal: widget.goal)),
                 FullPageButton(
                   title: "Activiteiten",
                   buttonTitle: "Activiteiten bekijken",

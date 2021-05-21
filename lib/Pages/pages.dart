@@ -7,5 +7,3 @@ export 'package:panda/Pages/NewGoal.dart';
 export 'package:panda/Pages/SeePredictionLargePage.dart';
 export 'package:panda/Pages/SeePredictionsmallPage.dart';
 export 'package:panda/Pages/Settings.dart';
-
-export 'temp.dart';

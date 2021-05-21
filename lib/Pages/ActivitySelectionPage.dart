@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
-import 'package:panda/Providers/ActivityProvider.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/CurrentActivities.dart';
@@ -19,7 +18,7 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
   bool loading = false;
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: implement initState (Reindert af?)
     super.initState();
     getData();
   }

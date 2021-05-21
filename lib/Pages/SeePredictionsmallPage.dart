@@ -1,12 +1,11 @@
 import "package:flutter/material.dart";
-import 'package:panda/widgets/GoalSummary.dart';
 
 class SeePredictionsmall extends StatefulWidget {
   @override
   _SeePredictionsmallState createState() => _SeePredictionsmallState();
 }
 
-//TODO: circel progressbar implmenteren door goal mee te geven
+//TODO: circel progressbar implmenteren door goal mee te geven (pagina komt er niet in?)
 class _SeePredictionsmallState extends State<SeePredictionsmall> {
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class _SeePredictionsmallState extends State<SeePredictionsmall> {
               ),
             ),
           ),
-          GoalSummary(),
+          //GoalSummary(goal: goal),
           Padding(
             padding: EdgeInsets.only(left: 15.0, top: 12.0, right: 15.0),
             child: Container(

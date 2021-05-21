@@ -31,8 +31,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       code = res.toString();
                       setState(() {});
                     }),
-                Text(code ??
-                    "No code yet authenticate first"), //todo: we can use this to talk to the fitbit api and get an accestoken
+                Text(code ?? "No code yet authenticate first"),
+                //todo: we can use this to talk to the fitbit api and get an accestoken (Reindert)
               ],
             ),
           ),

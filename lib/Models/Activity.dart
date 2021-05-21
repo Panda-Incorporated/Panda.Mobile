@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 import 'Goal.dart';
@@ -12,14 +14,15 @@ class Activity {
   double distance; // meters afgelegd activiteit
   Duration duration; // tijd activiteit
   Activity();
-  Activity.fill(
-      {this.id,
-      this.goalId,
-      this.duration,
-      this.distance,
-      this.goal,
-      this.name,
-      this.date});
+
+  Activity.fill({this.id,
+    this.goalId,
+    this.duration,
+    this.distance,
+    this.goal,
+    this.name,
+    this.date});
+
   String dayFormat() =>
       date != null ? DateFormat('dd-MM-yyyy').format(this.date) : "Geen datum";
 
@@ -29,6 +32,12 @@ class Activity {
   int getSecondsPerKilometer() {
     // seconds/km van activiteit
     return (duration.inSeconds / distance * 1000).toInt();
+  }
+
+  double RichelFormula(goaldistance) {
+    //return ;
+    return pow(
+        this.getSecondsPerKilometer() * (goaldistance / this.distance), 1.06);
   }
 
   int getDaysFromStartDay(DateTime startday) {
