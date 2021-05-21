@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Panda',
       theme: ThemeData(
         fontFamily: 'worksans',
-        primaryColor: Color(0xffC2E7C8),
+        primaryColor: Color(0xff02446C),
         cardColor: Color(0xffE4F6FA),
         floatingActionButtonTheme: FloatingActionButtonThemeData().copyWith(
             backgroundColor: Color(0xff02446C),
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         bottomNavigationBarTheme: BottomNavigationBarThemeData().copyWith(
             selectedItemColor: Color(0xffC2E7C8),
             type: BottomNavigationBarType.fixed,
+            backgroundColor: Color(0xff02446C),
             unselectedItemColor: Color(0xffffffff)),
         backgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
