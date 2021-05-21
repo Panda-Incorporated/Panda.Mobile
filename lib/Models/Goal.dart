@@ -35,7 +35,26 @@ class Goal extends DistanceDuration {
     return percentage;
   }
 
+  double getNextPoint() {
+    this.doneActivity.sort((a, b) => a.date.compareTo(b.date));
+    Activity lastactivity = this.doneActivity.last;
+    int kmslastpoint = lastactivity.getSecondsPerKilometer().toInt();
+    Activity secondlastactivity =
+        this.doneActivity[this.doneActivity.length - 2];
+
+    int kmsfirstpoint = secondlastactivity.getSecondsPerKilometer();
+
+    double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
+
+    double diffrencedays =
+        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+    double progressionperquantum = diffrencekms / diffrencedays;
+    double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
+    return kmsPredicted > this.goal ? kmsPredicted : this.goal.toDouble();
+  }
+
   int getMesurement() => doneActivity.first.getSecondsPerKilometer();
+
   Map<String, dynamic> toMap() {
     return {
       'title': title,

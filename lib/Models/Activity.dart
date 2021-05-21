@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:panda/Models/models.dart';
+
+import 'Goal.dart';
 
 //WARNING DB file: if changed, toMap also needs to be changed and DB rebuild.
 class Activity {

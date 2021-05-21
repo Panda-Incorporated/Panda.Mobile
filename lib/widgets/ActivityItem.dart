@@ -23,7 +23,8 @@ class _ActivityItemState extends State<ActivityItem> {
         onTap: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => GoalSelectionPage()),
+            MaterialPageRoute(
+                builder: (context) => GoalSelectionPage(act: widget.activity)),
           )
         }, //werkt
         child: Container(
@@ -79,8 +80,7 @@ class _ActivityItemState extends State<ActivityItem> {
                         child: Column(
                           children: [
                             Text(
-                              widget.activity.distance.toStringAsFixed(1) +
-                                  "km",
+                              "...x km",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
