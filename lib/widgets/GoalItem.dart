@@ -29,7 +29,7 @@ class _ListItemState extends State<ListItem> {
             .onTap, //navigeren naar goal summaary page en dan goal meegeven
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).cardColor,
               border: Border.all(color: Colors.white24),
               borderRadius: BorderRadius.all(Radius.circular(6))),
 
@@ -83,7 +83,10 @@ class _ListItemState extends State<ListItem> {
                             progressColor: Colors.green,
                             circularStrokeCap: CircularStrokeCap.round,
                             animation: true,
-                            center: Text("${widget.percentage.toDouble()}"),
+                            center: Text(
+                              "${widget.percentage.toDouble()}",
+                              style: TextStyle(),
+                            ),
                           ),
                         ),
                       ],

@@ -13,30 +13,33 @@ class ShowGoals extends StatelessWidget {
   final List<Goal> currentGoals;
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      for (var goal in currentGoals ?? [])
-        if (!goal.finished)
-          ListItem(
-            onTap: onGoalSelected != null
-                ? () => onGoalSelected(goal)
-                : () {
-                    print("Erreru");
-                  },
-            title: goal.title,
-            subTitle: goal.getString() ?? "",
-            percentage: GoalProvider.getPercentage(goal).toInt(),
-          )
-        else
-          ListItem(
-            onTap: onGoalSelected != null
-                ? () => onGoalSelected(goal)
-                : () {
-                    print("Erreru");
-                  },
-            title: goal.title,
-            subTitle: goal.getString() ?? "",
-            percentage: GoalProvider.getPercentage(goal).toInt(),
-          )
-    ]);
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          for (var goal in currentGoals ?? [])
+            if (!goal.finished)
+              ListItem(
+                onTap: onGoalSelected != null
+                    ? () => onGoalSelected(goal)
+                    : () {
+                        print("Erreru");
+                      },
+                title: goal.title,
+                subTitle: goal.getString() ?? "",
+                percentage: GoalProvider.getPercentage(goal).toInt(),
+              )
+            else
+              ListItem(
+                onTap: onGoalSelected != null
+                    ? () => onGoalSelected(goal)
+                    : () {
+                        print("Erreru");
+                      },
+                title: goal.title,
+                subTitle: goal.getString() ?? "",
+                percentage: GoalProvider.getPercentage(goal).toInt(),
+              )
+        ]);
   }
 }

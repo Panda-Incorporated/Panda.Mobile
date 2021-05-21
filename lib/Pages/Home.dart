@@ -28,97 +28,48 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(slivers: [
-        SliverAppBar(
-          stretch: true,
-          stretchTriggerOffset: 200,
-          floating: true,
-          bottom: AppBar(
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            centerTitle: false,
-            title: Text(
-              "Welkom " + (authState?.username ?? ""),
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w400,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 168,
+          child: ListView(
+            padding: const EdgeInsets.all(0),
+            children: [
+              ShowGoals(
+                onGoalSelected: (goal) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GoalSummaryPage(goal: goal)),
+                  );
+                },
+                currentGoals:
+                    GoalProvider.getGoals().where((e) => !e.finished).toList(),
               ),
-            ),
+            ],
           ),
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          flexibleSpace: FlexibleSpaceBar(
-            stretchModes: [StretchMode.zoomBackground],
-            collapseMode: CollapseMode.pin,
-            background: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Logo(),
-                ),
-              ],
-            ),
-          ),
-          expandedHeight: 300,
         ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Lopende doelen:",
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  ShowGoals(
-                    onGoalSelected: (goal) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GoalSummaryPage(goal: goal)),
-                      );
-                    },
-                    currentGoals: GoalProvider.getGoals()
-                        .where((e) => !e.finished)
-                        .toList(),
-                  ),
-                  Text("${GoalProvider.getGoals()[0].getPercentage()}"),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Afgeronde doelen:",
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  ShowGoals(
-                    // onGoalSelected: (goal) {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => GoalSummaryPage(goal: goal)),
-                    //   );
-                    // },
-                    currentGoals: GoalProvider.getGoals()
-                        .where((e) => e.finished)
-                        .toList(),
-                  ),
-                ],
-              ),
+        // Text("${GoalProvider.getGoals()[0].getPercentage()}"),
+
+        Container(
+          height: 168,
+          child: ListView(padding: const EdgeInsets.all(0), children: [
+            ShowGoals(
+              // onGoalSelected: (goal) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => GoalSummaryPage(goal: goal)),
+              //   );
+              // },
+              currentGoals:
+                  GoalProvider.getGoals().where((e) => e.finished).toList(),
             ),
           ]),
         ),
-      ]),
+      ],
     );
   }
 }

@@ -28,7 +28,7 @@ class _ActivityItemState extends State<ActivityItem> {
         }, //werkt
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).cardColor,
               border: Border.all(color: Colors.white24),
               borderRadius: BorderRadius.all(Radius.circular(6))),
           child: Container(
@@ -51,7 +51,9 @@ class _ActivityItemState extends State<ActivityItem> {
                               child: Text(
                                 "Titel",
                                 style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w500),
+                                    fontSize: 30,
+                                    color: Color(0xfffff),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                             Container(
