@@ -32,18 +32,24 @@ class _StartPageState extends State<StartPage> {
       context,
       MaterialPageRoute(builder: (context) => AuthenticationPage()),
     );
-    var authstate = await ApiProvider.getAccessToken(res);
+    if (res != null) {
+      var authstate = await ApiProvider.getAccessToken(res);
 
-    username = controller.text;
-    if (username != null) {
-      await DBProvider.helper.updateAuthState(AuthState.fill(
-          accessToken: authstate.accessToken,
-          refreshToken: authstate.refreshToken,
-          expires: authstate.expires,
-          username: username));
-      loading = false;
-      done = true;
-      setState(() {});
+      username = controller.text;
+      if (username != null) {
+        await DBProvider.helper.updateAuthState(AuthState.fill(
+            accessToken: authstate.accessToken,
+            refreshToken: authstate.refreshToken,
+            expires: authstate.expires,
+            username: username));
+        loading = false;
+        done = true;
+        setState(() {});
+      } else {
+        loading = false;
+        done = false;
+        setState(() {});
+      }
     } else {
       loading = false;
       done = false;

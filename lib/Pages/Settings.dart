@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Pages/AuthenticationPage.dart';
+import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Providers/GoalProvider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,7 +35,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     "No code yet authenticate first"), //todo: we can use this to talk to the fitbit api and get an accestoken
               ],
             ),
-          )
+          ),
+          OutlinedButton(
+              onPressed: () async {
+                for (var goal in await GoalProvider.getTempGoals()) {
+                  var id = await DBProvider.helper.insertGoal(goal);
+                  for (var act in GoalProvider.getTempActivitiesByGoal(id)) {
+                    await DBProvider.helper.insertActivity(act);
+                  }
+                }
+              },
+              child: Text("Fill database with 3 goals")),
+          Text(" warning dont touch more then once"),
         ]),
       ],
     );

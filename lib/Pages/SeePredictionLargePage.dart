@@ -18,10 +18,25 @@ class SeePredictionLargePage extends StatefulWidget {
 }
 
 class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
+  double percentage = 0.0;
+  List<LineChartBarData> barData = List.empty();
+  int measurement = 0;
   @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    percentage = await widget.goal.getPercentage();
+    barData = await generateLines(widget.goal);
+    measurement = await widget.goal.getMeasurement();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    if ((widget.goal.getPercentage() * 100) >= 100)
+    if ((percentage * 100) >= 100)
       return Text(
           "goal al bereikt"); // placeholder om een glitchende grafiek tegen te gaan
     else
@@ -39,12 +54,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                       radius: 80.0,
                       lineWidth: 6.0,
                       backgroundColor: Colors.green[100],
-                      percent: widget.goal.getPercentage(),
+                      percent: percentage,
                       progressColor: Colors.green[800],
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
-                        "${widget.goal.getPercentage() * 100}",
+                        "${percentage * 100}",
                         style: TextStyle(
                             color: Colors.green[800],
                             fontSize: 20,
@@ -165,10 +180,10 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
             .inDays
             .toDouble(),
         // max y = nulmeting begin + 20
-        maxY: (widget.goal.getMesurement() + 20).toDouble(),
+        maxY: (measurement + 20).toDouble(),
         //minY altijd doel -20
         minY: (widget.goal.goal - 20).toDouble(),
-        lineBarsData: generateLines(widget.goal),
+        lineBarsData: barData,
       ),
     );
   }
@@ -190,51 +205,53 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  List<LineChartBarData> generateLines(Goal goal) {
+  Future<List<LineChartBarData>> generateLines(Goal goal) async {
     return [
-      drawLine(Color(0xff4af699), goal, generateActivitySpots(goal)),
-      drawLine(Color(0xffaa4cfc), goal, generateSpots(goal)),
-      drawLine(Color(0xff27b6fc), goal, generatePredictLine(goal)),
+      drawLine(Color(0xff4af699), goal, await generateActivitySpots(goal)),
+      drawLine(Color(0xffaa4cfc), goal, await generateSpots(goal)),
+      drawLine(Color(0xff27b6fc), goal, await generatePredictLine(goal)),
     ];
   }
 }
 
 // genereert ideale lijnen TODO: single goal
 
-List<FlSpot> generateSpots(Goal goal) {
+Future<List<FlSpot>> generateSpots(Goal goal) async {
   var days = goal.endday.difference(goal.beginday).inDays;
 
   List<FlSpot> list = [];
   for (var i = 0; i < days + 1; i++) {
-    var y = (goal.goal - goal.getMesurement()) / sqrt(days) * sqrt(i) +
-        goal.getMesurement();
+    var y = (goal.goal - await goal.getMeasurement()) / sqrt(days) * sqrt(i) +
+        await goal.getMeasurement();
     list.add(FlSpot(i.toDouble(), y));
   }
   return list;
 }
 
 // genereert voltooide activiteiten lijn
-List<FlSpot> generateActivitySpots(Goal goal) {
+Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
   List<FlSpot> list = [];
-  for (var i = 0; i < goal.doneActivity.length; i++) {
-    var y = goal.doneActivity[i].getSecondsPerKilometer();
-    list.add(FlSpot(
-        goal.doneActivity[i].getDaysFromStartDay(goal.beginday).toDouble(),
+  var activities = await goal.activities();
+  for (var i = 0; i < activities.length; i++) {
+    var y = activities[i].getSecondsPerKilometer();
+    list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
         y.toDouble()));
   }
 
   return list;
 }
 
-List<FlSpot> generatePredictLine(Goal goal) {
-  goal.doneActivity.sort((a, b) => a.date.compareTo(b.date));
-  Activity lastactivity = goal.doneActivity.last;
+Future<List<FlSpot>> generatePredictLine(Goal goal) async {
+  var activities = await goal.activities();
+
+  activities.sort((a, b) => a.date.compareTo(b.date));
+  Activity lastactivity = activities.last;
 
   int y = lastactivity.getSecondsPerKilometer();
   double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
 
   int predictionday = 2;
-  double kmsPredicted = goal.getNextPoint();
+  double kmsPredicted = await goal.getNextPoint();
 
   List<FlSpot> list = [];
   list.add(FlSpot(beginpunt, y.toDouble()));

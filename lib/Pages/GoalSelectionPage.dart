@@ -5,6 +5,7 @@ import 'package:panda/Pages/GiveStarScreen.dart';
 import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
+import 'package:panda/widgets/NothingToDisplay.dart';
 import 'package:panda/widgets/widgets.dart';
 
 class GoalSelectionPage extends StatefulWidget {
@@ -19,6 +20,23 @@ class GoalSelectionPage extends StatefulWidget {
 // TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
 class _GoalSelectionPageState extends State<GoalSelectionPage> {
   Goal currentGoal;
+  List<Goal> goals;
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    getGoals();
+  }
+
+  getGoals() async {
+    setState(() {
+      loading = true;
+    });
+    goals = (await GoalProvider.getGoals()).where((e) => !e.finished).toList();
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,21 +82,23 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                ShowGoals(
-                  onGoalSelected: (goal) {
-                    currentGoal = goal;
+                loading
+                    ? Center(child: CircularProgressIndicator())
+                    : goals != null && goals.length > 0
+                        ? ShowGoals(
+                            onGoalSelected: (goal) {
+                              currentGoal = goal;
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              GiveStarPage(goal: goal, activity: widget.act)),
-                    );
-                  },
-                  currentGoals: GoalProvider.getGoals()
-                      .where((e) => !e.finished)
-                      .toList(),
-                ),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => GiveStarPage(
+                                        goal: goal, activity: widget.act)),
+                              );
+                            },
+                            currentGoals: goals,
+                          )
+                        : NothingToDisplay()
               ],
             ),
           ),

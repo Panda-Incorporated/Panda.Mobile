@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
+import 'package:panda/Pages/ShowActivities.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -18,10 +19,23 @@ class GoalSummaryPage extends StatefulWidget {
 }
 
 class _GoalSummaryPageState extends State<GoalSummaryPage> {
+  double percentage = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    percentage = await widget.goal.getPercentage();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         children: [
           // om het een plek te geven. Kan ook misschien met margin
@@ -33,12 +47,12 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 radius: 150.0,
                 lineWidth: 4.0,
                 backgroundColor: Colors.green[100],
-                percent: widget.goal.getPercentage() / 100,
+                percent: percentage / 100,
                 progressColor: Colors.green[800],
                 circularStrokeCap: CircularStrokeCap.round,
                 animation: true,
                 center: Text(
-                  "${widget.goal.getPercentage()}%",
+                  "$percentage%",
                   style: TextStyle(
                       color: Colors.green[800],
                       fontSize: 36,
@@ -55,15 +69,22 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 left: 12.0, right: 12.0, bottom: 8.0, top: 18.0),
             child: Column(
               children: [
-                ShowGraph(
-                  title: "Voorspelling",
+                FullPageButton(
+                  title: "Voorspelling/voorgang weergeven",
                   onTap: SeePredictionLargePage(goal: widget.goal),
                 ),
-                ShowGraph(
-                    title: "Voortgang",
+                FullPageButton(
+                    title: "Voortgang weergeven",
                     onTap: SeePredictionLargePage(goal: widget.goal)),
-                ShowGraph(
+                FullPageButton(
                   title: "Activiteiten",
+                  buttonTitle: "Activiteiten bekijken",
+                  onTap: ShowActivitiesPage(
+                    goal: widget.goal,
+                  ),
+                ),
+                FullPageButton(
+                  buttonTitle: "Activiteit toevoegen",
                   onTap: ActivitySelectionPage(),
                 ),
               ],

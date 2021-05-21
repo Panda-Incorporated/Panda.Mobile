@@ -46,17 +46,18 @@ class _ActivityItemState extends State<ActivityItem> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0),
-                              child: Text(
-                                "Titel",
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: Color(0xfffff),
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
+                            widget?.activity?.name != null
+                                ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10.0, vertical: 0),
+                                    child: Text(
+                                      widget.activity.name,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )
+                                : Container(),
                             Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 0),
@@ -80,7 +81,7 @@ class _ActivityItemState extends State<ActivityItem> {
                         child: Column(
                           children: [
                             Text(
-                              "...x km",
+                              "${widget.activity.distance.toStringAsFixed(1)} km",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,

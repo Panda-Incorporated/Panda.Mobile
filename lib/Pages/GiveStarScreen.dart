@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/main.dart';
 import 'package:panda/widgets/Logo.dart';
 
 import 'Home.dart';
@@ -19,16 +20,26 @@ class GiveStarPage extends StatefulWidget {
 }
 
 class _GiveStarPageState extends State<GiveStarPage> {
+  int measurement = 0;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    measurement = await widget.goal.getMeasurement();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var multiplier = [1.2, 1.0, 0.8];
     var kmsdif = [-4, 0, 4];
     var days = widget.goal.endday.difference(widget.goal.beginday).inDays;
     var i = DateTime.now().difference(widget.goal.beginday).inDays;
-    var secPkm = (widget.goal.goal - widget.goal.getMesurement()) /
-            sqrt(days) *
-            sqrt(i) +
-        widget.goal.getMesurement();
+    var secPkm =
+        (widget.goal.goal - measurement) / sqrt(days) * sqrt(i) + measurement;
 
     return Scaffold(
       body: CustomScrollView(slivers: [
@@ -122,8 +133,8 @@ class Litem extends StatelessWidget {
               goal.distance)),
           //TODO activity.totalactivitytime.inMinutes
           print(amountOfStarsTime(6, multiplier, goal.duration.inMinutes)),
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()))
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Navigation()))
         },
         // {
         //   Navigator.push(

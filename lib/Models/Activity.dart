@@ -7,6 +7,7 @@ class Activity {
   int id;
   int goalId;
   Goal goal;
+  String name;
   DateTime date; // datum activiteit
   double distance; // meters afgelegd activiteit
   Duration duration; // tijd activiteit
@@ -17,8 +18,10 @@ class Activity {
       this.duration,
       this.distance,
       this.goal,
+      this.name,
       this.date});
-  String dayFormat() => DateFormat('dd-MM-yyyy').format(this.date);
+  String dayFormat() =>
+      date != null ? DateFormat('dd-MM-yyyy').format(this.date) : "Geen datum";
 
   String timeFormat() =>
       this.duration.toString().split('.').first.padLeft(8, "0");
@@ -36,14 +39,18 @@ class Activity {
 
   Map<String, dynamic> toMap() {
     return {
-      'date': date,
+      'id': id,
+      'date': DateFormat().format(date),
       'distance': distance,
       'duration': duration.inSeconds,
+      'name': name,
+      'goalId': goalId,
     };
   }
 
   factory Activity.fromMap(Map<String, dynamic> map, {DateTime dateTime}) {
     return Activity.fill(
+      name: map['name'],
       date: dateTime != null ? dateTime : DateTime.parse(map['date']),
       distance: map['distance'],
       duration: Duration(milliseconds: map['duration']),

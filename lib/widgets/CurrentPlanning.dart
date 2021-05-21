@@ -4,35 +4,51 @@ import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/Home.dart';
 
-class ShowPlanning extends StatelessWidget {
+class ShowPlanning extends StatefulWidget {
   const ShowPlanning({Key key, this.planner, this.goal}) : super(key: key);
   final String planner;
   final Goal goal;
 
   @override
+  _ShowPlanningState createState() => _ShowPlanningState();
+}
+
+class _ShowPlanningState extends State<ShowPlanning> {
+  int measurement = 0;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    measurement = await widget.goal.getMeasurement();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var multiplier = [1.2, 1.0, 0.8];
     var kmsdif = [-4, 0, 4];
-    var days = goal.endday.difference(goal.beginday).inDays;
-    var i = DateTime.now().difference(goal.beginday).inDays;
-    var y = (goal.goal - goal.getMesurement()) / sqrt(days) * sqrt(i) +
-        goal.getMesurement();
+    var days = widget.goal.endday.difference(widget.goal.beginday).inDays;
+    var i = DateTime.now().difference(widget.goal.beginday).inDays;
+    var y =
+        (widget.goal.goal - measurement) / sqrt(days) * sqrt(i) + measurement;
     return Column(children: [
       for (int i = 0; i < 3; i++)
-        if (this.planner == "Time")
+        if (this.widget.planner == "Time")
           PlanningItem(
             Stars: i,
             text:
-                "Loop ${((goal.duration.inMinutes * multiplier[i]) / 2).ceilToDouble()} minuten hard",
+                "Loop ${((widget.goal.duration.inMinutes * multiplier[i]) / 2).ceilToDouble()} minuten hard",
           )
-        else if (this.planner == "Distance")
+        else if (this.widget.planner == "Distance")
           PlanningItem(
             item: "Planner",
             Stars: i,
             text:
-                "Loop ${(((goal.distance / 1000) * multiplier[i]) / 2)} kilometer hard",
+                "Loop ${(((widget.goal.distance / 1000) * multiplier[i]) / 2)} kilometer hard",
           )
-        else if (this.planner == "Nulmeting")
+        else if (this.widget.planner == "Nulmeting")
           PlanningItem(
             item: "Planner",
             Stars: i,
