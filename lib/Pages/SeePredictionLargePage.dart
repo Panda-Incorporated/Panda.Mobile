@@ -271,12 +271,15 @@ Future<List<FlSpot>> generatePredictLine(Goal goal) async {
   double y = lastactivity.RichelFormula(goal.distance);
   double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
 
-  int predictionday = 8;
   double kmsPredicted = await goal.getNextPoint();
-
+  Activity secondlastactivity = activities[activities.length - 2];
+  double diffrencedays =
+      lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
   List<FlSpot> list = [];
+  print("diffrence $diffrencedays");
+  print("$kmsPredicted");
   list.add(FlSpot(beginpunt, y));
-  list.add(FlSpot(beginpunt + predictionday, kmsPredicted));
+  list.add(FlSpot(beginpunt + diffrencedays, kmsPredicted));
 
   return list;
 }

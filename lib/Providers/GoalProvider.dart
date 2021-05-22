@@ -66,9 +66,4 @@ class GoalProvider {
   static Future<List<Goal>> getGoals() async {
     return await DBProvider.helper.getGoals();
   }
-
-//TODO kan weg? even nakijken
-// static double getPercentage(Goal goal) {
-//   return 0.1;
-// }
 }

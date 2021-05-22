@@ -56,10 +56,10 @@ class Goal extends DistanceDuration {
     var _activities = await activities();
     _activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = _activities.last;
-    int kmslastpoint = lastactivity.getSecondsPerKilometer().toInt();
+    int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
     Activity secondlastactivity = _activities[_activities.length - 2];
 
-    int kmsfirstpoint = secondlastactivity.getSecondsPerKilometer();
+    int kmsfirstpoint = secondlastactivity.RichelFormula(this.distance).toInt();
 
     double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
@@ -67,6 +67,7 @@ class Goal extends DistanceDuration {
         lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
     double progressionperquantum = diffrencekms / diffrencedays;
     double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
+
     return kmsPredicted > this.goal ? kmsPredicted : this.goal.toDouble();
   }
 
