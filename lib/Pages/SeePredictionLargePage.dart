@@ -25,6 +25,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   List<Activity> activities;
   double big = 0.0;
   double small = 6.0;
+  int steps = 10;
+  List<int> stepsARR = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
   @override
   void initState() {
@@ -48,8 +50,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     if (widget.goal.goal < small) {
       small = widget.goal.goal.toDouble();
     }
-    print(small);
-    print(big);
+
+    steps = (big - small) ~/ 21;
+    for (int j = 1; j < activities.length; j++) {
+      if (steps < stepsARR[j]) steps = stepsARR[j - 1];
+    }
+    print("Steps is $steps");
 
     setState(() {});
   }
@@ -178,10 +184,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
             margin: 10,
           ),
           leftTitles: SideTitles(
-            //TODO: 'mappen' naar dichstbijzijnd getal voor de steps Y as formule staat er al
-            // moet nog omzetten naar [10,15,20,25]
-            //((big - small) / 21).toInt().toDouble()
-            interval: 20,
+            interval: steps.toDouble(),
             showTitles: true,
             getTextStyles: (value) => const TextStyle(
               color: Color(0xff75729e),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
 import 'package:panda/widgets/GoalSummary.dart';
@@ -83,6 +84,11 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 FullPageButton(
                   buttonTitle: "Activiteit toevoegen",
                   onTap: ActivitySelectionPage(),
+                ),
+                FullPageButton(
+                  title: "Doelstellingen",
+                  buttonTitle: "Doelstellingen weergeven",
+                  onTap: PlanningPage(goal: widget.goal),
                 ),
               ],
             ),
