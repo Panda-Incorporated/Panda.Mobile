@@ -18,7 +18,6 @@ class _ShowActivitiesPageState extends State<ShowActivitiesPage> {
   bool loading = false;
   @override
   void initState() {
-    // TODO: implement initState (Reindert af?)
     super.initState();
     getData();
   }

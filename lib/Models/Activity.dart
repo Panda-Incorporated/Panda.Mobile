@@ -15,13 +15,14 @@ class Activity {
   Duration duration; // tijd activiteit
   Activity();
 
-  Activity.fill({this.id,
-    this.goalId,
-    this.duration,
-    this.distance,
-    this.goal,
-    this.name,
-    this.date});
+  Activity.fill(
+      {this.id,
+      this.goalId,
+      this.duration,
+      this.distance,
+      this.goal,
+      this.name,
+      this.date});
 
   String dayFormat() =>
       date != null ? DateFormat('dd-MM-yyyy').format(this.date) : "Geen datum";

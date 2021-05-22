@@ -18,7 +18,6 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
   bool loading = false;
   @override
   void initState() {
-    // TODO: implement initState (Reindert af?)
     super.initState();
     getData();
   }

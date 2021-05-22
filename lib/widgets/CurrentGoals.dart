@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/widgets/GoalItem.dart';
 
@@ -25,9 +24,7 @@ class ShowGoals extends StatelessWidget {
                     : () {
                         print("Erreru");
                       },
-                title: goal.title,
-                subTitle: goal.getString() ?? "",
-                percentage: GoalProvider.getPercentage(goal).toInt(),
+                goal: goal,
               )
             else
               ListItem(
@@ -36,9 +33,7 @@ class ShowGoals extends StatelessWidget {
                     : () {
                         print("Erreru");
                       },
-                title: goal.title,
-                subTitle: goal.getString() ?? "",
-                percentage: GoalProvider.getPercentage(goal).toInt(),
+                goal: goal,
               )
         ]);
   }

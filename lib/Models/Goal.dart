@@ -42,8 +42,8 @@ class Goal extends DistanceDuration {
   Future<double> getPercentage() async {
     // percentage done moet vervangen worden door nieuwe formule staat in documentatie onedrive
     var _activities = await activities();
-    var nulmeting = _activities.first.getSecondsPerKilometer();
-    var nu_punt = _activities.last.getSecondsPerKilometer();
+    var nulmeting = _activities.first.RichelFormula(distance);
+    var nu_punt = _activities.last.RichelFormula(distance);
 
     var verschil = nulmeting - goal;
     var progressie = nulmeting - nu_punt;
@@ -72,7 +72,7 @@ class Goal extends DistanceDuration {
 
   Future<int> getMeasurement() async {
     var _activities = await activities();
-    return _activities.first.getSecondsPerKilometer();
+    return _activities.first.RichelFormula(this.distance).toInt();
   }
 
   Map<String, dynamic> toMap() {

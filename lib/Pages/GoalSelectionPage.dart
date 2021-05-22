@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Pages/GiveStarScreen.dart';
+import 'package:panda/Pages/Home.dart';
 import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
@@ -89,11 +89,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                             onGoalSelected: (goal) {
                               currentGoal = goal;
 
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => GiveStarPage(
-                                        goal: goal, activity: widget.act)),
+                                MaterialPageRoute(builder: (context) => Home()),
                               );
                             },
                             currentGoals: goals,

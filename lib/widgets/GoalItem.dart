@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ListItem extends StatefulWidget {
-  ListItem({
-    Key key,
-    this.title,
-    this.subTitle,
-    this.percentage,
-    this.onTap,
-  }) : super(key: key);
+  ListItem({Key key, this.goal, this.onTap}) : super(key: key);
 
   @override
   _ListItemState createState() => _ListItemState();
-  final String title;
-  final String subTitle;
-  final int percentage;
+  final Goal goal;
   final Function onTap;
 }
 
-//TODO: singel goal meegeven (netzoals bij activity gedaan)
 class _ListItemState extends State<ListItem> {
+  double percentage = 0.1;
+  String title = "";
+  String subtitle = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    percentage = await widget.goal.getPercentage();
+    title = await widget.goal.title;
+    subtitle = await widget.goal.getString();
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -52,7 +62,7 @@ class _ListItemState extends State<ListItem> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 0),
                               child: Text(
-                                widget.title,
+                                title,
                                 style: TextStyle(
                                     fontSize: 30, fontWeight: FontWeight.w500),
                               ),
@@ -61,7 +71,7 @@ class _ListItemState extends State<ListItem> {
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 0),
                               child: Text(
-                                widget.subTitle,
+                                subtitle,
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w500),
                               ),
@@ -70,7 +80,6 @@ class _ListItemState extends State<ListItem> {
                         ),
                       ],
                     ),
-                    // %
                     Column(
                       children: [
                         Padding(
@@ -79,12 +88,12 @@ class _ListItemState extends State<ListItem> {
                             radius: 50.0,
                             lineWidth: 5.0,
                             backgroundColor: Colors.white,
-                            percent: widget.percentage.toDouble() / 100,
+                            percent: percentage,
                             progressColor: Colors.green,
                             circularStrokeCap: CircularStrokeCap.round,
                             animation: true,
                             center: Text(
-                              "${widget.percentage.toDouble()}",
+                              "${(percentage * 100).toInt()}",
                               style: TextStyle(),
                             ),
                           ),

@@ -22,6 +22,10 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   double percentage = 0.0;
   List<LineChartBarData> barData = List.empty();
   int measurement = 0;
+  List<Activity> activities;
+  double big = 0.0;
+  double small = 6.0;
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +36,21 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     percentage = await widget.goal.getPercentage();
     barData = await generateLines(widget.goal);
     measurement = await widget.goal.getMeasurement();
+    activities = await widget.goal.activities();
+    for (int i = 0; i < activities.length; i++) {
+      if (activities[i].RichelFormula(widget.goal.distance) > big)
+        big = activities[i].RichelFormula(widget.goal.distance);
+    }
+    for (int j = 0; j < activities.length; j++) {
+      if (small < activities[j].RichelFormula(widget.goal.distance))
+        small = activities[j].RichelFormula(widget.goal.distance).toDouble();
+    }
+    if (widget.goal.goal < small) {
+      small = widget.goal.goal.toDouble();
+    }
+    print(small);
+    print(big);
+
     setState(() {});
   }
 
@@ -159,7 +178,10 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
             margin: 10,
           ),
           leftTitles: SideTitles(
-            interval: 5,
+            //TODO: 'mappen' naar dichstbijzijnd getal voor de steps Y as formule staat er al
+            // moet nog omzetten naar [10,15,20,25]
+            //((big - small) / 21).toInt().toDouble()
+            interval: 20,
             showTitles: true,
             getTextStyles: (value) => const TextStyle(
               color: Color(0xff75729e),
@@ -181,9 +203,9 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
             .inDays
             .toDouble(),
         // max y = nulmeting begin + 20
-        maxY: (measurement + 20).toDouble(),
+        maxY: big.toDouble() + 11,
         //minY altijd doel -20
-        minY: (widget.goal.goal - 20).toDouble(),
+        minY: small.toDouble() - 9,
         lineBarsData: barData,
       ),
     );
@@ -232,7 +254,7 @@ Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
   List<FlSpot> list = [];
   var activities = await goal.activities();
   for (var i = 0; i < activities.length; i++) {
-    var y = activities[i].getSecondsPerKilometer();
+    var y = activities[i].RichelFormula(goal.distance);
     list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
         y.toDouble()));
   }
@@ -246,14 +268,14 @@ Future<List<FlSpot>> generatePredictLine(Goal goal) async {
   activities.sort((a, b) => a.date.compareTo(b.date));
   Activity lastactivity = activities.last;
 
-  int y = lastactivity.getSecondsPerKilometer();
+  double y = lastactivity.RichelFormula(goal.distance);
   double beginpunt = lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
 
-  int predictionday = 2;
+  int predictionday = 8;
   double kmsPredicted = await goal.getNextPoint();
 
   List<FlSpot> list = [];
-  list.add(FlSpot(beginpunt, y.toDouble()));
+  list.add(FlSpot(beginpunt, y));
   list.add(FlSpot(beginpunt + predictionday, kmsPredicted));
 
   return list;

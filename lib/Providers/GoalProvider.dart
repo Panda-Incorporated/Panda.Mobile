@@ -16,7 +16,6 @@ class GoalProvider {
         ..title = "Marathon"
         ..distance = 10000.0
         ..duration = Duration(minutes: 30)
-        // ..doneMaxDistance = 10
         ..beginday = DateTime(2021, DateTime.may, 11)
         ..endday = DateTime(2022, DateTime.may, 31),
       //    ..doneMaxDuration = Duration(minutes: 30),
@@ -24,18 +23,14 @@ class GoalProvider {
         ..title = "Marathon"
         ..distance = 5000.0
         ..duration = Duration(minutes: 30)
-        //   ..doneMaxDistance = 5
         ..beginday = DateTime(2021, 5, 11)
         ..endday = DateTime(2021, 5, 11),
-      //    ..doneMaxDuration = Duration(minutes: 30),
       Goal()
         ..title = "Marathon"
         ..distance = 2000.0
         ..duration = Duration(minutes: 30)
-        //   ..doneMaxDistance = 1.7
         ..beginday = DateTime(2021, 5, 11)
         ..endday = DateTime(2021, 5, 11)
-      //  ..doneMaxDuration = Duration(minutes: 30)
     ];
   }
 
@@ -72,7 +67,8 @@ class GoalProvider {
     return await DBProvider.helper.getGoals();
   }
 
-  static double getPercentage(Goal goal) {
-    return 0.1;
-  }
+//TODO kan weg? even nakijken
+// static double getPercentage(Goal goal) {
+//   return 0.1;
+// }
 }
