@@ -191,7 +191,13 @@ class _NavigationState extends State<Navigation> {
                           ),
                           FloatingActionButton(
                             heroTag: "GoalCreate",
-                            onPressed: () => {},
+                            onPressed: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewGoal()),
+                              )
+                            },
                             child: Icon(
                               Glyphicon.flag,
                               size: 20,

@@ -3,7 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:panda/widgets/Logo.dart';
-import 'package:panda/widgets/NewGoalInput.dart';
+import 'package:panda/Pages/NewGoalInput.dart';
+import 'package:panda/Pages/GoalSelectionPage.dart';
+import 'package:panda/Pages/Home.dart';
+import 'package:panda/main.dart';
+import 'package:panda/widgets/GoalSummary.dart';
+import 'NewGoalInput.dart';
 
 class NewGoal extends StatefulWidget {
   @override
@@ -11,16 +16,28 @@ class NewGoal extends StatefulWidget {
 }
 
 class _NewGoalState extends State<NewGoal> {
+  var _goal = new TextEditingController();
+  var _distance = new TextEditingController();
+  var _deadline = new TextEditingController();
+  var _date = new TextEditingController();
+  var _availability = new TextEditingController();
+  getItemAndNavigate(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SecondScreen(
+                nameHolder: _distance.text,
+                classHolder: _deadline.text,
+                numberHolder: _date.text)));
+  }
+
   bool _hasBeenPressed1 = false;
   bool _hasBeenPressed2 = false;
-  bool _hasBeenPressed3 = false;
+
   double _titelFontSize = 25;
   double _textFontSize = 15;
   double _inputBoxHeight = 50;
-  TextEditingController deadLine = TextEditingController();
-  TextEditingController afstand = TextEditingController();
-  TextEditingController tijd = TextEditingController();
-  TextEditingController beschikbaarheid = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +64,7 @@ class _NewGoalState extends State<NewGoal> {
           margin: EdgeInsets.only(left: 5, bottom: 5),
           alignment: Alignment.centerLeft,
           child: Text(
-            'Type Doel:',
+            'Selecteer doel:',
             style: TextStyle(
               fontSize: _textFontSize,
               fontWeight: FontWeight.w400,
@@ -60,41 +77,12 @@ class _NewGoalState extends State<NewGoal> {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 5, top: 5),
-              child: ButtonTheme(
-                minWidth: 150.0,
-                child: RaisedButton(
-                  child: Text(
-                    "Wielrennen",
-                    style: TextStyle(
-                      fontSize: _textFontSize,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  textColor: Colors.black,
-                  color: _hasBeenPressed1 ? Colors.blue : Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  onPressed: () => {
-                    setState(() {
-                      if (_hasBeenPressed2 == true) {
-                        _hasBeenPressed2 = false;
-                      }
-                      _hasBeenPressed1 = !_hasBeenPressed1;
-                    })
-                  },
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(left: 20, top: 5),
               child: ButtonTheme(
                 minWidth: 150.0,
                 child: RaisedButton(
                   child: Text(
-                    "Hardlopen",
+                    "Marathon",
                     style: TextStyle(
                       fontSize: _textFontSize,
                       fontWeight: FontWeight.w400,
@@ -135,13 +123,10 @@ class _NewGoalState extends State<NewGoal> {
               height: _inputBoxHeight,
               padding: EdgeInsets.all(10),
               child: TextField(
-                onChanged: (value) {
-                  print("The value entered is : $value");
-                },
-                controller: deadLine,
+                controller: _deadline,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Datum (dag-maand-jaar)',
+                  labelText: 'Datum',
                 ),
               ),
             ),
@@ -159,7 +144,7 @@ class _NewGoalState extends State<NewGoal> {
               height: _inputBoxHeight,
               padding: EdgeInsets.all(10),
               child: TextField(
-                controller: afstand,
+                controller: _distance,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Kilometers',
@@ -180,7 +165,7 @@ class _NewGoalState extends State<NewGoal> {
               height: _inputBoxHeight,
               padding: EdgeInsets.all(10),
               child: TextField(
-                controller: tijd,
+                controller: _date,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Uren:Minuten',
@@ -201,7 +186,7 @@ class _NewGoalState extends State<NewGoal> {
               height: _inputBoxHeight,
               padding: EdgeInsets.all(10),
               child: TextField(
-                controller: beschikbaarheid,
+                controller: _availability,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Aantal dagen',
@@ -209,6 +194,7 @@ class _NewGoalState extends State<NewGoal> {
               ),
             ),
             // * button
+
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(left: 20, top: 5),
@@ -227,7 +213,7 @@ class _NewGoalState extends State<NewGoal> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  onPressed: () => {},
+                  onPressed: () => getItemAndNavigate(context),
                 ),
               ),
             ),

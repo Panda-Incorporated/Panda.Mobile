@@ -6,6 +6,7 @@ import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
+import 'package:panda/widgets/widgets.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'ActivitySelectionPage.dart';

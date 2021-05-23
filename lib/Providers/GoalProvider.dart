@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/DBProvider.dart';
