@@ -29,6 +29,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   double big = 10.0;
   double small = 1.0;
   int steps = 1;
+  bool loading = false;
   List<int> stepsARR = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
   @override
@@ -38,8 +39,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   }
 
   getData() async {
+    setState(() {
+      loading = true;
+    });
     var temp = await widget.goal.activities();
-    if (widget.goal != null && temp.length > 0) {
+    if (widget.goal != null && temp.length > 0 && widget.goal.goal > 0) {
       percentage = await widget.goal.getPercentage();
       barData = await generateLines(widget.goal);
       measurement = await widget.goal.getMeasurement();
@@ -66,7 +70,9 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       }
     }
 
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -77,118 +83,123 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     else
       return Scaffold(
         backgroundColor: Colors.white,
-        body: barData.length > 0
-            ? Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Row(
+        body: loading
+            ? Center(child: CircularProgressIndicator())
+            : barData.length > 0
+                ? Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircularPercentIndicator(
-                            radius: 80.0,
-                            lineWidth: 6.0,
-                            backgroundColor: Colors.green[100],
-                            percent: percentage,
-                            progressColor: Colors.green[800],
-                            circularStrokeCap: CircularStrokeCap.round,
-                            animation: true,
-                            center: Text(
-                              "${(percentage * 100).toStringAsFixed(1)}%",
-                              style: TextStyle(
-                                  color: Colors.green[800],
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              "${widget.goal.title}",
-                              style: TextStyle(
-                                fontSize: 26,
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircularPercentIndicator(
+                                radius: 80.0,
+                                lineWidth: 6.0,
+                                backgroundColor: Colors.green[100],
+                                percent: percentage,
+                                progressColor: Colors.green[800],
+                                circularStrokeCap: CircularStrokeCap.round,
+                                animation: true,
+                                center: Text(
+                                  "${(percentage * 100).toStringAsFixed(1)}%",
+                                  style: TextStyle(
+                                      color: Colors.green[800],
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          alignment: Alignment.centerLeft,
-                          child: Text("Voorspelling"),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(18)),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.grey[200],
-                              Colors.grey[200],
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.topRight,
-                          children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16.0, left: 6.0),
-                                    child: chart(),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  "${widget.goal.title}",
+                                  style: TextStyle(
+                                    fontSize: 26,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
+                              ),
                             ),
-                            barData.length > 0
-                                ? Column(
-                                    children: [
-                                      legenda(Color(0xff4af699), "Gelopen"),
-                                      legenda(Color(0xffaa4cfc), "Goal"),
-                                      legenda(Color(0xff27b6fc), "Predictie")
-                                    ],
-                                  )
-                                : Text("Geen nulmeting toegevoegd"),
                           ],
                         ),
-                      ),
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              alignment: Alignment.centerLeft,
+                              child: Text("Voorspelling"),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18)),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.grey[200],
+                                  Colors.grey[200],
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                            child: Stack(
+                              alignment: Alignment.topRight,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 16.0, left: 6.0),
+                                        child: chart(),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                                barData.length > 0
+                                    ? Column(
+                                        children: [
+                                          legenda(Color(0xff4af699), "Gelopen"),
+                                          legenda(Color(0xffaa4cfc), "Goal"),
+                                          legenda(
+                                              Color(0xff27b6fc), "Predictie")
+                                        ],
+                                      )
+                                    : Text("Geen nulmeting toegevoegd"),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            : Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FullPageButton(
-                      buttonTitle: "Activiteit toevoegen",
-                      onTap: ActivitySelectionPage(),
-                      title:
-                          "U heeft nog geen nulmeting toegevoegd aan het doel",
+                  )
+                : Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FullPageButton(
+                          buttonTitle: "Activiteit toevoegen",
+                          onTap: ActivitySelectionPage(),
+                          title:
+                              "U heeft nog geen nulmeting toegevoegd aan het doel",
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
       );
   }
 

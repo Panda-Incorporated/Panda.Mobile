@@ -6,6 +6,7 @@ import 'package:panda/Providers/DBProvider.dart';
 //WARNING DB file: if changed, toMap also needs to be changed and DB rebuild.
 class Goal extends DistanceDuration {
   int id;
+
   bool get finished =>
       currentAmountOfStars == totalAmountOfStars &&
       totalAmountOfStars != 0 &&
@@ -40,6 +41,7 @@ class Goal extends DistanceDuration {
       this.endday,
       this.totalAmountOfStars,
       this.currentAmountOfStars});
+
   getString() {
     return getCombination(distance.toInt(), duration.inMinutes);
   }
@@ -60,28 +62,22 @@ class Goal extends DistanceDuration {
 
   Future<double> getNextPoint() async {
     var _activities = await activities();
-    if (_activities != null) {
-      _activities.sort((a, b) => a.date.compareTo(b.date));
-      Activity lastactivity = _activities.last;
-      int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
-      Activity secondlastactivity = _activities[_activities.length - 2];
+    if (_activities == null) return -1.0;
+    _activities.sort((a, b) => a.date.compareTo(b.date));
+    Activity lastactivity = _activities.last;
+    int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
+    Activity secondlastactivity = _activities[_activities.length - 2];
 
-      int kmsfirstpoint =
-          secondlastactivity.RichelFormula(this.distance).toInt();
+    int kmsfirstpoint = secondlastactivity.RichelFormula(this.distance).toInt();
 
-      double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
+    double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
-      double diffrencedays = lastactivity.date
-          .difference(secondlastactivity.date)
-          .inDays
-          .toDouble();
-      double progressionperquantum = diffrencekms / diffrencedays;
-      double kmsPredicted =
-          kmslastpoint - progressionperquantum * diffrencedays;
+    double diffrencedays =
+        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+    double progressionperquantum = diffrencekms / diffrencedays;
+    double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
 
-      return kmsPredicted > this.goal ? kmsPredicted : this.goal.toDouble();
-    } else
-      return -1.0;
+    return kmsPredicted > this.goal ? kmsPredicted : this.goal.toDouble();
   }
 
   Future<int> getMeasurement() async {
@@ -89,7 +85,7 @@ class Goal extends DistanceDuration {
     if (_activities != null && _activities.length > 0)
       return _activities.first.RichelFormula(this.distance).toInt();
     else
-      return 0;
+      return -1;
   }
 
   Map<String, dynamic> toMap() {
