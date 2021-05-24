@@ -66,106 +66,129 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 28.0),
-                    child: Container(
-                      child: Logo(),
-                      height: 188,
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        body: (!loading && !done)
+            ? Container(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 28.0),
+                            child: Container(
+                              child: Logo(),
+                              height: 188,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin:
-                    EdgeInsets.only(top: 20, left: 15, bottom: 12, right: 15),
-                child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: CustomScrollView(
-                      slivers: <Widget>[
-                        SliverToBoxAdapter(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Form(
-                                key: _formKey,
-                                autovalidateMode: AutovalidateMode.always,
-                                child: TextFormField(
-                                  validator: (val) {
-                                    if (val == null || val.isEmpty) {
-                                      return "Naam is verplicht";
-                                    }
-                                    return null;
-                                  },
-                                  style: TextStyle(),
-                                  controller: controller,
-                                  decoration: InputDecoration(
-                                    labelText: 'Naam',
-                                    border: OutlineInputBorder(),
-                                    hintText: 'Hoe mogen we je noemen?...',
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        margin: EdgeInsets.only(
+                            top: 20, left: 15, bottom: 12, right: 15),
+                        child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: CustomScrollView(
+                              slivers: <Widget>[
+                                SliverToBoxAdapter(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Form(
+                                        key: _formKey,
+                                        autovalidateMode:
+                                            AutovalidateMode.always,
+                                        child: TextFormField(
+                                          validator: (val) {
+                                            if (val == null || val.isEmpty) {
+                                              return "Naam is verplicht";
+                                            }
+                                            return null;
+                                          },
+                                          style: TextStyle(),
+                                          controller: controller,
+                                          decoration: InputDecoration(
+                                            labelText: 'Naam',
+                                            border: OutlineInputBorder(),
+                                            hintText:
+                                                'Hoe mogen we je noemen?...',
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 15,
+                                      ),
+                                      Text(
+                                          "Deze app maakt gebruik van Fibit, klik onderstaande knop om je account te koppelen."),
+                                      Center(
+                                        child: OutlinedButton(
+                                            child: Text("Inloggen via Fitbit"),
+                                            onPressed: () {
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                saveData();
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        behavior:
+                                                            SnackBarBehavior
+                                                                .floating,
+                                                        content: Text(
+                                                            'Er is nog geen naam ingevuld')));
+                                              }
+                                            }),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              ),
-                              Container(
-                                height: 15,
-                              ),
-                              Text(
-                                  "This app uses FitBit to access your activities. Sign in using your FitBit account below."),
-                              Center(
-                                child: OutlinedButton(
-                                    child: Text("Inloggen via Fitbit"),
-                                    onPressed: () {
-                                      if (_formKey.currentState.validate()) {
-                                        saveData();
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                content: Text(
-                                                    'Er is nog geen naam ingevuld')));
-                                      }
-                                    }),
-                              )
-                            ],
-                          ),
-                        ),
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              everythingDone
-                                  ? OutlinedButton(
-                                      child: Text("Volgende"),
-                                      onPressed: () {
-                                        if (widget.onDone != null)
-                                          widget.onDone();
-                                      })
-                                  : Container(),
-                            ],
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                                SliverFillRemaining(
+                                  hasScrollBody: false,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      everythingDone
+                                          ? OutlinedButton(
+                                              child: Text("Volgende"),
+                                              onPressed: () {
+                                                setState(() {
+                                                  done = true;
+                                                });
+                                              })
+                                          : Container(),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : (!loading && done)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        Text(
+                            "Bedankt voor het inloggen $username, klik volgende om verder te gaan."),
+                        OutlinedButton(
+                            child: Text("Volgende"),
+                            onPressed: () {
+                              //navigate to newgoal scherm when done call below
+                              if (widget.onDone != null) widget.onDone();
+                            })
+                      ])
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ));
   }
 }
