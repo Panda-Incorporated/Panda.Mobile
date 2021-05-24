@@ -24,7 +24,7 @@ class _ListItemState extends State<ListItem> {
 
   getData() async {
     percentage = await widget.goal.getPercentage();
-    title = await widget.goal.title;
+    title = widget.goal.title;
     subtitle = await widget.goal.getString();
 
     setState(() {});
@@ -54,7 +54,7 @@ class _ListItemState extends State<ListItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "lasdjflaaaakadsfjfdklkjldf",
+                      title,
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
