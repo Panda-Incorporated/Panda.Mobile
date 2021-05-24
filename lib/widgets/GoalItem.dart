@@ -44,66 +44,45 @@ class _ListItemState extends State<ListItem> {
               borderRadius: BorderRadius.all(Radius.circular(6))),
 
           // kleur knop
-          child: Container(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // helemaal links helemaal rechts
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // helemaal links helemaal rechts
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      //tekst datum en doel moeten onder elkaar
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0),
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0),
-                              child: Text(
-                                subtitle,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                    Text(
+                      "lasdjflaaaakadsfjfdklkjldf",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircularPercentIndicator(
-                            radius: 50.0,
-                            lineWidth: 5.0,
-                            backgroundColor: Colors.white,
-                            percent: percentage,
-                            progressColor: Colors.green,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            animation: true,
-                            center: Text(
-                              "${(percentage * 100).toInt()}",
-                              style: TextStyle(),
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      subtitle,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircularPercentIndicator(
+                  radius: 50.0,
+                  lineWidth: 5.0,
+                  backgroundColor: Colors.white,
+                  percent: percentage,
+                  progressColor: Colors.green,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  animation: true,
+                  center: Text(
+                    "${(percentage * 100).toInt()}",
+                    style: TextStyle(),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

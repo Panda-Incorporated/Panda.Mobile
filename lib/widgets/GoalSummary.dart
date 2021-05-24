@@ -22,12 +22,16 @@ class _GoalSummaryState extends State<GoalSummary> {
   }
 
   getData() async {
-    time = await widget.goal
-        .activities()
-        .then((value) => value.last.getSecondsPerKilometer());
-    distance1 =
-        await widget.goal.activities().then((value) => value.last.distance);
-    percentage = await widget.goal.getPercentage();
+    var temp = await widget.goal.activities();
+    if (temp != null && temp.length > 0) {
+      time = await widget.goal
+          .activities()
+          .then((value) => value.last.getSecondsPerKilometer());
+      distance1 =
+          await widget.goal.activities().then((value) => value.last.distance);
+      percentage = await widget.goal.getPercentage();
+    }
+
     setState(() {});
   }
 
