@@ -86,21 +86,8 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                         child: TomorrowSummary(
                             "Eerst volgende keer: ",
                             "vanaf ${DateFormat("dd-MM").format(activity.add(Duration(days: 2)))} eenmalig:\n"
-                                "loop ${_duration.inMinutes} minuten hard\n"
-                                "of\n"
-                                "loop ${meters} meter hard"),
+                                "loop ${meters ~/ widget.goal.duration.inMinutes} meter hard"),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(top: 12.0, bottom: 16.0),
-                      //   child: Text(
-                      //     "Meer weergeven",
-                      //     style: TextStyle(
-                      //       color: Colors.cyanAccent[700],
-                      //       fontWeight: FontWeight.w600,
-                      //       fontSize: 16,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

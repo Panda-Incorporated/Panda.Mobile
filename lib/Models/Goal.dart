@@ -149,10 +149,14 @@ class Goal extends DistanceDuration {
   }
 
   Future<int> getMetersToRun() async {
-    var y = (goal - await getMeasurement()) /
+    var mes = await getMeasurement();
+    var _activities = await activities();
+    var lastact = _activities.last;
+    var y = (goal - (mes * 60)) /
             sqrt(getTotalDays()) *
-            sqrt(getDaysLeft()) +
-        await getMeasurement();
+            sqrt(
+                endday.difference(lastact.date.add(Duration(days: 2))).inDays) +
+        (mes * 60);
     return y.toInt();
   }
 }
