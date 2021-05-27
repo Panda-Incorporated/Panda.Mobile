@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/DistanceDuration.dart';
@@ -9,8 +11,8 @@ class Goal extends DistanceDuration {
 
   bool get finished =>
       currentAmountOfStars == totalAmountOfStars &&
-      totalAmountOfStars != 0 &&
-      totalAmountOfStars != null;
+          totalAmountOfStars != 0 &&
+          totalAmountOfStars != null;
   String title;
   double distance;
   Duration duration;
@@ -20,9 +22,9 @@ class Goal extends DistanceDuration {
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
   int get goal => (duration != null &&
-          duration.inSeconds > 0 &&
-          distance > 0 &&
-          distance != null)
+      duration.inSeconds > 0 &&
+      distance > 0 &&
+      distance != null)
       ? duration.inSeconds ~/ (distance ~/ 1000)
       : 0; // doel
   Future<List<Activity>> activities() async {
@@ -32,10 +34,9 @@ class Goal extends DistanceDuration {
 
   Goal();
 
-  Goal.fill(
-      {this.id,
-      this.duration,
-      this.title,
+  Goal.fill({this.id,
+    this.duration,
+    this.title,
       this.distance,
       this.beginday,
       this.endday,
@@ -44,6 +45,21 @@ class Goal extends DistanceDuration {
 
   getString() {
     return getCombination(distance.toInt(), duration.inMinutes);
+  }
+
+  int getDaysLeft() {
+    return endday.difference(DateTime.now()).inDays;
+  }
+
+  int getSecondsPerKilometer() {
+    // seconds/km van activiteit
+    return (duration.inSeconds / distance * 1000).toInt();
+  }
+
+  Future<DateTime> getLastactivity() async {
+    var act = await activities();
+    act.sort((a, b) => a.date.compareTo(b.date));
+    return act.last.date;
   }
 
   Future<double> getPercentage() async {
@@ -60,9 +76,16 @@ class Goal extends DistanceDuration {
     return percentage;
   }
 
+  // double getSecondsPerKilometer(){
+  //
+  // }
+  int getTotalDays() {
+    return endday.difference(beginday).inDays;
+  }
+
   Future<double> getNextPoint() async {
     var _activities = await activities();
-    if (_activities == null) return -1.0;
+    if (_activities == null || _activities.length < 2) return -1.0;
     _activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = _activities.last;
     int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
@@ -73,7 +96,7 @@ class Goal extends DistanceDuration {
     double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
     double diffrencedays =
-        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+    lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
     double progressionperquantum = diffrencekms / diffrencedays;
     double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
 
@@ -98,5 +121,37 @@ class Goal extends DistanceDuration {
       'endday': DateFormat("yyyy-MM-dd hh:mm:ss").format(endday),
       'beginday': DateFormat("yyyy-MM-dd hh:mm:ss").format(beginday),
     };
+  }
+
+  Future<Duration> getMinutesToRun() async {
+    int initalTime = duration.inSeconds;
+    var mes = await getMeasurement();
+    var _duration = Duration();
+    int amountofParts = mes - goal;
+    int goal1 = mes;
+    int goal2 = mes - (amountofParts * 0.25).toInt();
+    int goal3 = mes - (amountofParts * 0.5).toInt();
+    int goal4 = mes - (amountofParts * 0.75).toInt();
+    var _activities = await activities();
+    var lastact = _activities.last;
+    if (lastact.RichelFormula(distance) < goal1)
+      _duration = Duration(seconds: initalTime ~/ 4);
+    if (lastact.RichelFormula(distance) < goal2)
+      _duration = Duration(seconds: initalTime ~/ 3);
+    if (lastact.RichelFormula(distance) < goal3)
+      _duration = Duration(seconds: initalTime ~/ 2);
+    if (lastact.RichelFormula(distance) < goal4)
+      _duration = Duration(seconds: initalTime ~/ 1);
+    if (_duration.inMinutes < 2) Duration(minutes: 2);
+    if (getDaysLeft() < 2) return Duration(minutes: 0);
+    return _duration;
+  }
+
+  Future<int> getMetersToRun() async {
+    var y = (goal - await getMeasurement()) /
+            sqrt(getTotalDays()) *
+            sqrt(getDaysLeft()) +
+        await getMeasurement();
+    return y.toInt();
   }
 }

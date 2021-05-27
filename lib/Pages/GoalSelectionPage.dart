@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/GoalProvider.dart';
+import 'package:panda/main.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
-import 'package:panda/widgets/widgets.dart';
-
-import '../main.dart';
 
 class GoalSelectionPage extends StatefulWidget {
   final Activity act;

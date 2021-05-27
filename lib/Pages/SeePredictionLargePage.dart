@@ -305,8 +305,10 @@ Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
   var activities = await goal.activities();
   for (var i = 0; i < activities.length; i++) {
     var y = activities[i].RichelFormula(goal.distance);
-    list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
-        y.toDouble()));
+    if (activities[i].distance > 3000)
+      list.add(FlSpot(
+          activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
+          y.toDouble()));
   }
 
   return list;

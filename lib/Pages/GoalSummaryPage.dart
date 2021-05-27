@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
@@ -22,6 +23,9 @@ class GoalSummaryPage extends StatefulWidget {
 
 class _GoalSummaryPageState extends State<GoalSummaryPage> {
   double percentage = 0.0;
+  DateTime activity;
+  Duration _duration;
+  int meters;
 
   @override
   void initState() {
@@ -31,6 +35,10 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
 
   getData() async {
     percentage = await widget.goal.getPercentage();
+    activity = await widget.goal.getLastactivity();
+    _duration = await widget.goal.getMinutesToRun();
+    meters = await widget.goal.getMetersToRun();
+
     setState(() {});
   }
 
@@ -66,6 +74,37 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                 ),
               ),
               GoalSummary(goal: widget.goal),
+              Padding(
+                padding: EdgeInsets.only(left: 12.0, top: 12.0),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TomorrowSummary(
+                            "Eerst volgende keer: ",
+                            "vanaf ${DateFormat("dd-MM").format(activity.add(Duration(days: 2)))} eenmalig:\n"
+                                "loop ${_duration.inMinutes} minuten hard\n"
+                                "of\n"
+                                "loop ${meters} meter hard"),
+                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(top: 12.0, bottom: 16.0),
+                      //   child: Text(
+                      //     "Meer weergeven",
+                      //     style: TextStyle(
+                      //       color: Colors.cyanAccent[700],
+                      //       fontWeight: FontWeight.w600,
+                      //       fontSize: 16,
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
 
               Padding(
                 // buiten het scherm en iets meer onder de 2,5 uur
@@ -100,6 +139,38 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TomorrowSummary extends StatelessWidget {
+  TomorrowSummary(this.date, this.goal);
+
+  final String date;
+  final String goal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          // "{planning.title} {planning.date?} "
+          date,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+        Text(
+          //"{planning.distance} km in planning.duration minuten"
+          "" + goal,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
 }

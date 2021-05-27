@@ -6,13 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/DBProvider.dart';
-import 'package:panda/widgets/Logo.dart';
-import 'package:panda/Pages/NewGoalInput.dart';
-import 'package:panda/Pages/GoalSelectionPage.dart';
-import 'package:panda/Pages/Home.dart';
-import 'package:panda/main.dart';
-import 'package:panda/widgets/GoalSummary.dart';
-import 'NewGoalInput.dart';
 
 class NewGoal extends StatefulWidget {
   @override
@@ -186,10 +179,10 @@ class _NewGoalState extends State<NewGoal> {
                           ),
                           onPressed: () => {
                             a = Goal()
-                              ..title = _goalName.text
-                              ..distance = double.parse(_distance.text)
-                              ..duration = Duration(minutes: 7, seconds: 39)
-                              ..beginday = DateTime(2021, DateTime.may, 11)
+                              ..title = "100km uur"
+                              ..distance = 100000
+                              ..duration = Duration(hours: 1)
+                              ..beginday = DateTime(2021, DateTime.may, 1)
                               ..endday = DateTime(2021, DateTime.may, 31),
                             DBProvider.helper.insertGoal(a),
                             print(a),
