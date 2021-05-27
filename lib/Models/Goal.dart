@@ -21,8 +21,7 @@ class Goal extends DistanceDuration {
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
-  int get goal =>
-      (duration != null &&
+  int get goal => (duration != null &&
           duration.inSeconds > 0 &&
           distance > 0 &&
           distance != null)
