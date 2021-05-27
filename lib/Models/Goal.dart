@@ -11,8 +11,8 @@ class Goal extends DistanceDuration {
 
   bool get finished =>
       currentAmountOfStars == totalAmountOfStars &&
-          totalAmountOfStars != 0 &&
-          totalAmountOfStars != null;
+      totalAmountOfStars != 0 &&
+      totalAmountOfStars != null;
   String title;
   double distance;
   Duration duration;
@@ -21,10 +21,11 @@ class Goal extends DistanceDuration {
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
-  int get goal => (duration != null &&
-      duration.inSeconds > 0 &&
-      distance > 0 &&
-      distance != null)
+  int get goal =>
+      (duration != null &&
+          duration.inSeconds > 0 &&
+          distance > 0 &&
+          distance != null)
       ? duration.inSeconds ~/ (distance ~/ 1000)
       : 0; // doel
   Future<List<Activity>> activities() async {
@@ -34,9 +35,10 @@ class Goal extends DistanceDuration {
 
   Goal();
 
-  Goal.fill({this.id,
-    this.duration,
-    this.title,
+  Goal.fill(
+      {this.id,
+      this.duration,
+      this.title,
       this.distance,
       this.beginday,
       this.endday,
@@ -96,7 +98,7 @@ class Goal extends DistanceDuration {
     double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
     double diffrencedays =
-    lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
     double progressionperquantum = diffrencekms / diffrencedays;
     double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
 
