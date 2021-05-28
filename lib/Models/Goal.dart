@@ -58,7 +58,7 @@ class Goal {
 
   Future<String> getLastactivity() async {
     var act = await activities();
-    if (act.length > 0) {
+    if (act != null && act.length > 0) {
       act.sort((a, b) => a.date.compareTo(b.date));
       var minimalday = act.last.date.add(Duration(days: 2));
       minimalday =
