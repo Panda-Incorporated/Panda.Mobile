@@ -89,7 +89,7 @@ class Goal {
   }
 
   int getTotalDays() {
-    return endday.difference(beginday).inDays;
+    return endday.difference(beginday).inDays + 1;
   }
 
   Future<double> getNextPoint() async {
@@ -97,15 +97,18 @@ class Goal {
     if (_activities == null || _activities.length < 2) return -1.0;
     _activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = _activities.last;
-    int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
+    int kmslastpoint = lastactivity.RichelFormula(distance).toInt();
     Activity secondlastactivity = _activities[_activities.length - 2];
 
-    int kmsfirstpoint = secondlastactivity.RichelFormula(this.distance).toInt();
+    int kmsfirstpoint = secondlastactivity.RichelFormula(distance).toInt();
 
     double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
-    double diffrencedays =
-        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+    double diffrencedays = lastactivity.date
+            .difference(secondlastactivity.date)
+            .inDays
+            .toDouble() +
+        1;
     double progressionperquantum = diffrencekms / diffrencedays;
     double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
 
@@ -115,7 +118,7 @@ class Goal {
   Future<int> getMeasurement() async {
     var _activities = await activities();
     if (_activities != null && _activities.length > 0)
-      return _activities.first.RichelFormula(this.distance).toInt();
+      return _activities.first.RichelFormula(distance).toInt();
     else
       return 1;
   }

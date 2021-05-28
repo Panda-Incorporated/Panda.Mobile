@@ -10,7 +10,7 @@ class GoalProvider {
         ..title = "Wielrennen"
         ..distance = 7200.0
         ..duration = Duration(minutes: 19)
-        ..beginday = DateTime(2021, DateTime.may, 1)
+        ..beginday = DateTime(2021, DateTime.may, 20)
         ..endday = DateTime(2021, DateTime.may, 31),
     ];
   }
@@ -36,23 +36,17 @@ class GoalProvider {
       //   ..name = "Activiteit 3"
       //   ..date = DateTime(2021, DateTime.may, 18),
       Activity()
-        ..distance = 5004
-        ..duration = Duration(minutes: 19)
-        ..goalId = goalId
-        ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 12),
-      Activity()
         ..distance = 5500
         ..duration = Duration(minutes: 19)
         ..goalId = goalId
         ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 13),
+        ..date = DateTime(2021, DateTime.may, 21),
       Activity()
         ..distance = 6400
         ..duration = Duration(minutes: 19)
         ..goalId = goalId
         ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 18),
+        ..date = DateTime(2021, DateTime.may, 22),
       Activity()
         ..distance = 6600
         ..duration = Duration(minutes: 19)
@@ -64,7 +58,19 @@ class GoalProvider {
         ..duration = Duration(minutes: 19)
         ..goalId = goalId
         ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 26)
+        ..date = DateTime(2021, DateTime.may, 25),
+      Activity()
+        ..distance = 7180
+        ..duration = Duration(minutes: 19)
+        ..goalId = goalId
+        ..name = "Activiteit 4"
+        ..date = DateTime(2021, DateTime.may, 30),
+      Activity()
+        ..distance = 7200
+        ..duration = Duration(minutes: 19)
+        ..goalId = goalId
+        ..name = "Activiteit 4"
+        ..date = DateTime(2021, DateTime.may, 31)
     ];
   }
 

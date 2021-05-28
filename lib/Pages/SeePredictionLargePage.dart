@@ -212,7 +212,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
         ),
         titlesData: FlTitlesData(
           bottomTitles: SideTitles(
-            interval: (widget.goal.getTotalDays() / 10).ceilToDouble(),
+            //interval: (widget.goal.getTotalDays() / 10).ceilToDouble(),
+            interval: 1,
             showTitles: true,
             reservedSize: 22,
             getTextStyles: (value) => const TextStyle(
@@ -225,7 +226,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
           ),
           leftTitles: SideTitles(
             // interval: steps > 0 ? steps.toDouble() : 10,
-            interval: (big / 8).ceilToDouble(),
+            // interval: (big / 8).ceilToDouble(),
+            interval: 20,
             showTitles: true,
             getTextStyles: (value) => const TextStyle(
               color: Color(0xff75729e),
@@ -266,8 +268,9 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       barWidth: 2,
       // display dots uit
       dotData: FlDotData(
-        show: false,
+        show: true,
       ),
+
       //display alles onder de lijn false
       belowBarData: BarAreaData(
         show: false,
@@ -280,7 +283,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       return [
         drawLine(Color(0xff4af699), await generateActivitySpots(goal)),
         drawLine(Color(0xffaa4cfc), await generateSpots(goal)),
-        drawLine(Color(0xff27b6fc), await generatePredictLine(goal)),
+        // drawLine(Color(0xff27b6fc), await generatePredictLine(goal)),
       ];
   }
 }
@@ -288,12 +291,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
 Future<List<FlSpot>> generateSpots(Goal goal) async {
   List<FlSpot> list = [];
   if (goal != null && goal.goal > 0) {
-    var days = goal.endday.difference(goal.beginday).inDays;
+    var days = goal.endday.difference(goal.beginday).inDays + 1;
     print(goal.goal);
+    var mes = await goal.getMeasurement();
+    for (var i = 0; i < days; i++) {
+      var y = (goal.goal - mes) / sqrt(days) * sqrt(i) + mes;
 
-    for (var i = 0; i < days + 1; i++) {
-      var y = (goal.goal - await goal.getMeasurement()) / sqrt(days) * sqrt(i) +
-          await goal.getMeasurement();
       list.add(FlSpot(i.toDouble(), y));
     }
     return list;
@@ -305,10 +308,13 @@ Future<List<FlSpot>> generateSpots(Goal goal) async {
 Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
   List<FlSpot> list = [];
   var activities = await goal.activities();
-  for (var i = 0; i < activities.length; i++) {
+  list.add(FlSpot(
+      activities.first.getDaysFromStartDay(goal.beginday).toDouble(),
+      activities.first.RichelFormula(goal.distance)));
+  for (var i = 1; i < activities.length; i++) {
     var y = activities[i].RichelFormula(goal.distance);
-    list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
-        y.toDouble()));
+    list.add(FlSpot(
+        activities[i].getDaysFromStartDay(goal.beginday).toDouble(), y * 0.8));
   }
 
   return list;
@@ -317,7 +323,7 @@ Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
 Future<List<FlSpot>> generatePredictLine(Goal goal) async {
   var activities = await goal.activities();
   List<FlSpot> list = [];
-  if (activities != null && activities.length > 0) {
+  if (activities != null && activities.length > 1) {
     activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = activities.last;
 
