@@ -175,18 +175,44 @@ class _StartPageState extends State<StartPage> {
                 ),
               )
             : (!loading && done)
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                        Text(
-                            "Bedankt voor het inloggen $username, klik volgende om verder te gaan."),
-                        OutlinedButton(
-                            child: Text("Volgende"),
-                            onPressed: () {
-                              //navigate to newgoal scherm when done call below
-                              if (widget.onDone != null) widget.onDone();
-                            })
-                      ])
+                ? Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 28.0),
+                      child: Logo(),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          padding: const EdgeInsets.all(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                    "Bedankt voor het inloggen $username, klik volgende om verder te gaan."),
+                                Container(
+                                  height: 15,
+                                ),
+                                OutlinedButton(
+                                    child: Text("Volgende"),
+                                    onPressed: () {
+                                      //navigate to newgoal scherm when done call below
+                                      if (widget.onDone != null)
+                                        widget.onDone();
+                                    }),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ])
                 : Center(
                     child: CircularProgressIndicator(),
                   ));
