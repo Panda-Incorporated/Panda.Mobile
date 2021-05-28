@@ -98,12 +98,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                                 radius: 80.0,
                                 lineWidth: 6.0,
                                 backgroundColor: Colors.green[100],
-                                percent: percentage,
+                                percent: percentage.toDouble(),
                                 progressColor: Colors.green[800],
                                 circularStrokeCap: CircularStrokeCap.round,
                                 animation: true,
                                 center: Text(
-                                  "${(percentage * 100).toStringAsFixed(1)}%",
+                                  "${(percentage * 100).toInt()}%",
                                   style: TextStyle(
                                       color: Colors.green[800],
                                       fontSize: 20,

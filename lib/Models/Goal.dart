@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
-import 'package:panda/Models/DistanceDuration.dart';
 import 'package:panda/Providers/DBProvider.dart';
 
 //WARNING DB file: if changed, toMap also needs to be changed and DB rebuild.
-class Goal extends DistanceDuration {
+class Goal {
   int id;
 
   bool get finished =>
@@ -44,9 +43,9 @@ class Goal extends DistanceDuration {
       this.totalAmountOfStars,
       this.currentAmountOfStars});
 
-  getString() {
-    return getCombination(distance.toInt(), duration.inMinutes);
-  }
+  // getString() {
+  //   return getCombination(distance.toInt(), duration.inMinutes);
+  // }
 
   int getDaysLeft() {
     return endday.difference(DateTime.now()).inDays;
@@ -57,10 +56,15 @@ class Goal extends DistanceDuration {
     return (duration.inSeconds / distance * 1000).toInt();
   }
 
-  Future<DateTime> getLastactivity() async {
+  Future<String> getLastactivity() async {
     var act = await activities();
-    act.sort((a, b) => a.date.compareTo(b.date));
-    return act.last.date;
+    if (act.length > 0) {
+      act.sort((a, b) => a.date.compareTo(b.date));
+      var minimalday = act.last.date.add(Duration(days: 2));
+      minimalday =
+          minimalday.isBefore(DateTime.now()) ? DateTime.now() : minimalday;
+      return DateFormat("dd-MM").format(minimalday);
+    }
   }
 
   Future<double> getPercentage() async {
@@ -77,9 +81,6 @@ class Goal extends DistanceDuration {
     return percentage;
   }
 
-  // double getSecondsPerKilometer(){
-  //
-  // }
   int getTotalDays() {
     return endday.difference(beginday).inDays;
   }
@@ -109,7 +110,7 @@ class Goal extends DistanceDuration {
     if (_activities != null && _activities.length > 0)
       return _activities.first.RichelFormula(this.distance).toInt();
     else
-      return -1;
+      return 1;
   }
 
   Map<String, dynamic> toMap() {
@@ -151,12 +152,20 @@ class Goal extends DistanceDuration {
   Future<int> getMetersToRun() async {
     var mes = await getMeasurement();
     var _activities = await activities();
+    if (_activities == null || _activities.length <= 0) return 0;
     var lastact = _activities.last;
     var y = (goal - (mes * 60)) /
             sqrt(getTotalDays()) *
             sqrt(
                 endday.difference(lastact.date.add(Duration(days: 2))).inDays) +
         (mes * 60);
-    return y.toInt();
+
+    if (duration.inMinutes.isNaN ||
+        duration.inMinutes.isInfinite ||
+        y.isNaN ||
+        y.isInfinite) {
+      return 0;
+    }
+    return y ~/ duration.inMinutes;
   }
 }

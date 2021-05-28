@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
@@ -23,9 +22,9 @@ class GoalSummaryPage extends StatefulWidget {
 
 class _GoalSummaryPageState extends State<GoalSummaryPage> {
   double percentage = 0.0;
-  DateTime activity;
-  Duration _duration;
-  int meters;
+  String activity = "";
+
+  int meters = 0;
 
   @override
   void initState() {
@@ -36,7 +35,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
   getData() async {
     percentage = await widget.goal.getPercentage();
     activity = await widget.goal.getLastactivity();
-    _duration = await widget.goal.getMinutesToRun();
+
     meters = await widget.goal.getMetersToRun();
 
     setState(() {});
@@ -46,86 +45,104 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: ListView(
-        children: [
-          Column(
-            children: [
-              // om het een plek te geven. Kan ook misschien met margin
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularPercentIndicator(
-                    radius: 150.0,
-                    lineWidth: 4.0,
-                    backgroundColor: Colors.green[100],
-                    percent: percentage,
-                    progressColor: Colors.green[800],
-                    circularStrokeCap: CircularStrokeCap.round,
-                    animation: true,
-                    center: Text(
-                      "${(percentage * 100).toStringAsFixed(1)}%",
-                      style: TextStyle(
-                          color: Colors.green[800],
-                          fontSize: 36,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ),
-              GoalSummary(goal: widget.goal),
-              Padding(
-                padding: EdgeInsets.only(left: 12.0, top: 12.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TomorrowSummary(
-                            "Eerst volgende keer: ",
-                            "vanaf ${DateFormat("dd-MM").format(activity.add(Duration(days: 2)))} eenmalig:\n"
-                                "loop ${meters ~/ widget.goal.duration.inMinutes} meter hard"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              Padding(
-                // buiten het scherm en iets meer onder de 2,5 uur
-                padding: EdgeInsets.only(
-                    left: 12.0, right: 12.0, bottom: 8.0, top: 18.0),
-                child: Column(
+      body: activity != null && activity.length > 0
+          ? ListView(
+              children: [
+                Column(
                   children: [
-                    FullPageButton(
-                      title: "Grafiek weergeven",
-                      onTap: SeePredictionLargePage(goal: widget.goal),
-                    ),
-                    FullPageButton(
-                      title: "Activiteiten",
-                      buttonTitle: "Activiteiten bekijken",
-                      onTap: ShowActivitiesPage(
-                        goal: widget.goal,
+                    // om het een plek te geven. Kan ook misschien met margin
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularPercentIndicator(
+                          radius: 150.0,
+                          lineWidth: 4.0,
+                          backgroundColor: Colors.green[100],
+                          percent: percentage.toDouble(),
+                          progressColor: Colors.green[800],
+                          circularStrokeCap: CircularStrokeCap.round,
+                          animation: true,
+                          center: Text(
+                            "${(percentage * 100).toInt()}%",
+                            style: TextStyle(
+                                color: Colors.green[800],
+                                fontSize: 36,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
                       ),
                     ),
-                    FullPageButton(
-                      buttonTitle: "Activiteit toevoegen",
-                      onTap: ActivitySelectionPage(),
+                    GoalSummary(goal: widget.goal),
+                    Padding(
+                      padding: EdgeInsets.only(left: 12.0, top: 12.0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TomorrowSummary(
+                                  "Eerst volgende keer: ",
+                                  "vanaf $activity eenmalig:\n"
+                                      "loop $meters meter hard"),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    FullPageButton(
-                      title: "Doelstellingen",
-                      buttonTitle: "Doelstellingen weergeven",
-                      onTap: PlanningPage(goal: widget.goal),
+
+                    Padding(
+                      // buiten het scherm en iets meer onder de 2,5 uur
+                      padding: EdgeInsets.only(
+                          left: 12.0, right: 12.0, bottom: 8.0, top: 18.0),
+                      child: Column(
+                        children: [
+                          FullPageButton(
+                            title: "Voortgang",
+                            buttonTitle: "Grafiek weergeven",
+                            onTap: SeePredictionLargePage(goal: widget.goal),
+                          ),
+                          FullPageButton(
+                            buttonTitle: "Doelstellingen weergeven",
+                            onTap: PlanningPage(goal: widget.goal),
+                          ),
+                          FullPageButton(
+                            title: "Activiteiten",
+                            buttonTitle: "Activiteiten bekijken",
+                            onTap: ShowActivitiesPage(
+                              goal: widget.goal,
+                            ),
+                          ),
+                          FullPageButton(
+                            buttonTitle: "Activiteit toevoegen",
+                            onTap: ActivitySelectionPage(),
+                          ),
+                          FullPageButton(
+                            onTap: null,
+                            title: "Doel verwijderen",
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
+              ],
+            )
+          : Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FullPageButton(
+                    buttonTitle: "Activiteit toevoegen",
+                    onTap: ActivitySelectionPage(),
+                    title: "U heeft nog geen nulmeting toegevoegd aan het doel",
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
     );
   }
 }

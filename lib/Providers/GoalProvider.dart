@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/DBProvider.dart';
@@ -19,19 +18,6 @@ class GoalProvider {
         ..duration = Duration(minutes: 30)
         ..beginday = DateTime(2021, DateTime.may, 11)
         ..endday = DateTime(2022, DateTime.may, 31),
-      //    ..doneMaxDuration = Duration(minutes: 30),
-      Goal()
-        ..title = "Marathon"
-        ..distance = 5000.0
-        ..duration = Duration(minutes: 30)
-        ..beginday = DateTime(2021, 5, 11)
-        ..endday = DateTime(2021, 5, 11),
-      Goal()
-        ..title = "Marathon"
-        ..distance = 2000.0
-        ..duration = Duration(minutes: 30)
-        ..beginday = DateTime(2021, 5, 11)
-        ..endday = DateTime(2021, 5, 11)
     ];
   }
 

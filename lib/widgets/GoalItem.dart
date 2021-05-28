@@ -15,6 +15,8 @@ class _ListItemState extends State<ListItem> {
   double percentage = 0.1;
   String title = "";
   String subtitle = "";
+  int distance = 0;
+  int time = 0;
 
   @override
   void initState() {
@@ -25,8 +27,10 @@ class _ListItemState extends State<ListItem> {
   getData() async {
     percentage = await widget.goal.getPercentage();
     title = widget.goal.title;
-    subtitle = await widget.goal.getString();
-
+    distance = widget.goal.distance.toInt();
+    time = widget.goal.duration.inMinutes;
+    //subtitle = await widget.goal.getString();
+    subtitle = "$distance m in $time min";
     setState(() {});
   }
 
