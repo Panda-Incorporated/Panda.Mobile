@@ -28,6 +28,9 @@ class _NewGoalState extends State<NewGoal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
       backgroundColor:
           Theme.of(context).bottomNavigationBarTheme.backgroundColor,
       body: Container(

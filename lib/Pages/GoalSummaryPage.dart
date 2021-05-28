@@ -44,6 +44,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Theme.of(context).backgroundColor,
       body: activity != null && activity.length > 0
           ? ListView(

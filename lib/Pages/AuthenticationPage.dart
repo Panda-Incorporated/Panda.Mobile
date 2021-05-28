@@ -22,21 +22,26 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: InAppWebView(
-          initialOptions: options,
-          onWebViewCreated: (controller) {
-            webViewController = controller;
-          },
-          onUpdateVisitedHistory: (_, Uri uri, __) {
-            if (uri.queryParameters.containsKey("code")) {
-              Navigator.pop(context, uri.queryParameters["code"]);
-            }
-          },
-          initialUrlRequest: URLRequest(
-              url: Uri.parse(
-                  "https://pandaapi.azurewebsites.net/authenticate/frikandelbroodje"))),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: InAppWebView(
+            initialOptions: options,
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+            },
+            onUpdateVisitedHistory: (_, Uri uri, __) {
+              if (uri.queryParameters.containsKey("code")) {
+                Navigator.pop(context, uri.queryParameters["code"]);
+              }
+            },
+            initialUrlRequest: URLRequest(
+                url: Uri.parse(
+                    "https://pandaapi.azurewebsites.net/authenticate/frikandelbroodje"))),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/CurrentActivities.dart';
 import 'package:panda/widgets/Logo.dart';
+import 'package:panda/widgets/NothingToDisplay.dart';
 
 class ActivitySelectionPage extends StatefulWidget {
   @override
@@ -50,6 +51,9 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -99,10 +103,12 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                     }),
                 if (loading)
                   Center(child: CircularProgressIndicator())
-                else if (activities != null)
+                else if (activities != null && activities.length > 0)
                   ShowActivities(currentActvities: activities)
                 else
-                  Center(child: Text("Geen activiteiten om weer te geven."))
+                  NothingToDisplay(
+                    message: "Geen activiteiten bij geselecteerde datum",
+                  ),
               ],
             ),
           ),
