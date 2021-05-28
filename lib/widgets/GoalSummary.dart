@@ -53,7 +53,7 @@ class _GoalSummaryState extends State<GoalSummary> {
           Icons.outlined_flag,
         ),
         Text(
-            "${(widget.goal.distance * percentage).toInt()} km van ${widget.goal.distance} km"),
+            "${(widget.goal.distance * percentage).toInt()} m van ${widget.goal.distance.toInt()} m"),
         Text(
           "in",
           style: TextStyle(fontSize: 12),
