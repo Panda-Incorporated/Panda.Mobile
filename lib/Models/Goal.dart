@@ -70,15 +70,16 @@ class Goal {
     if (_activities == null || _activities.length < 1) return 0;
     print("activities zijn $_activities");
     var nulmeting = _activities.first.RichelFormula(distance);
-    var nu_punt = _activities.last.RichelFormula(distance);
+    var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95);
     // var nulmeting = _activities.first.getSecondsPerKilometer();
     // var nu_punt = _activities.last.getSecondsPerKilometer();
-    var verschil = nulmeting - goal;
+    var goal1 = goal;
+    var verschil = nulmeting - goal1;
     var progressie = nulmeting - nu_punt;
     var percentage = progressie / verschil;
     var perc = (percentage * 100).toInt();
     if (currentAmountOfStars != perc) {
-      currentAmountOfStars = percentage.toInt();
+      currentAmountOfStars = perc;
       totalAmountOfStars = 100;
       var db = await DBProvider.helper.getDatabase();
       await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},

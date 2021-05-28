@@ -291,14 +291,15 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
 Future<List<FlSpot>> generateSpots(Goal goal) async {
   List<FlSpot> list = [];
   if (goal != null && goal.goal > 0) {
-    var days = goal.endday.difference(goal.beginday).inDays + 1;
-    print(goal.goal);
+    var days = goal.endday.difference(goal.beginday).inDays;
+    print("goal is ${goal.goal}");
     var mes = await goal.getMeasurement();
-    for (var i = 0; i < days; i++) {
+    for (var i = 0; i < days + 1; i++) {
       var y = (goal.goal - mes) / sqrt(days) * sqrt(i) + mes;
-
+      print("paarse lijn punt is $y met i $i");
       list.add(FlSpot(i.toDouble(), y));
     }
+
     return list;
   } else
     return list;
@@ -313,8 +314,9 @@ Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
       activities.first.RichelFormula(goal.distance)));
   for (var i = 1; i < activities.length; i++) {
     var y = activities[i].RichelFormula(goal.distance);
-    list.add(FlSpot(
-        activities[i].getDaysFromStartDay(goal.beginday).toDouble(), y * 0.8));
+    print("act spot is ${y * 0.8}");
+    list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
+        pow(y, 0.95)));
   }
 
   return list;
