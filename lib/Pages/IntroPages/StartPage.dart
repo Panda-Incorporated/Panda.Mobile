@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/AuthState.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/AuthenticationPage.dart';
 import 'package:panda/Pages/Home.dart';
+import 'package:panda/Pages/NewGoal.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
@@ -201,7 +203,11 @@ class _StartPageState extends State<StartPage> {
                                 ),
                                 OutlinedButton(
                                     child: Text("Volgende"),
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      var newGoal = await Navigator.push<Goal>(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => NewGoal()));
                                       //navigate to newgoal scherm when done call below
                                       if (widget.onDone != null)
                                         widget.onDone();
