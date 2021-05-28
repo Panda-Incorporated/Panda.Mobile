@@ -3,11 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/widgets/ActivityItem.dart';
 import 'package:panda/widgets/CurrentActivities.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 
 class ActivitySelectionPage extends StatefulWidget {
+  final Future<void> Function(Activity activity) onSelected;
+
+  const ActivitySelectionPage({Key key, this.onSelected}) : super(key: key);
   @override
   _ActivitySelectionPageState createState() => _ActivitySelectionPageState();
 }
@@ -104,7 +108,15 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                 if (loading)
                   Center(child: CircularProgressIndicator())
                 else if (activities != null && activities.length > 0)
-                  ShowActivities(currentActvities: activities)
+                  Column(children: [
+                    for (var activity in activities ?? [])
+                      ActivityItem(
+                        activity: activity,
+                        onSelected: (v) {
+                          widget.onSelected(v);
+                        },
+                      )
+                  ])
                 else
                   NothingToDisplay(
                     message: "Geen activiteiten bij geselecteerde datum",

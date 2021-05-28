@@ -3,10 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
 import 'package:panda/Models/AuthState.dart';
+import 'package:panda/Pages/ActivitySelectionPage.dart';
 import 'package:panda/Pages/IntroPages/StartPage.dart';
-import 'package:panda/Pages/pages.dart';
+import 'package:panda/Pages/NewGoal.dart';
+import 'package:panda/Pages/Settings.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
+
+import 'Pages/Home.dart';
 
 void main() => runApp(MyApp());
 

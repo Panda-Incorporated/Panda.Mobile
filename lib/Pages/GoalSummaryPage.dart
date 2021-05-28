@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
+import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
-import 'package:panda/widgets/widgets.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'ActivitySelectionPage.dart';
@@ -41,6 +42,24 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
     setState(() {});
   }
 
+  Future<void> onActivitySelected(Activity activity) async {
+    try {
+      if (widget.goal != null && activity != null) {
+        activity.goalId = widget.goal.id;
+        activity.distance = activity.distance * 1000;
+
+        await DBProvider.helper.insertActivity(activity);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('Activiteit is toegevoegd.')));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Activiteit kon niet worden toegevoegd.')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +79,10 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                           radius: 150.0,
                           lineWidth: 4.0,
                           backgroundColor: Colors.green[100],
-                          percent: percentage.toDouble(),
+                          percent: (percentage > 1.0
+                                  ? 1.0
+                                  : (percentage < 0 ? 0.0 : percentage))
+                              .toDouble(),
                           progressColor: Colors.green[800],
                           circularStrokeCap: CircularStrokeCap.round,
                           animation: true,
@@ -118,7 +140,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                           ),
                           FullPageButton(
                             buttonTitle: "Activiteit toevoegen",
-                            onTap: ActivitySelectionPage(),
+                            onTap: ActivitySelectionPage(
+                              onSelected: onActivitySelected,
+                            ),
                           ),
                           FullPageButton(
                             onTap: null,

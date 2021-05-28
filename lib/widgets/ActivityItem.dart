@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
-import 'package:panda/Pages/pages.dart';
 
 class ActivityItem extends StatefulWidget {
   final Activity activity;
-
+  final Function(Activity activity) onSelected;
   const ActivityItem({
     Key key,
     this.activity,
+    this.onSelected,
   }) : super(key: key);
 
   @override
@@ -21,11 +21,7 @@ class _ActivityItemState extends State<ActivityItem> {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => GoalSelectionPage(act: widget.activity)),
-          )
+          if (widget.onSelected != null) {widget.onSelected(widget.activity)}
         }, //werkt
         child: Container(
           decoration: BoxDecoration(

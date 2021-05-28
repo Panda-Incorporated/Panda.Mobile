@@ -9,9 +9,7 @@ class Goal {
   int id;
 
   bool get finished =>
-      currentAmountOfStars == totalAmountOfStars &&
-      totalAmountOfStars != 0 &&
-      totalAmountOfStars != null;
+      currentAmountOfStars != null && currentAmountOfStars >= 100;
   String title;
   double distance;
   Duration duration;
@@ -73,11 +71,20 @@ class Goal {
     print("activities zijn $_activities");
     var nulmeting = _activities.first.RichelFormula(distance);
     var nu_punt = _activities.last.RichelFormula(distance);
-
+    // var nulmeting = _activities.first.getSecondsPerKilometer();
+    // var nu_punt = _activities.last.getSecondsPerKilometer();
     var verschil = nulmeting - goal;
     var progressie = nulmeting - nu_punt;
-
     var percentage = progressie / verschil;
+    var perc = (percentage * 100).toInt();
+    if (currentAmountOfStars != perc) {
+      currentAmountOfStars = percentage.toInt();
+      totalAmountOfStars = 100;
+      var db = await DBProvider.helper.getDatabase();
+      await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},
+          where: "id = ?", whereArgs: [id]);
+    }
+
     return percentage;
   }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:panda/Models/Activity.dart';
@@ -7,21 +8,29 @@ import 'package:panda/Models/AuthState.dart';
 import 'package:panda/Providers/DBProvider.dart';
 
 class ApiProvider {
+  static final ValueNotifier<bool> needsReauthentication =
+      ValueNotifier<bool>(false);
   static final String url = "https://pandaapi.azurewebsites.net/";
   static final String accesstoken = "accesstoken";
+  static final String refreshToken = "refreshtoken";
   static final String activities = "api/activity";
   static Future<AuthState> getAccessToken(String code) async {
     var resp = await http.get(Uri.parse("$url$accesstoken?code=$code"));
     if (resp.statusCode == 200) {
+      needsReauthentication.value = false;
       return AuthState.fromMap(jsonDecode(resp.body));
     }
   }
 
-  static Future<AuthState> getAccessTokenUsingRefreshToken(
-      String refreshToken) async {
-    var resp = await http.get(Uri.parse("$url$accesstoken/$refreshToken"));
+  static Future<AuthState> getAccessTokenUsingRefreshToken(String token) async {
+    needsReauthentication.value = false;
+
+    var resp = await http.get(Uri.parse("$url$refreshToken/$token"));
     if (resp.statusCode == 200) {
+      needsReauthentication.value = false;
       return AuthState.fromMap(jsonDecode(resp.body));
+    } else {
+      needsReauthentication.value = true;
     }
   }
 
@@ -39,13 +48,13 @@ class ApiProvider {
           DBProvider.helper.updateAuthState(authState);
           return authState;
         } else {
-          throw NotSignedInException("No access to Fitbit API.");
+          needsReauthentication.value = true;
         }
       } else {
         return authState;
       }
     } else {
-      throw NotSignedInException("No access to Fitbit API.");
+      needsReauthentication.value = true;
     }
   }
 
