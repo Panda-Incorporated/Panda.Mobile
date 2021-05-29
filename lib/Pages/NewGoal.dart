@@ -1,14 +1,14 @@
 // ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, error checks, datum aanklikken tabel, overbodige code, eind en start datum mag niet hetzelfde zijn.
+// * TODO Niels, error checks, overbodige code,.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:panda/Models/Goal.dart';
+
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NewGoalInputField.dart';
+import 'package:panda/widgets/NewGoalInputDate.dart';
 
 class NewGoal extends StatefulWidget {
   @override
@@ -20,13 +20,13 @@ class _NewGoalState extends State<NewGoal> {
   var _distance = new TextEditingController();
   var _deadline = new TextEditingController();
   var _date = new TextEditingController();
-  DateTime _selectedDate = DateTime.now();
 
   Goal newGoal;
 
   double _titelFontSize = 25;
   double _textFontSize = 15;
   double _inputBoxHeight = 50;
+  DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -72,35 +72,10 @@ class _NewGoalState extends State<NewGoal> {
                           labelText: "Naam",
                           textString: 'Nieuw doel:',
                         ),
-                        // Container(
-                        //   height: _inputBoxHeight,
-                        //   padding: EdgeInsets.all(10),
-                        //   child: TextField(
-                        //     onTap: () async {
-                        //       DateTime picked = await showDatePicker(
-                        //         // ! HELP MIJ
-                        //         context: context,
-                        //         initialDate: DateTime.now(),
-                        //         firstDate: DateTime.now(),
-                        //         lastDate:
-                        //             DateTime.now().add(Duration(days: 1825)),
-                        //       );
-                        //       if (picked != null && picked != _selectedDate) {
-                        //         _deadline.text =
-                        //             DateFormat("dd/MM/yyyy").format(picked);
-                        //         setState(() {
-                        //           _selectedDate = picked;
-                        //         });
-                        //       }
-                        //     },
-                        //     controller: _deadline,
-                        //     decoration: InputDecoration(
-                        //       border: OutlineInputBorder(),
-                        //       labelText: 'Datum',
-                        //     ),
-                        //   ),
-                        // ),
-                        NewGoalInputAndTextField(
+                        NewGoalInputDate(
+                          onDateSelected: (d) {
+                            selectedDate = d;
+                          },
                           controller: _deadline,
                           labelText: "Datum",
                           textString: "Deadline:",
@@ -134,14 +109,17 @@ class _NewGoalState extends State<NewGoal> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               onPressed: () async => {
-                                newGoal = Goal()
-                                  ..title = _goalName.text
-                                  ..distance = double.parse(_distance.text)
-                                  ..duration = Duration(hours: 1)
-                                  ..beginday = DateTime(2021, DateTime.may, 1)
-                                  ..endday = DateTime(2021, DateTime.may, 31),
-                                await DBProvider.helper.insertGoal(newGoal),
-                                Navigator.pop(context, newGoal),
+                                if (selectedDate != null)
+                                  {
+                                    newGoal = Goal()
+                                      ..title = _goalName.text
+                                      ..distance = double.parse(_distance.text)
+                                      ..duration = Duration(hours: 1)
+                                      ..beginday = DateTime.now()
+                                      ..endday = selectedDate,
+                                    await DBProvider.helper.insertGoal(newGoal),
+                                    Navigator.pop(context, newGoal),
+                                  }
                               },
                             ),
                           ),
