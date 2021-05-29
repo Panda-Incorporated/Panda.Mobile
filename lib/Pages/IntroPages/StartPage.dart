@@ -129,10 +129,13 @@ class _StartPageState extends State<StartPage> {
                                         height: 15,
                                       ),
                                       Text(
-                                          "Deze app maakt gebruik van Fibit, klik onderstaande knop om je account te koppelen."),
+                                          "Deze app maakt gebruik van Fibit, nadat u uw gebruikernaam heeft ingevoerd wordt u doorverwezen om in te loggen met uw fitbit gegevens!"),
+                                      Container(
+                                        height: 15,
+                                      ),
                                       Center(
                                         child: OutlinedButton(
-                                            child: Text("Inloggen via Fitbit"),
+                                            child: Text("Inloggen met Fitbit"),
                                             onPressed: () {
                                               if (_formKey.currentState
                                                   .validate()) {
@@ -197,7 +200,7 @@ class _StartPageState extends State<StartPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                    "Bedankt voor het inloggen $username, klik volgende om verder te gaan."),
+                                    "Bedankt voor het inloggen $username, klik volgende om je eerste sportdoel aan te maken!"),
                                 Container(
                                   height: 15,
                                 ),
