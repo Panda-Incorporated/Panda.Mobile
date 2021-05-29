@@ -1,9 +1,10 @@
 // ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, max string length, error checks, datum aanklikken tabel, overbodige code.
+// * TODO Niels, error checks, datum aanklikken tabel, overbodige code, eind en start datum mag niet hetzelfde zijn.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
@@ -19,11 +20,13 @@ class _NewGoalState extends State<NewGoal> {
   var _distance = new TextEditingController();
   var _deadline = new TextEditingController();
   var _date = new TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   Goal newGoal;
 
   double _titelFontSize = 25;
   double _textFontSize = 15;
+  double _inputBoxHeight = 50;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +72,34 @@ class _NewGoalState extends State<NewGoal> {
                           labelText: "Naam",
                           textString: 'Nieuw doel:',
                         ),
+                        // Container(
+                        //   height: _inputBoxHeight,
+                        //   padding: EdgeInsets.all(10),
+                        //   child: TextField(
+                        //     onTap: () async {
+                        //       DateTime picked = await showDatePicker(
+                        //         // ! HELP MIJ
+                        //         context: context,
+                        //         initialDate: DateTime.now(),
+                        //         firstDate: DateTime.now(),
+                        //         lastDate:
+                        //             DateTime.now().add(Duration(days: 1825)),
+                        //       );
+                        //       if (picked != null && picked != _selectedDate) {
+                        //         _deadline.text =
+                        //             DateFormat("dd/MM/yyyy").format(picked);
+                        //         setState(() {
+                        //           _selectedDate = picked;
+                        //         });
+                        //       }
+                        //     },
+                        //     controller: _deadline,
+                        //     decoration: InputDecoration(
+                        //       border: OutlineInputBorder(),
+                        //       labelText: 'Datum',
+                        //     ),
+                        //   ),
+                        // ),
                         NewGoalInputAndTextField(
                           controller: _deadline,
                           labelText: "Datum",
@@ -102,14 +133,14 @@ class _NewGoalState extends State<NewGoal> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              onPressed: () => {
+                              onPressed: () async => {
                                 newGoal = Goal()
-                                  ..title = "100km uur"
-                                  ..distance = 100000
+                                  ..title = _goalName.text
+                                  ..distance = double.parse(_distance.text)
                                   ..duration = Duration(hours: 1)
                                   ..beginday = DateTime(2021, DateTime.may, 1)
                                   ..endday = DateTime(2021, DateTime.may, 31),
-                                DBProvider.helper.insertGoal(newGoal),
+                                await DBProvider.helper.insertGoal(newGoal),
                                 Navigator.pop(context, newGoal),
                               },
                             ),
