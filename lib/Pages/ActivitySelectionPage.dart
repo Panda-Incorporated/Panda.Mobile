@@ -58,73 +58,64 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            stretch: true,
-            stretchTriggerOffset: 200,
-            floating: true,
-            bottom: AppBar(
-              centerTitle: true,
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              title: Text(
-                "Kies uit Fitbit activiteiten",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w400,
+      backgroundColor:
+          Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: Container(
+                          child: Logo(),
+                          height: 200,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Kies uit Fitbit activiteiten",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ),
+                      Text(DateFormat().format(selectedDate)),
+                      OutlinedButton(
+                          child: Text("Datum selecteren"),
+                          onPressed: () {
+                            _selectDate(context);
+                          }),
+                      if (loading)
+                        Center(child: CircularProgressIndicator())
+                      else if (activities != null && activities.length > 0)
+                        Column(children: [
+                          for (var activity in activities ?? [])
+                            ActivityItem(
+                              activity: activity,
+                              onSelected: (v) {
+                                widget.onSelected(v);
+                              },
+                            )
+                        ])
+                      else
+                        NothingToDisplay(
+                          message: "Geen activiteiten bij geselecteerde datum",
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-            elevation: 0.0,
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: [StretchMode.zoomBackground],
-              collapseMode: CollapseMode.pin,
-              background: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      child: Logo(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            expandedHeight: 300,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Text(DateFormat().format(selectedDate)),
-                OutlinedButton(
-                    child: Text("Datum selecteren"),
-                    onPressed: () {
-                      _selectDate(context);
-                    }),
-                if (loading)
-                  Center(child: CircularProgressIndicator())
-                else if (activities != null && activities.length > 0)
-                  Column(children: [
-                    for (var activity in activities ?? [])
-                      ActivityItem(
-                        activity: activity,
-                        onSelected: (v) {
-                          widget.onSelected(v);
-                        },
-                      )
-                  ])
-                else
-                  NothingToDisplay(
-                    message: "Geen activiteiten bij geselecteerde datum",
-                  ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

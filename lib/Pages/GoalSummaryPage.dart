@@ -63,7 +63,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: activity != null && activity.length > 0
           ? ListView(
@@ -153,16 +155,27 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
               ],
             )
           : Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FullPageButton(
-                    buttonTitle: "Activiteit toevoegen",
-                    onTap: ActivitySelectionPage(),
-                    title: "U heeft nog geen nulmeting toegevoegd aan het doel",
-                  ),
-                ],
+              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+              padding: const EdgeInsets.only(
+                  top: 130.0, left: 10, right: 10, bottom: 130),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: FullPageButton(
+                        buttonTitle: "Activiteit toevoegen",
+                        onTap: ActivitySelectionPage(),
+                        title:
+                            "U heeft nog geen nulmeting toegevoegd aan het doel",
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );
