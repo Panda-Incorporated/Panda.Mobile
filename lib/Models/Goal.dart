@@ -117,7 +117,6 @@ class Goal {
       'distance': distance,
       'duration': duration.inSeconds,
       'currentAmountOfStars': currentAmountOfStars,
-      'totalAmountOfStars': 0,
       'endday': DateFormat("yyyy-MM-dd hh:mm:ss").format(endday),
       'beginday': DateFormat("yyyy-MM-dd hh:mm:ss").format(beginday),
     };

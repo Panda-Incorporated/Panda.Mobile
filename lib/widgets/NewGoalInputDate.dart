@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/services/text_formatter.dart';
+import 'package:intl/intl.dart';
 
-class NewGoalInputAndTextField extends StatelessWidget {
-  const NewGoalInputAndTextField({
+class NewGoalInputDate extends StatelessWidget {
+  NewGoalInputDate({
     Key key,
     @required TextEditingController controller,
     @required String labelText,
     @required String textString,
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
+    this.onDateSelected,
   })  : _controller = controller,
         _labelText = labelText,
         _textString = textString,
         super(key: key);
+
+  final Function(DateTime) onDateSelected;
 
   final TextEditingController _controller;
   final String _labelText;
@@ -20,6 +24,7 @@ class NewGoalInputAndTextField extends StatelessWidget {
 
   final double _textFontSize = 15;
   final double _inputBoxHeight = 50;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +47,25 @@ class NewGoalInputAndTextField extends StatelessWidget {
             inputFormatters: [
               LengthLimitingTextInputFormatter(20),
             ],
+            onTap: () async {
+              DateTime picked = await showDatePicker(
+                // ! HELP MIJ
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(Duration(days: 1825)),
+              );
+              if (picked != null && picked != _selectedDate) {
+                _controller.text = DateFormat("dd/MM/yyyy").format(picked);
+                setState(() {
+                  _selectedDate = picked;
+                  _controller.text = DateFormat.yMd().format(_selectedDate);
+                });
+                if (onDateSelected != null) {
+                  onDateSelected(_selectedDate);
+                }
+              }
+            },
             controller: _controller,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -52,4 +76,6 @@ class NewGoalInputAndTextField extends StatelessWidget {
       ],
     );
   }
+
+  void setState(Null Function() param0) {}
 }
