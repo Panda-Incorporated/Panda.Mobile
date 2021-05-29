@@ -36,6 +36,12 @@ class GoalProvider {
       //   ..name = "Activiteit 3"
       //   ..date = DateTime(2021, DateTime.may, 18),
       Activity()
+        ..distance = 5490
+        ..duration = Duration(minutes: 19)
+        ..goalId = goalId
+        ..name = "Activiteit 4"
+        ..date = DateTime(2021, DateTime.may, 20),
+      Activity()
         ..distance = 5500
         ..duration = Duration(minutes: 19)
         ..goalId = goalId
@@ -59,18 +65,18 @@ class GoalProvider {
         ..goalId = goalId
         ..name = "Activiteit 4"
         ..date = DateTime(2021, DateTime.may, 25),
-      Activity()
-        ..distance = 7180
-        ..duration = Duration(minutes: 19)
-        ..goalId = goalId
-        ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 30),
-      Activity()
-        ..distance = 7200
-        ..duration = Duration(minutes: 19)
-        ..goalId = goalId
-        ..name = "Activiteit 4"
-        ..date = DateTime(2021, DateTime.may, 31)
+      // Activity()
+      //   ..distance = 7180
+      //   ..duration = Duration(minutes: 19)
+      //   ..goalId = goalId
+      //   ..name = "Activiteit 4"
+      //   ..date = DateTime(2021, DateTime.may, 30),
+      // Activity()
+      //   ..distance = 7200
+      //   ..duration = Duration(minutes: 19)
+      //   ..goalId = goalId
+      //   ..name = "Activiteit 4"
+      //   ..date = DateTime(2021, DateTime.may, 31)
     ];
   }
 

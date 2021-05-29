@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:panda/Models/Goal.dart';
 import 'package:panda/Models/Activity.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
@@ -79,10 +79,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                           radius: 150.0,
                           lineWidth: 4.0,
                           backgroundColor: Colors.green[100],
-                          percent: (percentage > 1.0
-                                  ? 1.0
-                                  : (percentage < 0 ? 0.0 : percentage))
-                              .toDouble(),
+                          percent: percentage,
                           progressColor: Colors.green[800],
                           circularStrokeCap: CircularStrokeCap.round,
                           animation: true,

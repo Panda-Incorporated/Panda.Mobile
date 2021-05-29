@@ -11,7 +11,6 @@ class GoalSummary extends StatefulWidget {
 }
 
 class _GoalSummaryState extends State<GoalSummary> {
-  int time = 1;
   double percentage = 0.0;
   double distance1 = 19.0;
 
@@ -24,9 +23,6 @@ class _GoalSummaryState extends State<GoalSummary> {
   getData() async {
     var temp = await widget.goal.activities();
     if (temp != null && temp.length > 0) {
-      time = await widget.goal
-          .activities()
-          .then((value) => value.last.getSecondsPerKilometer());
       distance1 =
           await widget.goal.activities().then((value) => value.last.distance);
       percentage = await widget.goal.getPercentage();

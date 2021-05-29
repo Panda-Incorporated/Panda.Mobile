@@ -30,13 +30,15 @@ class Activity {
   String timeFormat() =>
       this.duration.toString().split('.').first.padLeft(8, "0");
 
-  int getSecondsPerKilometer() {
-    // seconds/km van activiteit
-    return (duration.inSeconds / distance * 1000).toInt();
-  }
+  // int getSecondsPerKilometer() {
+  //   // seconds/km van activiteit
+  //   return (duration.inSeconds / distance * 1000).toInt();
+  // }
 
   double RichelFormula(goaldistance) {
-    return pow(getSecondsPerKilometer() * (goaldistance / distance), 1.06);
+    return pow(
+        (duration.inSeconds / distance * 1000) * (goaldistance / distance),
+        1.06);
   }
 
   int getDaysFromStartDay(DateTime startday) {
