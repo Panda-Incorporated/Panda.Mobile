@@ -314,7 +314,7 @@ Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
       activities.first.RichelFormula(goal.distance)));
   for (var i = 1; i < activities.length; i++) {
     var y = activities[i].RichelFormula(goal.distance);
-    print("act spot is ${y * 0.8}");
+    print("act spot is ${pow(y, 0.95)}");
     list.add(FlSpot(activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
         pow(y, 0.95)));
   }

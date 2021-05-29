@@ -40,8 +40,6 @@ class Activity {
   }
 
   int getDaysFromStartDay(DateTime startday) {
-    // hoeveel dagen van start punt (gebruikt om x as van grafiek te tekenen)
-    // present-future
     return this.date.difference(startday).inDays + 1;
   }
 

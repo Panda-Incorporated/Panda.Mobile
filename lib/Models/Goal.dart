@@ -70,23 +70,19 @@ class Goal {
     if (_activities == null || _activities.length < 1) return 0;
     print("activities zijn $_activities");
     var nulmeting = _activities.first.RichelFormula(distance);
-    var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95);
-    // var nulmeting = _activities.first.getSecondsPerKilometer();
-    // var nu_punt = _activities.last.getSecondsPerKilometer();
-    var goal1 = goal;
-    var verschil = nulmeting - goal1;
+    var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95) - 2;
+    var verschil = nulmeting - goal;
     var progressie = nulmeting - nu_punt;
     var percentage = progressie / verschil;
     var perc = (percentage * 100).toInt();
-    if (currentAmountOfStars != perc) {
-      currentAmountOfStars = perc;
-      totalAmountOfStars = 100;
-      var db = await DBProvider.helper.getDatabase();
-      await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},
-          where: "id = ?", whereArgs: [id]);
-    }
 
-    return percentage;
+    currentAmountOfStars = perc;
+    totalAmountOfStars = 100;
+    var db = await DBProvider.helper.getDatabase();
+    await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},
+        where: "id = ?", whereArgs: [id]);
+
+    return percentage >= 100 ? 100 : percentage;
   }
 
   int getTotalDays() {
