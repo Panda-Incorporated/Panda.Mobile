@@ -9,14 +9,12 @@ class Goal {
   int id;
 
   bool get finished =>
-      currentAmountOfStars == totalAmountOfStars &&
-      totalAmountOfStars != 0 &&
-      totalAmountOfStars != null;
+      currentAmountOfStars != null && currentAmountOfStars >= 100;
   String title;
   double distance;
   Duration duration;
   int currentAmountOfStars = 0;
-  int totalAmountOfStars = 0;
+
   DateTime beginday; // begin dag van de eerste nulmeting
   DateTime endday; // dag doel moet voltooid zijn
   //tijdelijk
@@ -40,21 +38,7 @@ class Goal {
       this.distance,
       this.beginday,
       this.endday,
-      this.totalAmountOfStars,
       this.currentAmountOfStars});
-
-  // getString() {
-  //   return getCombination(distance.toInt(), duration.inMinutes);
-  // }
-
-  int getDaysLeft() {
-    return endday.difference(DateTime.now()).inDays;
-  }
-
-  int getSecondsPerKilometer() {
-    // seconds/km van activiteit
-    return (duration.inSeconds / distance * 1000).toInt();
-  }
 
   Future<String> getLastactivity() async {
     var act = await activities();
@@ -63,6 +47,7 @@ class Goal {
       var minimalday = act.last.date.add(Duration(days: 2));
       minimalday =
           minimalday.isBefore(DateTime.now()) ? DateTime.now() : minimalday;
+      minimalday = minimalday.isBefore(endday) ? minimalday : endday;
       return DateFormat("dd-MM").format(minimalday);
     }
   }
@@ -72,17 +57,27 @@ class Goal {
     if (_activities == null || _activities.length < 1) return 0;
     print("activities zijn $_activities");
     var nulmeting = _activities.first.RichelFormula(distance);
-    var nu_punt = _activities.last.RichelFormula(distance);
-
+    var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95) - 2;
     var verschil = nulmeting - goal;
     var progressie = nulmeting - nu_punt;
-
     var percentage = progressie / verschil;
-    return percentage;
+    var perc = (percentage * 100).toInt();
+    if (currentAmountOfStars != perc) {
+      currentAmountOfStars = perc;
+
+      var db = await DBProvider.helper.getDatabase();
+      await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},
+          where: "id = ?", whereArgs: [id]);
+    }
+    return percentage >= 1.0
+        ? 1.0
+        : percentage < 0.0
+            ? 0.0
+            : percentage;
   }
 
   int getTotalDays() {
-    return endday.difference(beginday).inDays;
+    return endday.difference(beginday).inDays + 1;
   }
 
   Future<double> getNextPoint() async {
@@ -90,15 +85,18 @@ class Goal {
     if (_activities == null || _activities.length < 2) return -1.0;
     _activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = _activities.last;
-    int kmslastpoint = lastactivity.RichelFormula(this.distance).toInt();
+    int kmslastpoint = lastactivity.RichelFormula(distance).toInt();
     Activity secondlastactivity = _activities[_activities.length - 2];
 
-    int kmsfirstpoint = secondlastactivity.RichelFormula(this.distance).toInt();
+    int kmsfirstpoint = secondlastactivity.RichelFormula(distance).toInt();
 
     double diffrencekms = (kmsfirstpoint - kmslastpoint).toDouble();
 
-    double diffrencedays =
-        lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
+    double diffrencedays = lastactivity.date
+            .difference(secondlastactivity.date)
+            .inDays
+            .toDouble() +
+        1;
     double progressionperquantum = diffrencekms / diffrencedays;
     double kmsPredicted = kmslastpoint - progressionperquantum * diffrencedays;
 
@@ -108,7 +106,7 @@ class Goal {
   Future<int> getMeasurement() async {
     var _activities = await activities();
     if (_activities != null && _activities.length > 0)
-      return _activities.first.RichelFormula(this.distance).toInt();
+      return _activities.first.RichelFormula(distance).toInt();
     else
       return 1;
   }
@@ -119,34 +117,9 @@ class Goal {
       'distance': distance,
       'duration': duration.inSeconds,
       'currentAmountOfStars': currentAmountOfStars,
-      'totalAmountOfStars': totalAmountOfStars,
       'endday': DateFormat("yyyy-MM-dd hh:mm:ss").format(endday),
       'beginday': DateFormat("yyyy-MM-dd hh:mm:ss").format(beginday),
     };
-  }
-
-  Future<Duration> getMinutesToRun() async {
-    int initalTime = duration.inSeconds;
-    var mes = await getMeasurement();
-    var _duration = Duration();
-    int amountofParts = mes - goal;
-    int goal1 = mes;
-    int goal2 = mes - (amountofParts * 0.25).toInt();
-    int goal3 = mes - (amountofParts * 0.5).toInt();
-    int goal4 = mes - (amountofParts * 0.75).toInt();
-    var _activities = await activities();
-    var lastact = _activities.last;
-    if (lastact.RichelFormula(distance) < goal1)
-      _duration = Duration(seconds: initalTime ~/ 4);
-    if (lastact.RichelFormula(distance) < goal2)
-      _duration = Duration(seconds: initalTime ~/ 3);
-    if (lastact.RichelFormula(distance) < goal3)
-      _duration = Duration(seconds: initalTime ~/ 2);
-    if (lastact.RichelFormula(distance) < goal4)
-      _duration = Duration(seconds: initalTime ~/ 1);
-    if (_duration.inMinutes < 2) Duration(minutes: 2);
-    if (getDaysLeft() < 2) return Duration(minutes: 0);
-    return _duration;
   }
 
   Future<int> getMetersToRun() async {
@@ -154,7 +127,7 @@ class Goal {
     var _activities = await activities();
     if (_activities == null || _activities.length <= 0) return 0;
     var lastact = _activities.last;
-    var y = (goal - (mes * 60)) /
+    double y = (goal - (mes * 60)) /
             sqrt(getTotalDays()) *
             sqrt(
                 endday.difference(lastact.date.add(Duration(days: 2))).inDays) +
@@ -166,6 +139,9 @@ class Goal {
         y.isInfinite) {
       return 0;
     }
-    return y ~/ duration.inMinutes;
+    var minimal = (distance * 0.05);
+    var current = (y / duration.inMinutes);
+    y = current < minimal ? minimal : current;
+    return y.toInt();
   }
 }

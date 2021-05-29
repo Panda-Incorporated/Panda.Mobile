@@ -17,7 +17,7 @@ class DBHelper {
         """CREATE TABLE AuthState(id INTEGER PRIMARY KEY AUTOINCREMENT , userName TEXT, accessToken TEXT, refreshToken TEXT, expires DATETIME);""",
       );
       await db.execute(
-        """CREATE TABLE Goal(id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, distance DOUBLE, duration INTEGER, totalAmountOfStars INTEGER, currentAmountOfStars INTEGER, beginday DATETIME, endday DATETIME);
+        """CREATE TABLE Goal(id INTEGER PRIMARY KEY AUTOINCREMENT , title TEXT, distance DOUBLE, duration INTEGER, currentAmountOfStars INTEGER, beginday DATETIME, endday DATETIME);
         """,
       );
       await db.execute(
@@ -77,7 +77,6 @@ class DBHelper {
           duration: Duration(seconds: maps[i]['duration']),
           beginday: DateTime.parse(maps[i]['beginday']),
           endday: DateTime.parse(maps[i]['endday']),
-          totalAmountOfStars: maps[i]['totalAmountOfStars'],
           currentAmountOfStars: maps[i]['currentAmountOfStars'],
         );
       });

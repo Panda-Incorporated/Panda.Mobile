@@ -1,13 +1,14 @@
 // ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, max string length, error checks, datum aanklikken tabel, overbodige code.
+// * TODO Niels, error checks, overbodige code,.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:panda/Models/Goal.dart';
+
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NewGoalInputField.dart';
+import 'package:panda/widgets/NewGoalInputDate.dart';
 
 class NewGoal extends StatefulWidget {
   @override
@@ -24,6 +25,8 @@ class _NewGoalState extends State<NewGoal> {
 
   double _titelFontSize = 25;
   double _textFontSize = 15;
+  double _inputBoxHeight = 50;
+  DateTime selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,10 @@ class _NewGoalState extends State<NewGoal> {
                           labelText: "Naam",
                           textString: 'Nieuw doel:',
                         ),
-                        NewGoalInputAndTextField(
+                        NewGoalInputDate(
+                          onDateSelected: (d) {
+                            selectedDate = d;
+                          },
                           controller: _deadline,
                           labelText: "Datum",
                           textString: "Deadline:",
@@ -102,15 +108,18 @@ class _NewGoalState extends State<NewGoal> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              onPressed: () => {
-                                newGoal = Goal()
-                                  ..title = "100km uur"
-                                  ..distance = 100000
-                                  ..duration = Duration(hours: 1)
-                                  ..beginday = DateTime(2021, DateTime.may, 1)
-                                  ..endday = DateTime(2021, DateTime.may, 31),
-                                DBProvider.helper.insertGoal(newGoal),
-                                Navigator.pop(context, newGoal),
+                              onPressed: () async => {
+                                if (selectedDate != null)
+                                  {
+                                    newGoal = Goal()
+                                      ..title = _goalName.text
+                                      ..distance = double.parse(_distance.text)
+                                      ..duration = Duration(hours: 1)
+                                      ..beginday = DateTime.now()
+                                      ..endday = selectedDate,
+                                    await DBProvider.helper.insertGoal(newGoal),
+                                    Navigator.pop(context, newGoal),
+                                  }
                               },
                             ),
                           ),

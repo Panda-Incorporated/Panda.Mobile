@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'dart:math' as math;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ListItem extends StatefulWidget {
@@ -76,7 +77,9 @@ class _ListItemState extends State<ListItem> {
                   radius: 50.0,
                   lineWidth: 5.0,
                   backgroundColor: Colors.white,
-                  percent: percentage,
+                  percent: percentage > 1.0
+                      ? 1.0
+                      : (percentage < 0 ? 0.0 : percentage),
                   progressColor: Colors.green,
                   circularStrokeCap: CircularStrokeCap.round,
                   animation: true,

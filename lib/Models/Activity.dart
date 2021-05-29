@@ -30,21 +30,19 @@ class Activity {
   String timeFormat() =>
       this.duration.toString().split('.').first.padLeft(8, "0");
 
-  int getSecondsPerKilometer() {
-    // seconds/km van activiteit
-    return (duration.inSeconds / distance * 1000).toInt();
-  }
+  // int getSecondsPerKilometer() {
+  //   // seconds/km van activiteit
+  //   return (duration.inSeconds / distance * 1000).toInt();
+  // }
 
   double RichelFormula(goaldistance) {
-    //return ;
     return pow(
-        this.getSecondsPerKilometer() * (goaldistance / this.distance), 1.06);
+        (duration.inSeconds / distance * 1000) * (goaldistance / distance),
+        1.06);
   }
 
   int getDaysFromStartDay(DateTime startday) {
-    // hoeveel dagen van start punt (gebruikt om x as van grafiek te tekenen)
-    // present-future
-    return this.date.difference(startday).inDays;
+    return this.date.difference(startday).inDays + 1;
   }
 
   Map<String, dynamic> toMap() {
