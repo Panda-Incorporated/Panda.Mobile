@@ -68,12 +68,15 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //TODO: listview zetten vragen aan reindert
+      appBar: AppBar(elevation: 0),
       backgroundColor: Colors.white,
       body: loading
           ? Center(child: CircularProgressIndicator())
           : barData.length > 0
-              ? Container(
-                  padding: const EdgeInsets.all(16.0),
+              ? Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
                   child: Column(
                     children: [
                       Row(
