@@ -50,6 +50,7 @@ class Goal {
       minimalday = minimalday.isBefore(endday) ? minimalday : endday;
       return DateFormat("dd-MM").format(minimalday);
     }
+    return "";
   }
 
   Future<double> getPercentage() async {

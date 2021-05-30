@@ -255,10 +255,13 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     if (goal != null)
       return [
         drawLine(Colors.black, await generateSpots(goal)),
-        drawLine(Colors.orange, await generateActivitySpots(goal)),
+        drawLine(
+            Colors.orange, await generateTreshold(goal, goal.distance * 0.10)),
         drawLine(Colors.grey, await generatePredictLine(goal)),
-        drawLine(Color(0xff4af699), await generateTreshold(goal))
+        drawLine(Color(0xff4af699),
+            await generateTreshold(goal, 6500)) //goal.distance *0.05
       ];
+    return [];
   }
 }
 
@@ -284,41 +287,24 @@ Future<List<FlSpot>> generateSpots(Goal goal) async {
     return list;
 }
 
-// genereert voltooide activiteiten lijn
-Future<List<FlSpot>> generateActivitySpots(Goal goal) async {
+Future<List<FlSpot>> generateTreshold(Goal goal, treshold) async {
   List<FlSpot> list = [];
   var activities = await goal.activities();
+
   list.add(FlSpot(
       activities.first.getDaysFromStartDay(goal.beginday).toDouble() - 1,
       activities.first.RichelFormula(goal.distance)));
   for (var i = 1; i < activities.length; i++) {
-    var y = activities[i].RichelFormula(goal.distance);
-    if (activities[i].distance > goal.distance * 0.10) {
-      print("act spot is ${pow(y, 0.95)}");
-      list.add(FlSpot(
-          activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
-          pow(y, 0.95) - 2));
-    }
-  }
-
-  return list;
-}
-
-Future<List<FlSpot>> generateTreshold(Goal goal) async {
-  List<FlSpot> list = [];
-  var activities = await goal.activities();
-  list.add(FlSpot(
-      activities.first.getDaysFromStartDay(goal.beginday).toDouble() - 1,
-      activities.first.RichelFormula(goal.distance)));
-  for (var i = 1; i < activities.length; i++) {
-    if (activities[i].distance > 6500) {
+    if (activities[i].distance > treshold) {
       // treshold 5% van de loop goal.distance * 0.05
       var y = activities[i].RichelFormula(goal.distance);
 
       print("act spot is ${pow(y, 0.95) - 2}");
       list.add(FlSpot(
           activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
-          pow(y, 0.95) - 2));
+          pow(y, 0.95) - 2 < goal.goal
+              ? goal.goal.toDouble()
+              : pow(y, 0.95) - 2));
     }
   }
 
@@ -327,8 +313,10 @@ Future<List<FlSpot>> generateTreshold(Goal goal) async {
 
 Future<List<FlSpot>> generatePredictLine(Goal goal) async {
   var activities = await goal.activities();
+  var perc = await goal.getPercentage();
   List<FlSpot> list = [];
-  if (activities != null && activities.length > 1) {
+  if (activities != null && activities.length > 1 && perc > 0.0) {
+    print("perc is $perc");
     activities.sort((a, b) => a.date.compareTo(b.date));
     Activity lastactivity = activities.last;
 
@@ -337,18 +325,23 @@ Future<List<FlSpot>> generatePredictLine(Goal goal) async {
         lastactivity.getDaysFromStartDay(goal.beginday).toDouble();
 
     double kmsPredicted = await goal.getNextPoint();
+    print("next point is $kmsPredicted");
     Activity secondlastactivity = activities[activities.length - 2];
     double diffrencedays =
         lastactivity.date.difference(secondlastactivity.date).inDays.toDouble();
 
     print("diffrence $diffrencedays");
-    print("$kmsPredicted");
+    var setmax = beginpunt + diffrencedays > goal.getTotalDays()
+        ? goal.getTotalDays() - 1
+        : beginpunt + diffrencedays;
     list.add(FlSpot(beginpunt, pow(y, 0.95) - 2));
     list.add(FlSpot(
-        beginpunt + diffrencedays,
+        setmax.toDouble(),
         pow(kmsPredicted, 0.95) + 2 > goal.goal
             ? goal.goal.toDouble()
             : pow(kmsPredicted, 0.95) + 2));
+    print("diffrence $diffrencedays");
+    print("$kmsPredicted");
 
     return list;
   } else

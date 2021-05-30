@@ -95,82 +95,82 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView(
-          children: [
-            ValueListenableBuilder<bool>(
-                valueListenable: ApiProvider.needsReauthentication,
-                builder: (c, v, _) {
-                  if (v) {
-                    return TextListItem(
-                      title: "Inlogsessie is verlopen",
-                      subTitle: "Klik hier om opnieuw in te loggen",
-                      extra: Icon(
-                        Glyphicon.exclamation_triangle,
-                        color: Colors.orange,
-                      ),
-                      onTap: () {
-                        saveData();
-                      },
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
+      children: [
+        ValueListenableBuilder<bool>(
+            valueListenable: ApiProvider.needsReauthentication,
+            builder: (c, v, _) {
+              if (v) {
+                return TextListItem(
+                  title: "Inlogsessie is verlopen",
+                  subTitle: "Klik hier om opnieuw in te loggen",
+                  extra: Icon(
+                    Glyphicon.exclamation_triangle,
+                    color: Colors.orange,
+                  ),
+                  onTap: () {
+                    saveData();
+                  },
+                );
+              } else {
+                return Container();
+              }
+            }),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Center(
-                  child: Text(
-                    "Lopende doelen",
-                    style: TextStyle(fontSize: 24.0),
-                  )),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  loading
-                      ? Center(child: CircularProgressIndicator())
-                      : goals != null && goals.where((e) => !e.finished).length > 0
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Center(
+              child: Text(
+            "Lopende doelen",
+            style: TextStyle(fontSize: 24.0),
+          )),
+        ),
+        Container(
+          child: Column(
+            children: [
+              loading
+                  ? Center(child: CircularProgressIndicator())
+                  : goals != null && goals.where((e) => !e.finished).length > 0
                       ? ShowGoals(
-                    onGoalSelected: (goal) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                GoalSummaryPage(goal: goal)),
-                      );
-                    },
-                    currentGoals:
-                    goals.where((e) => !e.finished).toList(),
-                  )
+                          onGoalSelected: (goal) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      GoalSummaryPage(goal: goal)),
+                            );
+                          },
+                          currentGoals:
+                              goals.where((e) => !e.finished).toList(),
+                        )
                       : NothingToDisplay(),
-                ],
-              ),
-            ),
-            // Text("${GoalProvider.getGoals()[0].getPercentage()}"),
-            Center(
-                child: Text(
-                  "Afgeronde doelen",
-                  style: TextStyle(fontSize: 24.0),
-                )),
-            Container(
-              child: Column(children: [
-                loading
-                    ? Center(child: CircularProgressIndicator())
-                    : goals != null && goals.where((e) => e.finished).length > 0
+            ],
+          ),
+        ),
+        // Text("${GoalProvider.getGoals()[0].getPercentage()}"),
+        Center(
+            child: Text(
+          "Afgeronde doelen",
+          style: TextStyle(fontSize: 24.0),
+        )),
+        Container(
+          child: Column(children: [
+            loading
+                ? Center(child: CircularProgressIndicator())
+                : goals != null && goals.where((e) => e.finished).length > 0
                     ? ShowGoals(
-                    onGoalSelected: (goal) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                GoalSummaryPage(goal: goal)),
-                      );
-                    },
-                    currentGoals: goals.where((e) => e.finished).toList())
+                        onGoalSelected: (goal) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    GoalSummaryPage(goal: goal)),
+                          );
+                        },
+                        currentGoals: goals.where((e) => e.finished).toList())
                     : NothingToDisplay()
-              ]),
-            ),
-          ],
-        ));
+          ]),
+        ),
+      ],
+    ));
   }
 }

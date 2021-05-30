@@ -75,12 +75,12 @@ class _ListItemState extends State<ListItem> {
                     Text(
                       title,
                       style:
-                      TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
                     Text(
                       subtitle,
                       style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
