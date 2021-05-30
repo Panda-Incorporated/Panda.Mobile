@@ -87,11 +87,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                               radius: 80.0,
                               lineWidth: 6.0,
                               backgroundColor: Colors.green[100],
-                              percent: ((percentage > 1.0
-                                          ? 1.0
-                                          : (percentage < 0 ? 0.0 : percentage))
-                                      .toDouble())
-                                  .toDouble(),
+                              percent: percentage,
                               progressColor: Colors.green[800],
                               circularStrokeCap: CircularStrokeCap.round,
                               animation: true,
@@ -315,11 +311,11 @@ Future<List<FlSpot>> generateTreshold(Goal goal) async {
       activities.first.getDaysFromStartDay(goal.beginday).toDouble() - 1,
       activities.first.RichelFormula(goal.distance)));
   for (var i = 1; i < activities.length; i++) {
-    if (activities[i].distance > 6000) {
+    if (activities[i].distance > 6500) {
       // treshold 5% van de loop goal.distance * 0.05
       var y = activities[i].RichelFormula(goal.distance);
 
-      print("act spot is ${pow(y, 0.95)}");
+      print("act spot is ${pow(y, 0.95) - 2}");
       list.add(FlSpot(
           activities[i].getDaysFromStartDay(goal.beginday).toDouble(),
           pow(y, 0.95) - 2));

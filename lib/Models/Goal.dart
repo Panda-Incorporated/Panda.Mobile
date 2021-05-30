@@ -55,7 +55,7 @@ class Goal {
   Future<double> getPercentage() async {
     var _activities = await activities();
     if (_activities == null || _activities.length < 1) return 0;
-    print("activities zijn $_activities");
+
     var nulmeting = _activities.first.RichelFormula(distance);
     var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95) - 2;
     var verschil = nulmeting - goal;

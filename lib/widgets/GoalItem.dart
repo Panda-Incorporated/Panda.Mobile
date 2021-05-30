@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
-import 'dart:math' as math;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ListItem extends StatefulWidget {
@@ -23,6 +24,19 @@ class _ListItemState extends State<ListItem> {
   void initState() {
     super.initState();
     getData();
+    const fiveSec = const Duration(seconds: 2);
+    new Timer.periodic(fiveSec, (Timer t) async {
+      double perc = await widget.goal.getPercentage();
+      if (percentage != perc) {
+        refresh();
+      }
+    });
+  }
+
+  refresh() async {
+    percentage = await widget.goal.getPercentage();
+    print("fresehd home");
+    setState(() {});
   }
 
   getData() async {
@@ -61,12 +75,12 @@ class _ListItemState extends State<ListItem> {
                     Text(
                       title,
                       style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                      TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
                     Text(
                       subtitle,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
