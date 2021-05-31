@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:glyphicon/glyphicon.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/PlanningPage.dart';
@@ -9,6 +10,7 @@ import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/Utils/Notifications.dart';
+import 'package:panda/Utils/ValueParser.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -131,9 +133,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: TomorrowSummary(
-                                      "Eerst volgende keer: ",
-                                      "vanaf $activity eenmalig:\n"
-                                          "loop $meters meter hard"),
+                                      "Eerstvolgende activiteit: ",
+                                      "Vanaf $activity eenmalig:",
+                                      "${ValueParser.distance(meters)} meter"),
                                 ),
                               ],
                             ),
@@ -169,8 +171,48 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                                   onSelected: onActivitySelected,
                                 ),
                               ),
-                              FullPageButton(
-                                onTap: null,
+                              FullPageButtonBase(
+                                onTap: () => showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text('Let op!'),
+                                    content: const Text(
+                                        'Weet u zeker dat u dit doel met alle gekoppelde activiteiten wilt verwijderen?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Nee'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: const Text(
+                                                  'Doel wordt verwijderd'),
+                                              content: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            ),
+                                          );
+                                          await DBProvider.helper
+                                              .removeGoal(widget.goal);
+
+                                          await DBProvider.helper
+                                              .removeActivityByGoal(
+                                                  widget.goal);
+                                          Navigator.popUntil(context,
+                                              (route) => route.isFirst);
+                                        },
+                                        child: const Text('Ja'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 title: "Doel verwijderen",
                               )
                             ],
@@ -213,10 +255,11 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
 }
 
 class TomorrowSummary extends StatelessWidget {
-  TomorrowSummary(this.date, this.goal);
+  TomorrowSummary(this.date, this.goal, this.distance);
 
   final String date;
   final String goal;
+  final String distance;
 
   @override
   Widget build(BuildContext context) {
@@ -228,15 +271,41 @@ class TomorrowSummary extends StatelessWidget {
           date,
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 16,
+            fontSize: 18,
           ),
         ),
-        Text(
-          //"{planning.distance} km in planning.duration minuten"
-          "" + goal,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+          child: Text(
+            //"{planning.distance} km in planning.duration minuten"
+            "" + goal,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Glyphicon.circle,
+                  size: 8.0,
+                ),
+              ),
+              Text(
+                //"{planning.distance} km in planning.duration minuten"
+                distance,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ),
       ],

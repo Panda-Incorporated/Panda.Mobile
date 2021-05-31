@@ -64,6 +64,41 @@ class DBHelper {
     }
   }
 
+  Future<int> removeGoal(Goal goal) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db.delete("Goal", where: "id = ?", whereArgs: [goal.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
+    }
+  }
+
+  Future<int> removeActivity(Activity activity) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db
+          .delete("Activity", where: "id = ?", whereArgs: [activity.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
+    }
+  }
+
+  Future<int> removeActivityByGoal(Goal goal) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db
+          .delete("Activity", where: "goalId = ?", whereArgs: [goal.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
+    }
+  }
+
   Future<List<Goal>> getGoals({String where, List<Object> whereArgs}) async {
     try {
       final Database db = await getDatabase();

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class FullPageButton extends StatefulWidget {
+class FullPageButtonBase extends StatefulWidget {
   final String title;
   final String buttonTitle;
-  final Widget onTap;
+  final Function onTap;
 
-  const FullPageButton(
+  const FullPageButtonBase(
       {Key key, this.title, @required this.onTap, this.buttonTitle})
       : super(key: key);
 
   @override
-  _FullPageButtonState createState() => _FullPageButtonState();
+  _FullPageButtonBaseState createState() => _FullPageButtonBaseState();
 }
 
-class _FullPageButtonState extends State<FullPageButton> {
+class _FullPageButtonBaseState extends State<FullPageButtonBase> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,12 +32,7 @@ class _FullPageButtonState extends State<FullPageButton> {
                 ),
               ),
         GestureDetector(
-            onTap: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => widget.onTap),
-                  )
-                },
+            onTap: widget.onTap ?? () {},
             child: Padding(
               padding: EdgeInsets.only(bottom: 15),
               child: Container(
@@ -63,5 +58,33 @@ class _FullPageButtonState extends State<FullPageButton> {
             )),
       ],
     );
+  }
+}
+
+class FullPageButton extends StatefulWidget {
+  final String title;
+  final String buttonTitle;
+  final Widget onTap;
+
+  const FullPageButton(
+      {Key key, this.title, @required this.onTap, this.buttonTitle})
+      : super(key: key);
+
+  @override
+  _FullPageButtonState createState() => _FullPageButtonState();
+}
+
+class _FullPageButtonState extends State<FullPageButton> {
+  @override
+  Widget build(BuildContext context) {
+    return FullPageButtonBase(
+        title: widget.title,
+        buttonTitle: widget.buttonTitle,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => widget.onTap),
+          );
+        });
   }
 }
