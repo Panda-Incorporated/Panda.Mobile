@@ -100,8 +100,10 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                             ActivityItem(
                               activity: activity,
                               onSelected: (v) {
-                                widget.onSelected(v);
-                                Navigator.of(context).pop();
+                                if (widget.onSelected != null) {
+                                  widget.onSelected(v);
+                                  Navigator.of(context).pop();
+                                }
                               },
                             )
                         ])

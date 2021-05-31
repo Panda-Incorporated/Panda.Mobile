@@ -8,6 +8,7 @@ import 'package:panda/Pages/PlanningPage.dart';
 import 'package:panda/Pages/SeePredictionLargePage.dart';
 import 'package:panda/Pages/ShowActivities.dart';
 import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Utils/Notifications.dart';
 import 'package:panda/widgets/GoalSummary.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -23,23 +24,24 @@ class GoalSummaryPage extends StatefulWidget {
   _GoalSummaryPageState createState() => _GoalSummaryPageState();
 }
 
-class _GoalSummaryPageState extends State<GoalSummaryPage> {
+class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
   double percentage = 0.0;
   String activity = "";
   bool loading = false;
   int meters = 0;
 
   @override
+  void didPopNext() {
+    print("didPopNext");
+    if (mounted) {
+      refresh();
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     getData();
-    const fiveSec = const Duration(seconds: 2);
-    new Timer.periodic(fiveSec, (Timer t) async {
-      double perc = await widget.goal.getPercentage();
-      if (percentage != perc) {
-        refresh();
-      }
-    });
   }
 
   refresh() async {
@@ -72,11 +74,12 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             behavior: SnackBarBehavior.floating,
             content: Text('Activiteit is toegevoegd.')));
+        Notifications.show(context, text: "Activiteit is toegevoegd");
+        Navigator.popUntil(context, (route) => route.isFirst);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text('Activiteit kon niet worden toegevoegd.')));
+      Notifications.show(context,
+          text: 'Activiteit kon niet worden toegevoegd.');
     }
   }
 
@@ -194,7 +197,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> {
                           padding: const EdgeInsets.all(12.0),
                           child: FullPageButton(
                             buttonTitle: "Activiteit toevoegen",
-                            onTap: ActivitySelectionPage(),
+                            onTap: ActivitySelectionPage(
+                              onSelected: onActivitySelected,
+                            ),
                             title:
                                 "U heeft nog geen nulmeting toegevoegd aan het doel",
                           ),

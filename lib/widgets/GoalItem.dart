@@ -13,7 +13,7 @@ class ListItem extends StatefulWidget {
   final Function onTap;
 }
 
-class _ListItemState extends State<ListItem> {
+class _ListItemState extends State<ListItem> with RouteAware {
   double percentage = 0.1;
   String title = "";
   String subtitle = "";
@@ -24,13 +24,14 @@ class _ListItemState extends State<ListItem> {
   void initState() {
     super.initState();
     getData();
-    const fiveSec = const Duration(seconds: 2);
-    new Timer.periodic(fiveSec, (Timer t) async {
-      double perc = await widget.goal.getPercentage();
-      if (percentage != perc) {
-        refresh();
-      }
-    });
+  }
+
+  @override
+  void didPopNext() {
+    print("didPopNext");
+    if (mounted) {
+      refresh();
+    }
   }
 
   refresh() async {

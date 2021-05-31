@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:glyphicon/glyphicon.dart';
+import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/AuthState.dart';
+import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/ActivitySelectionPage.dart';
+import 'package:panda/Pages/GoalSelectionPage.dart';
 import 'package:panda/Pages/IntroPages/StartPage.dart';
 import 'package:panda/Pages/NewGoal.dart';
 import 'package:panda/Pages/Settings.dart';
 import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Utils/Notifications.dart';
 import 'package:panda/widgets/Logo.dart';
 
 import 'Pages/Home.dart';
 
 void main() => runApp(MyApp());
+final routeObserver = RouteObserver<PageRoute>();
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
       title: 'Panda',
       theme: ThemeData(
@@ -117,6 +123,38 @@ class _NavigationState extends State<Navigation> {
     });
   }
 
+  Goal selectedGoal;
+  onGoalSelected(goal) {
+    selectedGoal = goal;
+    if (selectedGoal != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ActivitySelectionPage(onSelected: onActivitySelected)),
+      );
+    } else {
+      Notifications.show(context,
+          text: "Er is geen doel geselecteerd, probeer opnieuw.");
+    }
+  }
+
+  Future<void> onActivitySelected(Activity activity) async {
+    try {
+      if (selectedGoal != null && activity != null) {
+        activity.goalId = selectedGoal.id;
+        activity.distance = activity.distance * 1000;
+
+        await DBProvider.helper.insertActivity(activity);
+        Notifications.show(context, text: "Activiteit is toegevoegd");
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }
+    } catch (e) {
+      Notifications.show(context,
+          text: 'Activiteit kon niet worden toegevoegd.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -173,13 +211,15 @@ class _NavigationState extends State<Navigation> {
                         children: [
                           FloatingActionButton(
                             heroTag: "Actvityselection",
-                            onPressed: () => {
+                            onPressed: () {
+                              selectedGoal = null;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        ActivitySelectionPage()),
-                              )
+                                    builder: (context) => GoalSelectionPage(
+                                          onGoalSelected: onGoalSelected,
+                                        )),
+                              );
                             },
                             child: Container(
                               width: 100.0,
