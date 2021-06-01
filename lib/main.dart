@@ -119,6 +119,7 @@ class _NavigationState extends State<Navigation> {
 
   void _onItemTap(int index) {
     setState(() {
+      buttonsShown = false;
       _selectedIndex = index;
     });
   }
@@ -143,7 +144,7 @@ class _NavigationState extends State<Navigation> {
     try {
       if (selectedGoal != null && activity != null) {
         activity.goalId = selectedGoal.id;
-        activity.distance = activity.distance * 1000;
+        activity.distance = activity.distance;
 
         await DBProvider.helper.insertActivity(activity);
         Notifications.show(context, text: "Activiteit is toegevoegd");

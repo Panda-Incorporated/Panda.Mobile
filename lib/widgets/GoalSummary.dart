@@ -59,7 +59,7 @@ class _GoalSummaryState extends State<GoalSummary> {
           "in",
           style: TextStyle(fontSize: 12),
         ),
-        Text("${widget.goal.duration.inMinutes} minuten"),
+        Text("${ValueParser.duration(widget.goal.duration)}"),
       ],
     );
   }

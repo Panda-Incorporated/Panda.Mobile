@@ -106,6 +106,7 @@ class _HomeState extends State<Home> with RouteAware {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView(
+      padding: EdgeInsets.zero,
       children: [
         ValueListenableBuilder<bool>(
             valueListenable: ApiProvider.needsReauthentication,

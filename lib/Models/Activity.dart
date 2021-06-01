@@ -60,7 +60,7 @@ class Activity {
     return Activity.fill(
       name: map['name'],
       date: dateTime != null ? dateTime : DateFormat().parse(map['date']),
-      distance: map['distance'],
+      distance: map['distance'] * 1000,
       duration: Duration(milliseconds: map['duration']),
     );
   }

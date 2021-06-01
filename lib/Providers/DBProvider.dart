@@ -27,6 +27,13 @@ class DBHelper {
     return _database;
   }
 
+  deleteDb() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'app.db');
+    await deleteDatabase(path);
+    initialize();
+  }
+
   Future<int> insertGoal(Goal goal) async {
     final Database db = await getDatabase();
     return await db.insert('Goal', goal.toMap(),

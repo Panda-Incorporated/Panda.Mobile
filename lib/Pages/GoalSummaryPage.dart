@@ -70,7 +70,6 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
     try {
       if (widget.goal != null && activity != null) {
         activity.goalId = widget.goal.id;
-        activity.distance = activity.distance * 1000;
 
         await DBProvider.helper.insertActivity(activity);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -135,7 +134,7 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                                   child: TomorrowSummary(
                                       "Eerstvolgende activiteit: ",
                                       "Vanaf $activity eenmalig:",
-                                      "${ValueParser.distance(meters)} meter"),
+                                      "${ValueParser.distance(meters)}"),
                                 ),
                               ],
                             ),
