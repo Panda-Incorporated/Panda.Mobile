@@ -131,10 +131,20 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: TomorrowSummary(
-                                      "Eerstvolgende activiteit: ",
-                                      "Vanaf $activity eenmalig:",
-                                      "${ValueParser.distance(meters)}"),
+                                  child: widget.goal.endday
+                                          .subtract(Duration(days: 2))
+                                          .isBefore(DateTime.now())
+                                      ? Text(
+                                          "Geen activiteiten op de planning",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                          ),
+                                        )
+                                      : TomorrowSummary(
+                                          "Eerstvolgende activiteit: ",
+                                          "Vanaf $activity eenmalig:",
+                                          "${ValueParser.distance(meters)}"),
                                 ),
                               ],
                             ),
