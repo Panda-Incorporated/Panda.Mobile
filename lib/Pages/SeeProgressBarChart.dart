@@ -28,7 +28,7 @@ class _BarChartState extends State<BarChartPage> {
         x: i,
         barRods: [
           //y moet km per distance worden
-          BarChartRodData(y: 8, colors: [
+          BarChartRodData(y: 1, colors: [
             Color(0XFF01436D),
             Colors.lightBlueAccent,
           ])
@@ -43,10 +43,8 @@ class _BarChartState extends State<BarChartPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getData();
     super.initState();
-    // barItems = loadInBarItems(widget.goal);
   }
 
   getData() async {
@@ -56,7 +54,7 @@ class _BarChartState extends State<BarChartPage> {
     var temp = await widget.goal.activities();
     if (widget.goal != null && temp.length > 0 && widget.goal.goal > 0) {
       barItems = await loadInBarItems(widget.goal);
-      activities = await widget.goal.activities();
+      activities = temp;
     }
     setState(() {
       loading = false;
@@ -102,26 +100,28 @@ class _BarChartState extends State<BarChartPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: 14),
                     margin: 10,
-                    // getTitles: (double value) {
-                    //   switch (value.toInt()) {
-                    //     case 0:
-                    //       return 'Mn';
-                    //     case 1:
-                    //       return 'Te';
-                    //     case 2:
-                    //       return 'Wd';
-                    //     case 3:
-                    //       return 'Tu';
-                    //     case 4:
-                    //       return 'Fr';
-                    //     case 5:
-                    //       return 'St';
-                    //     case 6:
-                    //       return 'Sn';
-                    //     default:
-                    //       return '';
-                    //   }
-                    // },
+                    getTitles: (double value) {
+                      // switch (value.toInt()) {
+                      //   case 0:
+                      //     return 'Mn';
+                      //   case 1:
+                      //     return 'Te';
+                      //   case 2:
+                      //     return 'Wd';
+                      //   case 3:
+                      //     return 'Tu';
+                      //   case 4:
+                      //     return 'Fr';
+                      //   case 5:
+                      //     return 'St';
+                      //   case 6:
+                      //     return 'Sn';
+                      //   default:
+                      //     return '';
+                      // }
+
+                      return activities[value.toInt()].dayFormat();
+                    },
                   ),
                   leftTitles: SideTitles(showTitles: false),
                 ),
