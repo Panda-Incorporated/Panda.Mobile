@@ -29,10 +29,12 @@ class _BarChartState extends State<BarChartPage> {
         x: i,
         barRods: [
           //y moet km per distance worden
-          BarChartRodData(y: 5, colors: [
-            Color(0XFF01436D),
-            Colors.lightBlueAccent,
-          ])
+          BarChartRodData(
+              y: activities[i].RichelFormula(goal.distance),
+              colors: [
+                Color(0XFF01436D),
+                Colors.lightBlueAccent,
+              ])
         ],
         showingTooltipIndicators: [0],
       );
@@ -52,10 +54,9 @@ class _BarChartState extends State<BarChartPage> {
     setState(() {
       loading = true;
     });
-    var temp = await widget.goal.activities();
-    if (widget.goal != null && temp.length > 0 && widget.goal.goal > 0) {
+
+    if (widget.goal != null && widget.goal.goal > 0) {
       barItems = await loadInBarItems(widget.goal);
-      activities = temp;
     }
     setState(() {
       loading = false;
@@ -64,10 +65,10 @@ class _BarChartState extends State<BarChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? CircularProgressIndicator()
-        : Scaffold(
-            body: BarChart(
+    return Scaffold(
+      body: loading
+          ? CircularProgressIndicator()
+          : BarChart(
               BarChartData(
                 maxY: 20,
                 alignment: BarChartAlignment.spaceAround,
@@ -81,7 +82,8 @@ class _BarChartState extends State<BarChartPage> {
                       BarChartGroupData group,
                       int groupIndex,
                       BarChartRodData rod,
-                        int rodIndex,) {
+                      int rodIndex,
+                    ) {
                       return BarTooltipItem(
                         rod.y.round().toString(),
                         TextStyle(
@@ -101,7 +103,7 @@ class _BarChartState extends State<BarChartPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: 14),
                     margin: 10,
-                    getTitles: (double value) =>
+                    getTitles: (value) =>
                         activities[value.toInt()].date.ToInput('01-01'),
                   ),
                   leftTitles: SideTitles(showTitles: false),
@@ -112,6 +114,6 @@ class _BarChartState extends State<BarChartPage> {
                 barGroups: barItems,
               ),
             ),
-          );
+    );
   }
 }
