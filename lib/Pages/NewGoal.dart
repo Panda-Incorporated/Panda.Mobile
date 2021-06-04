@@ -1,5 +1,5 @@
 // ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, error checks, overbodige code, date tijd aanpassen, afstand input box aanpassen naar alleen digits.
+// * TODO Niels, error checks, overbodige code, date tijd aanpassen.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -85,12 +85,12 @@ class _NewGoalState extends State<NewGoal> {
                         NewGoalInputDistance(
                           controller: _distance,
                           labelText: "Meters",
-                          textString: "Afstand:",
+                          textString: "Afstand van de marathon:",
                         ),
                         NewGoalInputAndTextField(
                           controller: _duration,
                           labelText: "Minuten",
-                          textString: "Tijd",
+                          textString: "Gewenste looptijd",
                         ),
                         Container(
                           alignment: Alignment.center,

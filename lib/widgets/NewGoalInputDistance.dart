@@ -45,7 +45,7 @@ class NewGoalInputDistance extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: TextField(
             inputFormatters: [
-              LengthLimitingTextInputFormatter(20),
+              LengthLimitingTextInputFormatter(6),
             ],
             controller: _controller,
             keyboardType: TextInputType.number,
