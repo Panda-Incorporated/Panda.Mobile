@@ -88,7 +88,9 @@ class _InitialPageState extends State<InitialPage> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Center(child: CircularProgressIndicator())
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(child: CircularProgressIndicator()))
         : isFirstStart
             ? StartPage(
                 onDone: () {
