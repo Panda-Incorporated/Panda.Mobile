@@ -12,6 +12,7 @@ import 'package:panda/Pages/NewGoal.dart';
 import 'package:panda/Pages/SeeProgressBarChart.dart';
 import 'package:panda/Pages/Settings.dart';
 import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/Utils/Notifications.dart';
 import 'package:panda/widgets/Logo.dart';
 
@@ -116,7 +117,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
   bool buttonsShown = false;
-  List<Widget> _widgetOptions = [Home(), BarChartPage()];
+  List<Widget> _widgetOptions = [Home(), SettingsPage()];
 
   void _onItemTap(int index) {
     setState(() {
