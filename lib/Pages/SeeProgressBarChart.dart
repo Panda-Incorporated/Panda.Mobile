@@ -19,8 +19,9 @@ class _BarChartState extends State<BarChartPage> {
   bool loading = false;
 
   Future<List<BarChartGroupData>> loadInBarItems(Goal goal) async {
-    var _activities = await goal.activities();
-
+    activities = await goal.activities();
+    activities.sort((a, b) => a.date.compareTo(b.date));
+    activities.where((f) => f.distance > 10000).toList(); //filter with treshold
     return [
       BarChartGroupData(
         x: 1,
@@ -41,7 +42,7 @@ class _BarChartState extends State<BarChartPage> {
     // TODO: implement initState
     getData();
     super.initState();
-    // barItems = loadInBarItems(widget.goal); errrrreurrr
+    // barItems = loadInBarItems(widget.goal);
   }
 
   getData() async {
@@ -53,15 +54,18 @@ class _BarChartState extends State<BarChartPage> {
       barItems = await loadInBarItems(widget.goal);
       activities = await widget.goal.activities();
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      child: loading
-          ? CircularProgressIndicator()
-          : BarChart(
+    return loading
+        ? CircularProgressIndicator()
+        : Container(
+            height: 400,
+            child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
                 barTouchData: BarTouchData(
@@ -124,6 +128,6 @@ class _BarChartState extends State<BarChartPage> {
                 barGroups: barItems,
               ),
             ),
-    );
+          );
   }
 }
