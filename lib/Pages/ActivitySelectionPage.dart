@@ -4,7 +4,6 @@ import 'package:panda/Models/Activity.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/ActivityItem.dart';
-import 'package:panda/widgets/CurrentActivities.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 
@@ -101,7 +100,10 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                             ActivityItem(
                               activity: activity,
                               onSelected: (v) {
-                                widget.onSelected(v);
+                                if (widget.onSelected != null) {
+                                  widget.onSelected(v);
+                                  Navigator.of(context).pop();
+                                }
                               },
                             )
                         ])

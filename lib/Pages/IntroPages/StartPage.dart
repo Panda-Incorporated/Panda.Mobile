@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:panda/Models/AuthState.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/AuthenticationPage.dart';
-import 'package:panda/Pages/Home.dart';
 import 'package:panda/Pages/NewGoal.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:panda/Models/AuthState.dart';
 import 'package:panda/Pages/AuthenticationPage.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/Providers/GoalProvider.dart';
+import 'package:panda/main.dart';
+import 'package:panda/widgets/NewGoalInputField.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -9,7 +12,32 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String code;
+  TextEditingController controller;
+  AuthState authState;
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+
+    loadData();
+  }
+
+  onEditUsername() async {
+    if (controller.text != authState.username) {
+      authState.username = controller.text;
+      await DBProvider.helper.updateAuthState(authState);
+      print("saved username");
+      FocusScope.of(context).unfocus();
+    }
+  }
+
+  loadData() async {
+    authState = await DBProvider.helper.getAuthState();
+    controller.text = authState.username;
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,23 +49,21 @@ class _SettingsPageState extends State<SettingsPage> {
             Container(
               child: Column(
                 children: [
-                  Text("Settings"),
-                  OutlinedButton(
-                      child: Text("Authenticate"),
-                      onPressed: () async {
-                        var res = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AuthenticationPage()),
-                        );
-                        code = res.toString();
-                        setState(() {});
-                      }),
-                  Text(code ?? "No code yet authenticate first"),
+                  Text(
+                    "Settings",
+                    style: TextStyle(fontSize: 24.0),
+                  ),
+                  NewGoalInputAndTextField(
+                      onEdittingComplete: onEditUsername,
+                      controller: controller,
+                      labelText: "Voer gebruikersnaam in",
+                      textString: "Gebruikersnaam wijzigen"),
+
                   //todo: we can use this to talk to the fitbit api and get an accestoken (Reindert)
                 ],
               ),
             ),
+            Divider(),
             OutlinedButton(
                 onPressed: () async {
                   for (var goal in await GoalProvider.getTempGoals()) {
@@ -47,8 +73,35 @@ class _SettingsPageState extends State<SettingsPage> {
                     }
                   }
                 },
-                child: Text("Fill database with 3 goals")),
-            Text(" warning dont touch more then once"),
+                child: Text("Fill database with 1 goal")),
+            OutlinedButton(
+                onPressed: () async {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Let op!'),
+                      content: const Text(
+                          'Weet u zeker dat u alle data binnen deze app wilt verwijderen? Alle opgeslagen gegevens zoals doelen, activiteiten, gebruikersnaam etc. gaan verloren.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Nee'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await DBProvider.helper.deleteDb();
+                            await Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (c) => InitialPage()));
+                          },
+                          child: const Text('Ja'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Text("Reset app")),
           ]),
         ],
       ),

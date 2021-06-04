@@ -9,6 +9,7 @@ class NewGoalInputAndTextField extends StatelessWidget {
     @required String textString,
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
+    this.onEdittingComplete,
   })  : _controller = controller,
         _labelText = labelText,
         _textString = textString,
@@ -17,7 +18,7 @@ class NewGoalInputAndTextField extends StatelessWidget {
   final TextEditingController _controller;
   final String _labelText;
   final String _textString;
-
+  final Function onEdittingComplete;
   final double _textFontSize = 15;
   final double _inputBoxHeight = 50;
 
@@ -39,6 +40,7 @@ class NewGoalInputAndTextField extends StatelessWidget {
           height: _inputBoxHeight,
           padding: EdgeInsets.all(10),
           child: TextField(
+            onEditingComplete: onEdittingComplete,
             inputFormatters: [
               LengthLimitingTextInputFormatter(20),
             ],

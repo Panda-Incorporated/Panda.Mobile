@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
+import 'package:panda/Utils/ValueParser.dart';
 
 class ActivityItem extends StatefulWidget {
   final Activity activity;
@@ -77,14 +78,14 @@ class _ActivityItemState extends State<ActivityItem> {
                         child: Column(
                           children: [
                             Text(
-                              "${widget.activity.distance.toStringAsFixed(1)} km",
+                              "${ValueParser.distanceDoublePrecise(widget.activity.distance)}",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              "${widget.activity.timeFormat()} tijd",
+                              "${ValueParser.duration(widget.activity.duration)}",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,

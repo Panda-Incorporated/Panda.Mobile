@@ -8,15 +8,12 @@ import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 
 class GoalSelectionPage extends StatefulWidget {
-  final Activity act;
-
-  const GoalSelectionPage({Key key, @required this.act}) : super(key: key);
-
+  const GoalSelectionPage({Key key, this.onGoalSelected}) : super(key: key);
+  final Function(Goal) onGoalSelected;
   @override
   _GoalSelectionPageState createState() => _GoalSelectionPageState();
 }
 
-// TODO: Fitbitselection1 en Fitbitselection2 generiek maken zodat we maar 1 scherm nodig hebben voor twee widgets
 class _GoalSelectionPageState extends State<GoalSelectionPage> {
   Goal currentGoal;
   List<Goal> goals;
@@ -51,7 +48,7 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
               elevation: 0.0,
               backgroundColor: Colors.transparent,
               title: Text(
-                "Kies uit doel:",
+                "Kies een doel:",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w400,
@@ -87,12 +84,9 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
                         ? ShowGoals(
                             onGoalSelected: (goal) {
                               currentGoal = goal;
-
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Navigation()),
-                              );
+                              if (widget.onGoalSelected != null) {
+                                widget.onGoalSelected(goal);
+                              }
                             },
                             currentGoals: goals,
                           )

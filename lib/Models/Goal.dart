@@ -46,16 +46,19 @@ class Goal {
       act.sort((a, b) => a.date.compareTo(b.date));
       var minimalday = act.last.date.add(Duration(days: 2));
       minimalday =
-          minimalday.isBefore(DateTime.now()) ? DateTime.now() : minimalday;
-      minimalday = minimalday.isBefore(endday) ? minimalday : endday;
+          minimalday.isBefore(DateTime.now()) ? minimalday : DateTime.now();
+      minimalday = minimalday.isBefore(endday.subtract(Duration(days: 2)))
+          ? minimalday
+          : endday.subtract(Duration(days: 2));
       return DateFormat("dd-MM").format(minimalday);
     }
+    return "";
   }
 
   Future<double> getPercentage() async {
     var _activities = await activities();
     if (_activities == null || _activities.length < 1) return 0;
-    print("activities zijn $_activities");
+
     var nulmeting = _activities.first.RichelFormula(distance);
     var nu_punt = pow(_activities.last.RichelFormula(distance), 0.95) - 2;
     var verschil = nulmeting - goal;

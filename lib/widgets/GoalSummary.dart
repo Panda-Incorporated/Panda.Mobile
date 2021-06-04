@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Utils/ValueParser.dart';
 
 class GoalSummary extends StatefulWidget {
   final Goal goal;
@@ -12,7 +13,8 @@ class GoalSummary extends StatefulWidget {
 
 class _GoalSummaryState extends State<GoalSummary> {
   double percentage = 0.0;
-  double distance1 = 19.0;
+  double distance1 = 0.0;
+  String finalDistance = "";
 
   @override
   void initState() {
@@ -26,6 +28,9 @@ class _GoalSummaryState extends State<GoalSummary> {
       distance1 =
           await widget.goal.activities().then((value) => value.last.distance);
       percentage = await widget.goal.getPercentage();
+      finalDistance =
+          ValueParser.distance((widget.goal.distance * percentage).toInt());
+      print(finalDistance);
     }
 
     setState(() {});
@@ -49,12 +54,12 @@ class _GoalSummaryState extends State<GoalSummary> {
           Icons.outlined_flag,
         ),
         Text(
-            "${(widget.goal.distance * percentage).toInt()} m van ${widget.goal.distance.toInt()} m"),
+            "$finalDistance van ${ValueParser.distance(widget.goal.distance.toInt())}"),
         Text(
           "in",
           style: TextStyle(fontSize: 12),
         ),
-        Text("${widget.goal.duration.inMinutes} minuten"),
+        Text("${ValueParser.duration(widget.goal.duration)}"),
       ],
     );
   }

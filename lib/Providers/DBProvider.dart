@@ -27,6 +27,13 @@ class DBHelper {
     return _database;
   }
 
+  deleteDb() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'app.db');
+    await deleteDatabase(path);
+    initialize();
+  }
+
   Future<int> insertGoal(Goal goal) async {
     final Database db = await getDatabase();
     return await db.insert('Goal', goal.toMap(),
@@ -61,6 +68,41 @@ class DBHelper {
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
       }
+    }
+  }
+
+  Future<int> removeGoal(Goal goal) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db.delete("Goal", where: "id = ?", whereArgs: [goal.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
+    }
+  }
+
+  Future<int> removeActivity(Activity activity) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db
+          .delete("Activity", where: "id = ?", whereArgs: [activity.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
+    }
+  }
+
+  Future<int> removeActivityByGoal(Goal goal) async {
+    try {
+      final Database db = await getDatabase();
+      var res = await db
+          .delete("Activity", where: "goalId = ?", whereArgs: [goal.id]);
+      return res;
+    } catch (e) {
+      print(e);
+      return -1;
     }
   }
 

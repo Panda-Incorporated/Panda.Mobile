@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:glyphicon/glyphicon.dart';
 import 'package:panda/Models/AuthState.dart';
@@ -7,8 +9,8 @@ import 'package:panda/Pages/GoalSummaryPage.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/Providers/GoalProvider.dart';
+import 'package:panda/main.dart';
 import 'package:panda/widgets/CurrentGoals.dart';
-import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 import 'package:panda/widgets/TextListItem.dart';
 
@@ -19,29 +21,51 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with RouteAware {
   AuthState authState;
   bool loading = false;
   List<Goal> goals;
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void didPopNext() {
+    print("didPopNext");
+    if (mounted) {
+      loadData();
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    ApiProvider.needsReauthentication.removeListener(showSnackBar);
+    super.dispose();
+  }
+
+  showSnackBar() {
+    if (ApiProvider.needsReauthentication.value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(days: 1),
+          action: SnackBarAction(
+            onPressed: () async {
+              await saveData();
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            label: "Klik hier",
+          ),
+          behavior: SnackBarBehavior.floating,
+          content: Text('Inlogsessie verlopen probeer opnieuw in te loggen')));
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-    ApiProvider.needsReauthentication.addListener(() {
-      if (ApiProvider.needsReauthentication.value) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            duration: Duration(days: 1),
-            action: SnackBarAction(
-              onPressed: () async {
-                await saveData();
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              label: "Klik hier",
-            ),
-            behavior: SnackBarBehavior.floating,
-            content:
-                Text('Inlogsessie verlopen probeer opnieuw in te loggen')));
-      }
-    });
+    ApiProvider.needsReauthentication.addListener(showSnackBar);
     loadData();
   }
 
@@ -82,6 +106,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView(
+      padding: EdgeInsets.zero,
       children: [
         ValueListenableBuilder<bool>(
             valueListenable: ApiProvider.needsReauthentication,
