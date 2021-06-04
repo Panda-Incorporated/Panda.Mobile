@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Utils/DateTimeExtension.dart';
 
 class BarChartPage extends StatefulWidget {
   final Goal goal;
@@ -28,7 +29,7 @@ class _BarChartState extends State<BarChartPage> {
         x: i,
         barRods: [
           //y moet km per distance worden
-          BarChartRodData(y: 1, colors: [
+          BarChartRodData(y: 5, colors: [
             Color(0XFF01436D),
             Colors.lightBlueAccent,
           ])
@@ -68,6 +69,7 @@ class _BarChartState extends State<BarChartPage> {
         : Scaffold(
             body: BarChart(
               BarChartData(
+                maxY: 20,
                 alignment: BarChartAlignment.spaceAround,
                 barTouchData: BarTouchData(
                   enabled: false,
@@ -79,12 +81,11 @@ class _BarChartState extends State<BarChartPage> {
                       BarChartGroupData group,
                       int groupIndex,
                       BarChartRodData rod,
-                      int rodIndex,
-                    ) {
+                        int rodIndex,) {
                       return BarTooltipItem(
                         rod.y.round().toString(),
                         TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -100,28 +101,8 @@ class _BarChartState extends State<BarChartPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: 14),
                     margin: 10,
-                    getTitles: (double value) {
-                      // switch (value.toInt()) {
-                      //   case 0:
-                      //     return 'Mn';
-                      //   case 1:
-                      //     return 'Te';
-                      //   case 2:
-                      //     return 'Wd';
-                      //   case 3:
-                      //     return 'Tu';
-                      //   case 4:
-                      //     return 'Fr';
-                      //   case 5:
-                      //     return 'St';
-                      //   case 6:
-                      //     return 'Sn';
-                      //   default:
-                      //     return '';
-                      // }
-
-                      return activities[value.toInt()].dayFormat();
-                    },
+                    getTitles: (double value) =>
+                        activities[value.toInt()].date.ToInput('01-01'),
                   ),
                   leftTitles: SideTitles(showTitles: false),
                 ),
