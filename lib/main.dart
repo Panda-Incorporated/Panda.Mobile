@@ -9,8 +9,10 @@ import 'package:panda/Pages/ActivitySelectionPage.dart';
 import 'package:panda/Pages/GoalSelectionPage.dart';
 import 'package:panda/Pages/IntroPages/StartPage.dart';
 import 'package:panda/Pages/NewGoal.dart';
+import 'package:panda/Pages/SeeProgressBarChart.dart';
 import 'package:panda/Pages/Settings.dart';
 import 'package:panda/Providers/DBProvider.dart';
+import 'package:panda/Providers/GoalProvider.dart';
 import 'package:panda/Utils/Notifications.dart';
 import 'package:panda/widgets/Logo.dart';
 

@@ -3,7 +3,7 @@ import 'package:panda/Models/Goal.dart';
 import 'package:panda/Providers/DBProvider.dart';
 
 class GoalProvider {
-  static Future<List<Goal>> getTempGoals() async {
+  static List<Goal> getTempGoals() {
     //NIET GOAL 1 AANPASSEN IS TEST UNIT
     return [
       Goal()

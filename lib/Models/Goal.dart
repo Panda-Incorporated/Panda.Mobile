@@ -46,8 +46,10 @@ class Goal {
       act.sort((a, b) => a.date.compareTo(b.date));
       var minimalday = act.last.date.add(Duration(days: 2));
       minimalday =
-          minimalday.isBefore(DateTime.now()) ? DateTime.now() : minimalday;
-      minimalday = minimalday.isBefore(endday) ? minimalday : endday;
+          minimalday.isBefore(DateTime.now()) ? minimalday : DateTime.now();
+      minimalday = minimalday.isBefore(endday.subtract(Duration(days: 2)))
+          ? minimalday
+          : endday.subtract(Duration(days: 2));
       return DateFormat("dd-MM").format(minimalday);
     }
     return "";

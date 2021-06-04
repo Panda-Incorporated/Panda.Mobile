@@ -1,5 +1,5 @@
 // ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, error checks, overbodige code,.
+// * TODO Niels, error checks, overbodige code, date tijd aanpassen, afstand input box aanpassen naar alleen digits.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +9,7 @@ import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NewGoalInputField.dart';
 import 'package:panda/widgets/NewGoalInputDate.dart';
+import 'package:panda/widgets/NewGoalInputDistance.dart';
 
 class NewGoal extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _NewGoalState extends State<NewGoal> {
   var _goalName = new TextEditingController();
   var _distance = new TextEditingController();
   var _deadline = new TextEditingController();
-  var _date = new TextEditingController();
+  var _duration = new TextEditingController();
 
   Goal newGoal;
 
@@ -78,16 +79,17 @@ class _NewGoalState extends State<NewGoal> {
                           },
                           controller: _deadline,
                           labelText: "Datum",
+                          keyboardType: TextInputType.number,
                           textString: "Deadline:",
                         ),
-                        NewGoalInputAndTextField(
+                        NewGoalInputDistance(
                           controller: _distance,
-                          labelText: "Kilometers",
+                          labelText: "Meters",
                           textString: "Afstand:",
                         ),
                         NewGoalInputAndTextField(
-                          controller: _date,
-                          labelText: "Uren:Minuten",
+                          controller: _duration,
+                          labelText: "Minuten",
                           textString: "Tijd",
                         ),
                         Container(
@@ -114,7 +116,8 @@ class _NewGoalState extends State<NewGoal> {
                                     newGoal = Goal()
                                       ..title = _goalName.text
                                       ..distance = double.parse(_distance.text)
-                                      ..duration = Duration(hours: 1)
+                                      ..duration = Duration(
+                                          minutes: int.parse(_duration.text))
                                       ..beginday = DateTime.now()
                                       ..endday = selectedDate,
                                     await DBProvider.helper.insertGoal(newGoal),

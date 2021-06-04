@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/services/text_formatter.dart';
 import 'package:intl/intl.dart';
 
-class NewGoalInputDate extends StatelessWidget {
-  NewGoalInputDate({
+class NewGoalInputDistance extends StatelessWidget {
+  NewGoalInputDistance({
     Key key,
     @required TextEditingController controller,
     @required String labelText,
@@ -47,25 +47,8 @@ class NewGoalInputDate extends StatelessWidget {
             inputFormatters: [
               LengthLimitingTextInputFormatter(20),
             ],
-            onTap: () async {
-              DateTime picked = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(Duration(days: 1825)),
-              );
-              if (picked != null && picked != _selectedDate) {
-                _controller.text = DateFormat("dd/MM/yyyy").format(picked);
-                setState(() {
-                  _selectedDate = picked;
-                  _controller.text = DateFormat.yMd().format(_selectedDate);
-                });
-                if (onDateSelected != null) {
-                  onDateSelected(_selectedDate);
-                }
-              }
-            },
             controller: _controller,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: _labelText,

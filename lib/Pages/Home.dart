@@ -6,6 +6,7 @@ import 'package:panda/Models/AuthState.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Pages/AuthenticationPage.dart';
 import 'package:panda/Pages/GoalSummaryPage.dart';
+import 'package:panda/Pages/SeeProgressBarChart.dart';
 import 'package:panda/Providers/ApiProvider.dart';
 import 'package:panda/Providers/DBProvider.dart';
 import 'package:panda/Providers/GoalProvider.dart';
@@ -148,7 +149,7 @@ class _HomeState extends State<Home> with RouteAware {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      GoalSummaryPage(goal: goal)),
+                                      BarChartPage(goal: goal)),
                             );
                           },
                           currentGoals:
