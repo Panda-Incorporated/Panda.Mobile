@@ -21,10 +21,11 @@ class _BarChartState extends State<BarChartPage> {
   Future<List<BarChartGroupData>> loadInBarItems(Goal goal) async {
     activities = await goal.activities();
     activities.sort((a, b) => a.date.compareTo(b.date));
-    activities.where((f) => f.distance > 10000).toList(); //filter with treshold
-    return [
-      BarChartGroupData(
-        x: 1,
+    activities.where((f) => f.distance > 5000).toList(); //filter with treshold
+    List<BarChartGroupData> returnlist = [];
+    for (int i = 0; i < activities.length; i++) {
+      var value = BarChartGroupData(
+        x: i,
         barRods: [
           //y moet km per distance worden
           BarChartRodData(y: 8, colors: [
@@ -33,8 +34,11 @@ class _BarChartState extends State<BarChartPage> {
           ])
         ],
         showingTooltipIndicators: [0],
-      )
-    ];
+      );
+      returnlist.add(value);
+    }
+
+    return returnlist;
   }
 
   @override
@@ -63,9 +67,8 @@ class _BarChartState extends State<BarChartPage> {
   Widget build(BuildContext context) {
     return loading
         ? CircularProgressIndicator()
-        : Container(
-            height: 400,
-            child: BarChart(
+        : Scaffold(
+            body: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
                 barTouchData: BarTouchData(
