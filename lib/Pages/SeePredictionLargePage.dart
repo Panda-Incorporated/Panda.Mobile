@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Pages/SeeProgressBarChart.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -65,6 +66,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     });
   }
 
+  final PageController controller = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,96 +76,103 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
       body: loading
           ? Center(child: CircularProgressIndicator())
           : barData.length > 0
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularPercentIndicator(
-                              radius: 80.0,
-                              lineWidth: 6.0,
-                              backgroundColor: Colors.green[100],
-                              percent: percentage,
-                              progressColor: Colors.green[800],
-                              circularStrokeCap: CircularStrokeCap.round,
-                              animation: true,
-                              center: Text(
-                                "${(percentage * 100).toInt()}%",
-                                style: TextStyle(
-                                    color: Colors.green[800],
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500),
-                              ),
+              ? PageView(
+                  scrollDirection: Axis.horizontal,
+                  controller: controller,
+                  children: <Widget>[
+                      BarChartPage(goal: widget.goal),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularPercentIndicator(
+                                    radius: 80.0,
+                                    lineWidth: 6.0,
+                                    backgroundColor: Colors.green[100],
+                                    percent: percentage,
+                                    progressColor: Colors.green[800],
+                                    circularStrokeCap: CircularStrokeCap.round,
+                                    animation: true,
+                                    center: Text(
+                                      "${(percentage * 100).toInt()}%",
+                                      style: TextStyle(
+                                          color: Colors.green[800],
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      "${widget.goal.title}",
+                                      style: TextStyle(
+                                        fontSize: 26,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(
-                                "${widget.goal.title}",
-                                style: TextStyle(
-                                  fontSize: 26,
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Voorspelling"),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: Container(
+                                color: Colors.grey[200],
+                                child: Stack(
+                                  alignment: Alignment.topRight,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.centerLeft,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10.0),
+                                          child: RotationTransition(
+                                            child: Text("Sec/km =>"),
+                                            alignment: Alignment.centerLeft,
+                                            turns: new AlwaysStoppedAnimation(
+                                                -90 / 360),
+                                          ),
+                                        ),
+                                        Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            chart(),
+                                            Text("Dagen =>"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        legenda(Colors.orange, "Progressie"),
+                                        legenda(Colors.black, "Doel"),
+                                        legenda(Colors.grey, "Predictie"),
+                                        legenda(Color(0xff4af699), "Nulmeting"),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            alignment: Alignment.centerLeft,
-                            child: Text("Voorspelling"),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.grey[200],
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              Stack(
-                                alignment: Alignment.centerLeft,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: RotationTransition(
-                                      child: Text("Sec/km =>"),
-                                      alignment: Alignment.centerLeft,
-                                      turns:
-                                          new AlwaysStoppedAnimation(-90 / 360),
-                                    ),
-                                  ),
-                                  Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      chart(),
-                                      Text("Dagen =>"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  legenda(Colors.orange, "Progressie"),
-                                  legenda(Colors.black, "Doel"),
-                                  legenda(Colors.grey, "Predictie"),
-                                  legenda(Color(0xff4af699), "Nulmeting"),
-                                ],
-                              ),
-                            ],
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                )
+                      )
+                    ])
               : Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

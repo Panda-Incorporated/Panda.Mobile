@@ -149,7 +149,7 @@ class _HomeState extends State<Home> with RouteAware {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BarChartPage(goal: goal)),
+                                      GoalSummaryPage(goal: goal)),
                             );
                           },
                           currentGoals:
