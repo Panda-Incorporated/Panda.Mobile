@@ -19,22 +19,52 @@ class _BarChartState extends State<BarChartPage> {
   List<Activity> activities;
   bool loading = false;
 
+  List<String> generateYasNumbers() {
+    double maxValue = calculateMaxY();
+
+    List<String> yasNumbers = [];
+
+    for (int i = 0; i < maxValue; i++) {
+      yasNumbers.add(i.toString());
+    }
+
+    return yasNumbers;
+  }
+
+  double calculateMaxY() {
+    double biggestKmPHour = 0;
+
+    for (int i = 0; i < activities.length; i++) {
+      var kmperhour =
+          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
+              .roundToDouble();
+      if (kmperhour > biggestKmPHour) {
+        biggestKmPHour = kmperhour;
+      }
+    }
+    var result = biggestKmPHour + (biggestKmPHour * 0.2);
+    return result;
+  }
+
   Future<List<BarChartGroupData>> loadInBarItems(Goal goal) async {
     activities = await goal.activities();
     activities.sort((a, b) => a.date.compareTo(b.date));
-    activities.where((f) => f.distance > 5000).toList(); //filter with treshold
+    activities
+        .where((f) => f.distance > (goal.distance / 2))
+        .toList(); //filter with treshold
     List<BarChartGroupData> returnlist = [];
     for (int i = 0; i < activities.length; i++) {
+      var kmperhour =
+          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
+              .roundToDouble();
+
       var value = BarChartGroupData(
         x: i,
         barRods: [
-          //y moet km per distance worden
-          BarChartRodData(
-              y: activities[i].RichelFormula(goal.distance),
-              colors: [
-                Color(0XFF01436D),
-                Colors.lightBlueAccent,
-              ])
+          BarChartRodData(y: kmperhour, colors: [
+            Color(0XFF01436D),
+            Colors.lightBlueAccent,
+          ])
         ],
         showingTooltipIndicators: [0],
       );
@@ -68,50 +98,57 @@ class _BarChartState extends State<BarChartPage> {
     return Scaffold(
       body: loading
           ? CircularProgressIndicator()
-          : BarChart(
-              BarChartData(
-                maxY: 20,
-                alignment: BarChartAlignment.spaceAround,
-                barTouchData: BarTouchData(
-                  enabled: false,
-                  touchTooltipData: BarTouchTooltipData(
-                    tooltipBgColor: Colors.transparent,
-                    tooltipPadding: const EdgeInsets.all(0),
-                    tooltipMargin: 8,
-                    getTooltipItem: (
-                      BarChartGroupData group,
-                      int groupIndex,
-                      BarChartRodData rod,
-                      int rodIndex,
-                    ) {
-                      return BarTooltipItem(
-                        rod.y.round().toString(),
-                        TextStyle(
-                          color: Colors.black,
+          : Padding(
+              padding: const EdgeInsets.all(20),
+              child: BarChart(
+                BarChartData(
+                  maxY: calculateMaxY(),
+                  alignment: BarChartAlignment.spaceAround,
+                  barTouchData: BarTouchData(
+                    enabled: false,
+                    touchTooltipData: BarTouchTooltipData(
+                      tooltipBgColor: Colors.transparent,
+                      tooltipPadding: const EdgeInsets.all(0),
+                      tooltipMargin: 8,
+                      getTooltipItem: (
+                        BarChartGroupData group,
+                        int groupIndex,
+                        BarChartRodData rod,
+                        int rodIndex,
+                      ) {
+                        return BarTooltipItem(
+                          rod.y.round().toString(),
+                          TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      getTextStyles: (value) => const TextStyle(
+                          color: Color(0xff7589a2),
                           fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
+                          fontSize: 14),
+                      getTitles: (value) =>
+                          activities[value.toInt()].date.ToInput('01-01'),
+                    ),
+                    leftTitles: SideTitles(
+                        margin: 25,
+                        showTitles: true,
+                        interval: 4,
+                        getTitles: (value) =>
+                            (generateYasNumbers()[value.toInt()]) + " km/u"),
                   ),
-                ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  bottomTitles: SideTitles(
-                    showTitles: true,
-                    getTextStyles: (value) => const TextStyle(
-                        color: Color(0xff7589a2),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14),
-                    margin: 10,
-                    getTitles: (value) =>
-                        activities[value.toInt()].date.ToInput('01-01'),
+                  borderData: FlBorderData(
+                    show: false,
                   ),
-                  leftTitles: SideTitles(showTitles: false),
+                  barGroups: barItems,
                 ),
-                borderData: FlBorderData(
-                  show: false,
-                ),
-                barGroups: barItems,
               ),
             ),
     );
