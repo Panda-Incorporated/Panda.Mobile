@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:panda/Models/Activity.dart';
 import 'package:panda/Models/Goal.dart';
-import 'package:panda/Pages/SeeProgressBarChart.dart';
+import 'package:panda/Utils/DateTimeExtension.dart';
 import 'package:panda/widgets/ShowGraph.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -23,12 +23,70 @@ class SeePredictionLargePage extends StatefulWidget {
 }
 
 class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
+  List<BarChartGroupData> barItems = [];
   double percentage = 0.0;
   List<LineChartBarData> barData = List.empty();
   List<Activity> activities;
   double big = 10.0;
+  bool isShowingMainData;
   double small = 1.0;
   bool loading = false;
+
+  List<String> generateYasNumbers() {
+    double maxValue = calculateMaxY();
+
+    List<String> yasNumbers = [];
+
+    for (int i = 0; i < maxValue; i++) {
+      yasNumbers.add(i.toString());
+    }
+
+    return yasNumbers;
+  }
+
+  double calculateMaxY() {
+    double biggestKmPHour = 0;
+
+    for (int i = 0; i < activities.length; i++) {
+      var kmperhour =
+          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
+              .roundToDouble();
+      if (kmperhour > biggestKmPHour) {
+        biggestKmPHour = kmperhour;
+      }
+    }
+
+    var result = biggestKmPHour + (biggestKmPHour * 0.2);
+    return result;
+  }
+
+  Future<List<BarChartGroupData>> loadInBarItems(Goal goal) async {
+    activities = await goal.activities();
+    activities.sort((a, b) => a.date.compareTo(b.date));
+    activities
+        .where((f) => f.distance > (goal.distance / 2))
+        .toList(); //filter with treshold
+    List<BarChartGroupData> returnlist = [];
+    for (int i = 0; i < activities.length; i++) {
+      var kmperhour =
+          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
+              .roundToDouble();
+
+      var value = BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(y: kmperhour, colors: [
+            Color(0XFF01436D),
+            Colors.lightBlueAccent,
+          ])
+        ],
+        showingTooltipIndicators: [0],
+      );
+      returnlist.add(value);
+    }
+
+    return returnlist;
+  }
 
   @override
   void initState() {
@@ -40,6 +98,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     setState(() {
       loading = true;
     });
+    isShowingMainData = true;
+    if (widget.goal != null && widget.goal.goal > 0) {
+      barItems = await loadInBarItems(widget.goal);
+    }
+
     var temp = await widget.goal.activities();
     if (widget.goal != null && temp.length > 0 && widget.goal.goal > 0) {
       percentage = await widget.goal.getPercentage();
@@ -67,112 +130,36 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   }
 
   final PageController controller = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //TODO: listview zetten vragen aan reindert
-      appBar: AppBar(elevation: 0),
+      appBar: AppBar(
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.white.withOpacity(isShowingMainData ? 1.0 : 0.5),
+            ),
+            onPressed: () {
+              setState(() {
+                isShowingMainData = !isShowingMainData;
+              });
+            },
+          )
+        ],
+      ),
       backgroundColor: Colors.white,
       body: loading
           ? Center(child: CircularProgressIndicator())
           : barData.length > 0
-              ? PageView(
-                  scrollDirection: Axis.horizontal,
-                  controller: controller,
-                  children: <Widget>[
-                      BarChartPage(goal: widget.goal),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CircularPercentIndicator(
-                                    radius: 80.0,
-                                    lineWidth: 6.0,
-                                    backgroundColor: Colors.green[100],
-                                    percent: percentage,
-                                    progressColor: Colors.green[800],
-                                    circularStrokeCap: CircularStrokeCap.round,
-                                    animation: true,
-                                    center: Text(
-                                      "${(percentage * 100).toInt()}%",
-                                      style: TextStyle(
-                                          color: Colors.green[800],
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Text(
-                                      "${widget.goal.title}",
-                                      style: TextStyle(
-                                        fontSize: 26,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Voorspelling"),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey[200],
-                                child: Stack(
-                                  alignment: Alignment.topRight,
-                                  children: [
-                                    Stack(
-                                      alignment: Alignment.centerLeft,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: RotationTransition(
-                                            child: Text("Sec/km =>"),
-                                            alignment: Alignment.centerLeft,
-                                            turns: new AlwaysStoppedAnimation(
-                                                -90 / 360),
-                                          ),
-                                        ),
-                                        Stack(
-                                          alignment: Alignment.bottomCenter,
-                                          children: [
-                                            chart(),
-                                            Text("Dagen =>"),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        legenda(Colors.orange, "Progressie"),
-                                        legenda(Colors.black, "Doel"),
-                                        legenda(Colors.grey, "Predictie"),
-                                        legenda(Color(0xff4af699), "Nulmeting"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ])
+              ? Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
+                  child: wholePage(),
+                )
               : Container(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -190,55 +177,201 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     );
   }
 
-  Widget chart() {
-    return LineChart(
-      LineChartData(
-        // lineTouchData: LineTouchData(enabled: false),
-        titlesData: FlTitlesData(
-          bottomTitles: SideTitles(
-            interval: widget.goal.getTotalDays() <= 12
-                ? 1
-                : (widget.goal.getTotalDays() / 12).roundToDouble(),
-            showTitles: true,
-            reservedSize: 40,
-            getTextStyles: (value) => const TextStyle(
-              color: Color(0xff72719b),
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+  Widget wholePage() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircularPercentIndicator(
+                radius: 80.0,
+                lineWidth: 6.0,
+                backgroundColor: Colors.green[100],
+                percent: percentage,
+                progressColor: Colors.green[800],
+                circularStrokeCap: CircularStrokeCap.round,
+                animation: true,
+                center: Text(
+                  "${(percentage * 100).toInt()}%",
+                  style: TextStyle(
+                      color: Colors.green[800],
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
             ),
-            // afstand X as met lijntjes
-            margin: 0,
-          ),
-          leftTitles: SideTitles(
-
-              // interval: steps > 0 ? steps.toDouble() : 10,
-              interval: ((big - small) / 18).ceilToDouble(),
-              showTitles: true,
-              getTextStyles: (value) => const TextStyle(
-                    color: Color(0xff75729e),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  "${widget.goal.title}",
+                  style: TextStyle(
+                    fontSize: 26,
                   ),
-              reservedSize: 60,
-              //afstand y numer tot grafiek
-              margin: 0),
+                ),
+              ),
+            ),
+          ],
         ),
-        borderData: FlBorderData(
-          border: Border.all(color: Color(0xff4e4965)),
-        ),
-        // minX altijd 0
-        minX: 0,
+        // Row(
+        //   children: [
+        //     Container(
+        //       padding: EdgeInsets.symmetric(vertical: 16),
+        //       alignment: Alignment.centerLeft,
+        //       child: Text("Voorspelling"),
+        //     ),
+        //   ],
+        // ),
+        isShowingMainData ? LineGraph() : barchart(),
+      ],
+    );
+  }
 
-        //maxX altijd duur training (in dagen)
-        maxX: widget.goal.endday
-            .difference(widget.goal.beginday)
-            .inDays
-            .toDouble(),
-        maxY: big.toDouble(),
-        // minY altijd doel -20
-        minY: small.toDouble(),
-        lineBarsData: barData,
+  Widget barchart() {
+    return Expanded(
+      child: Container(
+        color: Colors.grey[200],
+        child: BarChart(
+          BarChartData(
+            maxY: calculateMaxY(),
+            alignment: BarChartAlignment.spaceAround,
+            barTouchData: BarTouchData(
+              enabled: false,
+              touchTooltipData: BarTouchTooltipData(
+                tooltipBgColor: Colors.transparent,
+                tooltipPadding: const EdgeInsets.all(0),
+                tooltipMargin: 8,
+                getTooltipItem: (
+                  BarChartGroupData group,
+                  int groupIndex,
+                  BarChartRodData rod,
+                  int rodIndex,
+                ) {
+                  return BarTooltipItem(
+                    rod.y.round().toString(),
+                    TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+            ),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: SideTitles(
+                showTitles: true,
+                getTextStyles: (value) => const TextStyle(
+                    color: Color(0xff7589a2),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14),
+                getTitles: (value) =>
+                    activities[value.toInt()].date.ToInput('01-01'),
+              ),
+              leftTitles: SideTitles(
+                  margin: 25,
+                  showTitles: true,
+                  interval: 4,
+                  getTitles: (value) =>
+                      (generateYasNumbers()[value.toInt()]) + " km/u"),
+            ),
+            borderData: FlBorderData(
+              show: false,
+            ),
+            barGroups: barItems,
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget LineGraph() {
+    return Expanded(
+      child: Container(
+        color: Colors.grey[200],
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Stack(
+              alignment: Alignment.centerLeft,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: RotationTransition(
+                    child: Text("Sec/km =>"),
+                    alignment: Alignment.centerLeft,
+                    turns: new AlwaysStoppedAnimation(-90 / 360),
+                  ),
+                ),
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    LineChart(chart()),
+                    Text("Dagen =>"),
+                  ],
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                legenda(Colors.orange, "Progressie"),
+                legenda(Colors.black, "Doel"),
+                legenda(Colors.grey, "Predictie"),
+                legenda(Color(0xff4af699), "Nulmeting"),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  LineChartData chart() {
+    return LineChartData(
+      // lineTouchData: LineTouchData(enabled: false),
+      titlesData: FlTitlesData(
+        bottomTitles: SideTitles(
+          interval: widget.goal.getTotalDays() <= 12
+              ? 1
+              : (widget.goal.getTotalDays() / 12).roundToDouble(),
+          showTitles: true,
+          reservedSize: 40,
+          getTextStyles: (value) => const TextStyle(
+            color: Color(0xff72719b),
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+          // afstand X as met lijntjes
+          margin: 0,
+        ),
+        leftTitles: SideTitles(
+
+            // interval: steps > 0 ? steps.toDouble() : 10,
+            interval: ((big - small) / 18).ceilToDouble(),
+            showTitles: true,
+            getTextStyles: (value) => const TextStyle(
+                  color: Color(0xff75729e),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+            reservedSize: 60,
+            //afstand y numer tot grafiek
+            margin: 0),
+      ),
+      borderData: FlBorderData(
+        border: Border.all(color: Color(0xff4e4965)),
+      ),
+      // minX altijd 0
+      minX: 0,
+
+      //maxX altijd duur training (in dagen)
+      maxX:
+          widget.goal.endday.difference(widget.goal.beginday).inDays.toDouble(),
+      maxY: big.toDouble(),
+      // minY altijd doel -20
+      minY: small.toDouble(),
+      lineBarsData: barData,
     );
   }
 
