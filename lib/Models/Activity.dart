@@ -35,6 +35,10 @@ class Activity {
   //   return (duration.inSeconds / distance * 1000).toInt();
   // }
 
+  double KMPerHour() {
+    return distance / duration.inSeconds * 3.6;
+  }
+
   double RichelFormula(goaldistance) {
     return pow(
         (duration.inSeconds / distance * 1000) * (goaldistance / distance),

@@ -31,34 +31,8 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   bool isShowingMainData;
   double small = 1.0;
   bool loading = false;
-
-  List<String> generateYasNumbers() {
-    double maxValue = calculateMaxY();
-
-    List<String> yasNumbers = [];
-
-    for (int i = 0; i < maxValue; i++) {
-      yasNumbers.add(i.toString());
-    }
-
-    return yasNumbers;
-  }
-
-  double calculateMaxY() {
-    double biggestKmPHour = 0;
-
-    for (int i = 0; i < activities.length; i++) {
-      var kmperhour =
-          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
-              .roundToDouble();
-      if (kmperhour > biggestKmPHour) {
-        biggestKmPHour = kmperhour;
-      }
-    }
-
-    var result = biggestKmPHour + (biggestKmPHour * 0.2);
-    return result;
-  }
+  double biggestKmPHour = 0;
+  double maxYbar = 0.0;
 
   Future<List<BarChartGroupData>> loadInBarItems(Goal goal) async {
     activities = await goal.activities();
@@ -68,19 +42,19 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
         .toList(); //filter with treshold
     List<BarChartGroupData> returnlist = [];
     for (int i = 0; i < activities.length; i++) {
-      var kmperhour =
-          ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
-              .roundToDouble();
-
+      var kmperhour = activities[i].KMPerHour();
       var value = BarChartGroupData(
         x: i,
         barRods: [
-          BarChartRodData(y: kmperhour, colors: [
-            Color(0XFF01436D),
-            Colors.lightBlueAccent,
-          ])
+          BarChartRodData(
+            y: kmperhour,
+            colors: [
+              Color(0XFF01436D),
+              Colors.lightBlueAccent,
+            ],
+            width: 20.0,
+          )
         ],
-        showingTooltipIndicators: [0],
       );
       returnlist.add(value);
     }
@@ -112,24 +86,26 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
         for (int i = 0; i < activities.length; i++) {
           if (activities[i].RichelFormula(widget.goal.distance) > big)
             big = activities[i].RichelFormula(widget.goal.distance);
-        }
-        for (int j = 0; j < activities.length; j++) {
-          if (small < activities[j].RichelFormula(widget.goal.distance))
+          if (small < activities[i].RichelFormula(widget.goal.distance))
             small =
-                activities[j].RichelFormula(widget.goal.distance).toDouble();
+                activities[i].RichelFormula(widget.goal.distance).toDouble();
+          var kmperhour = activities[i].KMPerHour();
+          if (kmperhour > biggestKmPHour) {
+            biggestKmPHour = kmperhour;
+          }
         }
+
         if (widget.goal.goal < small) {
           small = widget.goal.goal.toDouble();
         }
       }
+      biggestKmPHour += biggestKmPHour * 0.2;
     }
 
     setState(() {
       loading = false;
     });
   }
-
-  final PageController controller = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -259,30 +235,31 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
   Widget BarGraph() {
     return BarChart(
       BarChartData(
-        maxY: calculateMaxY(),
+        maxY: biggestKmPHour,
         alignment: BarChartAlignment.spaceAround,
         barTouchData: BarTouchData(
           enabled: false,
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.transparent,
-            tooltipPadding: const EdgeInsets.all(0),
-            tooltipMargin: 8,
-            getTooltipItem: (
-              BarChartGroupData group,
-              int groupIndex,
-              BarChartRodData rod,
-              int rodIndex,
-            ) {
-              return BarTooltipItem(
-                rod.y.round().toString(),
-                TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            },
-          ),
         ),
+        // touchTooltipData: BarTouchTooltipData(
+        //   tooltipBgColor: Colors.transparent,
+        //   tooltipPadding: const EdgeInsets.all(0),
+        //   tooltipMargin: 8,
+        //   getTooltipItem: (
+        //     BarChartGroupData group,
+        //     int groupIndex,
+        //     BarChartRodData rod,
+        //     int rodIndex,
+        //   ) {
+        //     return BarTooltipItem(
+        //       rod.y.round().toString(),
+        //       TextStyle(
+        //         color: Colors.black,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     );
+        //   },
+        // ),
+        //  ),
         titlesData: FlTitlesData(
           show: true,
           bottomTitles: SideTitles(
@@ -297,11 +274,12 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
             reservedSize: 40,
           ),
           leftTitles: SideTitles(
-              margin: 5,
-              showTitles: true,
-              interval: 4,
-              reservedSize: 40,
-              getTitles: (value) => (generateYasNumbers()[value.toInt()])),
+            margin: 5,
+            showTitles: true,
+            interval: 4,
+            reservedSize: 40,
+            //getTitles: (value) => (generateYasNumbers()[value.toInt()]),
+          ),
         ),
         borderData: FlBorderData(
           show: true,
