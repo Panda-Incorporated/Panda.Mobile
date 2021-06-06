@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
 import 'package:panda/Utils/ValueParser.dart';

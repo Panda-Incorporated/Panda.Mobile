@@ -232,56 +232,81 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
     return Expanded(
       child: Container(
         color: Colors.grey[200],
-        child: BarChart(
-          BarChartData(
-            maxY: calculateMaxY(),
-            alignment: BarChartAlignment.spaceAround,
-            barTouchData: BarTouchData(
-              enabled: false,
-              touchTooltipData: BarTouchTooltipData(
-                tooltipBgColor: Colors.transparent,
-                tooltipPadding: const EdgeInsets.all(0),
-                tooltipMargin: 8,
-                getTooltipItem: (
-                  BarChartGroupData group,
-                  int groupIndex,
-                  BarChartRodData rod,
-                  int rodIndex,
-                ) {
-                  return BarTooltipItem(
-                    rod.y.round().toString(),
-                    TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                },
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: RotationTransition(
+                child: Text("KM/UUR =>"),
+                alignment: Alignment.centerLeft,
+                turns: new AlwaysStoppedAnimation(-90 / 360),
               ),
             ),
-            titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (value) => const TextStyle(
-                    color: Color(0xff7589a2),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14),
-                getTitles: (value) =>
-                    activities[value.toInt()].date.ToInput('01-01'),
-              ),
-              leftTitles: SideTitles(
-                  margin: 25,
-                  showTitles: true,
-                  interval: 4,
-                  getTitles: (value) =>
-                      (generateYasNumbers()[value.toInt()]) + " km/u"),
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                BarGraph(),
+                Text("Dagen =>"),
+              ],
             ),
-            borderData: FlBorderData(
-              show: false,
-            ),
-            barGroups: barItems,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget BarGraph() {
+    return BarChart(
+      BarChartData(
+        maxY: calculateMaxY(),
+        alignment: BarChartAlignment.spaceAround,
+        barTouchData: BarTouchData(
+          enabled: false,
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: Colors.transparent,
+            tooltipPadding: const EdgeInsets.all(0),
+            tooltipMargin: 8,
+            getTooltipItem: (
+              BarChartGroupData group,
+              int groupIndex,
+              BarChartRodData rod,
+              int rodIndex,
+            ) {
+              return BarTooltipItem(
+                rod.y.round().toString(),
+                TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            },
           ),
         ),
+        titlesData: FlTitlesData(
+          show: true,
+          bottomTitles: SideTitles(
+            showTitles: true,
+            getTextStyles: (value) => const TextStyle(
+                color: Color(0xff7589a2),
+                fontWeight: FontWeight.bold,
+                fontSize: 14),
+            getTitles: (value) =>
+                activities[value.toInt()].date.ToInput('01-01'),
+            margin: 0,
+            reservedSize: 40,
+          ),
+          leftTitles: SideTitles(
+              margin: 5,
+              showTitles: true,
+              interval: 4,
+              reservedSize: 40,
+              getTitles: (value) => (generateYasNumbers()[value.toInt()])),
+        ),
+        borderData: FlBorderData(
+          show: true,
+        ),
+        barGroups: barItems,
       ),
     );
   }
