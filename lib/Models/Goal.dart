@@ -50,6 +50,7 @@ class Goal {
       minimalday = minimalday.isBefore(endday.subtract(Duration(days: 2)))
           ? minimalday
           : endday.subtract(Duration(days: 2));
+      minimalday = DateTime.now().isBefore(beginday) ? beginday : minimalday;
       return DateFormat("dd-MM").format(minimalday);
     }
     return "";

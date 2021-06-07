@@ -30,9 +30,8 @@ class _GiveStarPageState extends State<PlanningPage> {
     activities = await widget.goal.activities();
     var startpoint = DateTime.now().difference(widget.goal.beginday).inDays;
     var days = widget.goal.endday.difference(widget.goal.beginday).inDays;
-    print(startpoint);
     var togo = days - startpoint;
-    for (int i = 0; i < togo; i++) {
+    for (int i = 0; i <= togo; i++) {
       // now- history
       var j = await getYbasedonX(widget.goal, i + startpoint);
       program.add(j);
@@ -88,17 +87,13 @@ class _GiveStarPageState extends State<PlanningPage> {
                       fontSize: 18,
                     ),
                   ),
-                  for (int i = 0; i < togo; i++)
-                    Litem(
-                        // text: i % 2 == 0
-                        //     ? "Loop gemiddeld ${program.length > 0 ? program[i].toInt() : 0} sec/km over 3km"
-                        //     : i % 5 == 0
-                        //         ? "active rustdag"
-                        //         : "passvive rustdag",
-                        text:
-                            "Loop gemiddeld ${program.length > 0 ? program[i].toInt() : 0} sec/km over 3km",
-                        titel:
-                            "${DateFormat('EEEE dd-MM').format(DateTime.now().add(Duration(days: i)))}"),
+                  for (int i = 0; i <= togo; i++)
+                    if (program.isNotEmpty && !program[i].isNaN)
+                      Litem(
+                          text:
+                              "Loop gemiddeld ${program.length > 0 ? program[i].toInt() : 0} sec/km over ${widget.goal.distance * 0.05 / 1000} km",
+                          titel:
+                              "${DateFormat('EEEE dd-MM').format(DateTime.now().add(Duration(days: i + 1)))}"),
                 ],
               ),
             ),
@@ -127,48 +122,30 @@ class Litem extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).cardColor,
               border: Border.all(color: Colors.white24),
               borderRadius: BorderRadius.all(Radius.circular(6))),
 
           // kleur knop
           child: Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // helemaal links helemaal rechts
-                  children: [
-                    Column(
-                      //tekst datum en doel moeten onder elkaar
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0),
-                              child: Text(
-                                "$titel",
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 0),
-                              child: Text(
-                                "$text",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+                  child: Text(
+                    "$titel",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+                  child: Text(
+                    "$text",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
                 ),
               ],
             ),
@@ -182,6 +159,6 @@ class Litem extends StatelessWidget {
 Future<double> getYbasedonX(Goal goal, int i) async {
   var mes = await goal.getMeasurement();
   var days = goal.endday.difference(goal.beginday).inDays;
-  // print("amount of days $days");
-  return ((goal.goal - mes) / sqrt(days) * sqrt(i) + mes);
+  var speed = ((goal.goal - mes) / sqrt(days) * sqrt(i) + mes);
+  return speed;
 }

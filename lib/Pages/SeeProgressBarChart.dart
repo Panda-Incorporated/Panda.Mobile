@@ -22,29 +22,16 @@
 //   List<LineChartBarData> barData = List.empty();
 //   double big = 10.0;
 //   double small = 1.0;
+//   double biggestKmPHour = 0;
 //
 //   List<Activity> activities;
 //   bool loading = false;
-//
-//   List<String> generateYasNumbers() {
-//     double maxValue = calculateMaxY();
-//
-//     List<String> yasNumbers = [];
-//
-//     for (int i = 0; i < maxValue; i++) {
-//       yasNumbers.add(i.toString());
-//     }
-//
-//     return yasNumbers;
-//   }
 //
 //   double calculateMaxY() {
 //     double biggestKmPHour = 0;
 //
 //     for (int i = 0; i < activities.length; i++) {
-//       var kmperhour =
-//           ((activities[i].distance / activities[i].duration.inSeconds) * 3.6)
-//               .roundToDouble();
+//       var kmperhour = activities[i].KMPerHour();
 //       if (kmperhour > biggestKmPHour) {
 //         biggestKmPHour = kmperhour;
 //       }
@@ -93,10 +80,11 @@
 //     setState(() {
 //       loading = true;
 //     });
-//
+//     isShowingMainData = true;
 //     if (widget.goal != null && widget.goal.goal > 0) {
 //       barItems = await loadInBarItems(widget.goal);
 //     }
+//
 //     var temp = await widget.goal.activities();
 //     if (widget.goal != null && temp.length > 0 && widget.goal.goal > 0) {
 //       percentage = await widget.goal.getPercentage();
@@ -106,16 +94,20 @@
 //         for (int i = 0; i < activities.length; i++) {
 //           if (activities[i].RichelFormula(widget.goal.distance) > big)
 //             big = activities[i].RichelFormula(widget.goal.distance);
-//         }
-//         for (int j = 0; j < activities.length; j++) {
-//           if (small < activities[j].RichelFormula(widget.goal.distance))
+//           if (small < activities[i].RichelFormula(widget.goal.distance))
 //             small =
-//                 activities[j].RichelFormula(widget.goal.distance).toDouble();
+//                 activities[i].RichelFormula(widget.goal.distance).toDouble();
+//           var kmperhour = activities[i].KMPerHour();
+//           if (kmperhour > biggestKmPHour) {
+//             biggestKmPHour = kmperhour;
+//           }
 //         }
+//
 //         if (widget.goal.goal < small) {
 //           small = widget.goal.goal.toDouble();
 //         }
 //       }
+//       biggestKmPHour += biggestKmPHour * 0.2;
 //     }
 //
 //     setState(() {
@@ -132,6 +124,91 @@
 //               padding: const EdgeInsets.all(20),
 //               child: barchart(),
 //             ),
+//     );
+//   }
+//
+//   Widget barchart() {
+//     return Expanded(
+//       child: Container(
+//         color: Colors.grey[200],
+//         child: Stack(
+//           alignment: Alignment.centerLeft,
+//           children: <Widget>[
+//             Padding(
+//               padding: const EdgeInsets.only(left: 10.0),
+//               child: RotationTransition(
+//                 child: Text("KM/UUR =>"),
+//                 alignment: Alignment.centerLeft,
+//                 turns: new AlwaysStoppedAnimation(-90 / 360),
+//               ),
+//             ),
+//             Stack(
+//               alignment: Alignment.bottomCenter,
+//               children: [
+//                 BarGraph(),
+//                 Text("Dagen =>"),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget BarGraph() {
+//     return BarChart(
+//       BarChartData(
+//         maxY: biggestKmPHour,
+//         alignment: BarChartAlignment.spaceAround,
+//         barTouchData: BarTouchData(
+//           enabled: false,
+//         ),
+//         // touchTooltipData: BarTouchTooltipData(
+//         //   tooltipBgColor: Colors.transparent,
+//         //   tooltipPadding: const EdgeInsets.all(0),
+//         //   tooltipMargin: 8,
+//         //   getTooltipItem: (
+//         //     BarChartGroupData group,
+//         //     int groupIndex,
+//         //     BarChartRodData rod,
+//         //     int rodIndex,
+//         //   ) {
+//         //     return BarTooltipItem(
+//         //       rod.y.round().toString(),
+//         //       TextStyle(
+//         //         color: Colors.black,
+//         //         fontWeight: FontWeight.bold,
+//         //       ),
+//         //     );
+//         //   },
+//         // ),
+//         //  ),
+//         titlesData: FlTitlesData(
+//           show: true,
+//           bottomTitles: SideTitles(
+//             showTitles: true,
+//             getTextStyles: (value) => const TextStyle(
+//                 color: Color(0xff7589a2),
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 14),
+//             getTitles: (value) =>
+//                 activities[value.toInt()].date.ToInput('01-01'),
+//             margin: 0,
+//             reservedSize: 40,
+//           ),
+//           leftTitles: SideTitles(
+//             margin: 5,
+//             showTitles: true,
+//             interval: 4,
+//             reservedSize: 40,
+//             //getTitles: (value) => (generateYasNumbers()[value.toInt()]),
+//           ),
+//         ),
+//         borderData: FlBorderData(
+//           show: true,
+//         ),
+//         barGroups: barItems,
+//       ),
 //     );
 //   }
 //
