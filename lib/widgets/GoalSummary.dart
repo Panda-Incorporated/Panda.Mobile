@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panda/Models/Goal.dart';
+import 'package:panda/Utils/DateTimeExtension.dart';
 import 'package:panda/Utils/ValueParser.dart';
 
 class GoalSummary extends StatefulWidget {
@@ -50,6 +51,9 @@ class _GoalSummaryState extends State<GoalSummary> {
             ),
           ),
         ),
+        Text(
+            "${widget.goal.beginday.ToInput("03/02/20")} - ${widget.goal.endday.ToInput("03/02/21")}"),
+        const SizedBox(height: 10),
         Icon(
           Icons.outlined_flag,
         ),

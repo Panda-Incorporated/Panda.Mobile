@@ -117,7 +117,7 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
         actions: [
           IconButton(
               icon: Icon(
-                  toggle ? Glyphicon.graph_down : Glyphicon.bar_chart_line),
+                  toggle ? Glyphicon.bar_chart_line : Glyphicon.graph_down),
               onPressed: () {
                 controller.animateToPage(
                   controller.page == 1 ? 0 : 1,

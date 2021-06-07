@@ -126,27 +126,22 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                           padding: EdgeInsets.only(left: 12.0, top: 12.0),
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: widget.goal.endday
-                                          .subtract(Duration(days: 2))
-                                          .isBefore(DateTime.now())
-                                      ? Text(
-                                          "Geen activiteiten op de planning",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                          ),
-                                        )
-                                      : TomorrowSummary(
-                                          "Eerstvolgende activiteit: ",
-                                          "Vanaf $activity eenmalig:",
-                                          "${ValueParser.distance(meters)}"),
-                                ),
-                              ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: widget.goal.endday
+                                      .subtract(Duration(days: 2))
+                                      .isBefore(DateTime.now())
+                                  ? Text(
+                                      "Geen activiteiten op de planning",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      ),
+                                    )
+                                  : TomorrowSummary(
+                                      "Eerstvolgende activiteit: ",
+                                      "Vanaf $activity eenmalig:",
+                                      "${ValueParser.distance(meters)}"),
                             ),
                           ),
                         ),

@@ -146,10 +146,10 @@ extension NumberParsing on DateTime {
             var shortmonth = temp[1].length == 2 && int.parse(temp[1]) < 10;
             shortyear = temp[2].length == 2;
 
-            inputs[i] = (shortday ? '0' : '') +
+            inputs[i] = (shortday ? '' : '0') +
                 map['daynumshort'] +
                 '-' +
-                (shortmonth ? '0' : '') +
+                (shortmonth ? '' : '0') +
                 map['monthnum'] +
                 '-' +
                 (shortyear ? map['yearshort'] : map['year']);
@@ -167,10 +167,10 @@ extension NumberParsing on DateTime {
             var shortday = temp[0].length == 2 && int.parse(temp[0]) < 10;
             var shortmonth = temp[1].length == 2 && int.parse(temp[1]) < 10;
 
-            inputs[i] = (shortday ? '0' : '') +
+            inputs[i] = (shortday ? '' : '0') +
                 map['daynumshort'] +
                 '/' +
-                (shortmonth ? '0' : '') +
+                (shortmonth ? '' : '0') +
                 map['monthnum'];
           }
         } else if (temp.length == 3) {
@@ -183,10 +183,10 @@ extension NumberParsing on DateTime {
             var shortmonth = temp[1].length == 2 && int.parse(temp[1]) < 10;
             shortyear = temp[2].length == 2;
 
-            inputs[i] = (shortday ? '0' : '') +
+            inputs[i] = (shortday ? '' : '0') +
                 map['daynumshort'] +
                 '/' +
-                (shortmonth ? '0' : '') +
+                (shortmonth ? '' : '0') +
                 map['monthnum'] +
                 '/' +
                 (shortyear ? map['yearshort'] : map['year']);
