@@ -1,5 +1,4 @@
-// ! Sniellsie zijn goede code, holy shit deze man kan flutteren.
-// * TODO Niels, error checks, overbodige code, date tijd aanpassen.
+// * TODO Niels, error checks, overbodige code
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -85,9 +84,9 @@ class _NewGoalState extends State<NewGoal> {
                         NewGoalInputDistance(
                           controller: _distance,
                           labelText: "Meters",
-                          textString: "Afstand van de marathon:",
+                          textString: "Lengte van de marathon:",
                         ),
-                        NewGoalInputAndTextField(
+                        NewGoalInputDistance(
                           controller: _duration,
                           labelText: "Minuten",
                           textString: "Gewenste looptijd",

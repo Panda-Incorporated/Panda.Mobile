@@ -50,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 children: [
                   Text(
-                    "Settings",
+                    "Instellingen",
                     style: TextStyle(fontSize: 24.0),
                   ),
                   NewGoalInputAndTextField(

@@ -112,6 +112,9 @@ class _StartPageState extends State<StartPage> {
                                             if (val == null || val.isEmpty) {
                                               return "Naam is verplicht";
                                             }
+                                            if (val.length > 20) {
+                                              return "Naam lengte maximaal 20 karakters";
+                                            }
                                             return null;
                                           },
                                           style: TextStyle(),
@@ -146,7 +149,7 @@ class _StartPageState extends State<StartPage> {
                                                             SnackBarBehavior
                                                                 .floating,
                                                         content: Text(
-                                                            'Er is nog geen naam ingevuld')));
+                                                            'Naam voldoet niet aan de voorwaarden')));
                                               }
                                             }),
                                       )
