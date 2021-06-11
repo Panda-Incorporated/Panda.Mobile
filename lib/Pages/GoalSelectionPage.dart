@@ -6,7 +6,9 @@ import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 
 class GoalSelectionPage extends StatefulWidget {
-  const GoalSelectionPage({Key key, this.onGoalSelected}) : super(key: key);
+  final String title;
+  const GoalSelectionPage({Key key, this.onGoalSelected, this.title})
+      : super(key: key);
   final Function(Goal) onGoalSelected;
   @override
   _GoalSelectionPageState createState() => _GoalSelectionPageState();
@@ -35,65 +37,57 @@ class _GoalSelectionPageState extends State<GoalSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            stretch: true,
-            stretchTriggerOffset: 200,
-            floating: true,
-            bottom: AppBar(
-              centerTitle: true,
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              title: Text(
-                "Kies een doel:",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            elevation: 0.0,
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              stretchModes: [StretchMode.zoomBackground],
-              collapseMode: CollapseMode.pin,
-              background: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      child: Logo(),
-                    ),
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(widget.title ?? ""),
+        ),
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        body: Container(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: Container(
+                                child: Logo(),
+                                height: 200,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Kies uit lopende doelen",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 22),
+                              ),
+                            ),
+                            loading
+                                ? Center(child: CircularProgressIndicator())
+                                : goals != null && goals.length > 0
+                                    ? ShowGoals(
+                                        onGoalSelected: (goal) {
+                                          currentGoal = goal;
+                                          if (widget.onGoalSelected != null) {
+                                            widget.onGoalSelected(goal);
+                                          }
+                                        },
+                                        currentGoals: goals,
+                                      )
+                                    : NothingToDisplay()
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            expandedHeight: 300,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                loading
-                    ? Center(child: CircularProgressIndicator())
-                    : goals != null && goals.length > 0
-                        ? ShowGoals(
-                            onGoalSelected: (goal) {
-                              currentGoal = goal;
-                              if (widget.onGoalSelected != null) {
-                                widget.onGoalSelected(goal);
-                              }
-                            },
-                            currentGoals: goals,
-                          )
-                        : NothingToDisplay()
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                ))));
   }
 }

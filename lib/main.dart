@@ -22,6 +22,10 @@ final routeObserver = RouteObserver<PageRoute>();
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       navigatorObservers: [routeObserver],
       debugShowCheckedModeBanner: false,
@@ -133,8 +137,10 @@ class _NavigationState extends State<Navigation> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ActivitySelectionPage(onSelected: onActivitySelected)),
+            builder: (context) => ActivitySelectionPage(
+                  onSelected: onActivitySelected,
+                  titel: "Nieuwe activiteit toevoegen",
+                )),
       );
     } else {
       Notifications.show(context,
@@ -221,6 +227,7 @@ class _NavigationState extends State<Navigation> {
                                 MaterialPageRoute(
                                     builder: (context) => GoalSelectionPage(
                                           onGoalSelected: onGoalSelected,
+                                          title: "Nieuwe activiteit toevoegen",
                                         )),
                               );
                             },

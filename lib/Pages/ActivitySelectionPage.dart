@@ -8,9 +8,11 @@ import 'package:panda/widgets/Logo.dart';
 import 'package:panda/widgets/NothingToDisplay.dart';
 
 class ActivitySelectionPage extends StatefulWidget {
+  final String titel;
   final Future<void> Function(Activity activity) onSelected;
 
-  const ActivitySelectionPage({Key key, this.onSelected}) : super(key: key);
+  const ActivitySelectionPage({Key key, this.onSelected, this.titel})
+      : super(key: key);
   @override
   _ActivitySelectionPageState createState() => _ActivitySelectionPageState();
 }
@@ -56,6 +58,7 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: Text(widget.titel ?? ""),
       ),
       backgroundColor:
           Theme.of(context).bottomNavigationBarTheme.backgroundColor,
@@ -86,7 +89,14 @@ class _ActivitySelectionPageState extends State<ActivitySelectionPage> {
                           style: TextStyle(fontSize: 22),
                         ),
                       ),
-                      Text(DateFormat().format(selectedDate)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Geselecteerde datum: " +
+                              DateFormat("dd/MM/yyyy").format(selectedDate),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       OutlinedButton(
                           child: Text("Datum selecteren"),
                           onPressed: () {
