@@ -73,11 +73,7 @@ class Goal {
       await db.update("Goal", {"currentAmountOfStars": currentAmountOfStars},
           where: "id = ?", whereArgs: [id]);
     }
-    return percentage >= 1.0
-        ? 1.0
-        : percentage < 0.0
-            ? 0.0
-            : percentage;
+    return percentage;
   }
 
   int getTotalDays() {

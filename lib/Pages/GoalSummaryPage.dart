@@ -107,7 +107,11 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                               radius: 150.0,
                               lineWidth: 4.0,
                               backgroundColor: Colors.green[100],
-                              percent: percentage,
+                              percent: percentage >= 1.0
+                                  ? 1.0
+                                  : percentage < 0.0
+                                      ? 0.0
+                                      : percentage,
                               progressColor: Colors.green[800],
                               circularStrokeCap: CircularStrokeCap.round,
                               animation: true,
@@ -129,8 +133,9 @@ class _GoalSummaryPageState extends State<GoalSummaryPage> with RouteAware {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: widget.goal.endday
-                                      .subtract(Duration(days: 2))
-                                      .isBefore(DateTime.now())
+                                          .subtract(Duration(days: 2))
+                                          .isBefore(DateTime.now()) ||
+                                      percentage >= 1.0
                                   ? Text(
                                       "Geen activiteiten op de planning",
                                       style: TextStyle(

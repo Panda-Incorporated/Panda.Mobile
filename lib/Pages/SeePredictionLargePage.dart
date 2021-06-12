@@ -143,7 +143,11 @@ class _SeePredictionLargePageState extends State<SeePredictionLargePage> {
                             radius: 80.0,
                             lineWidth: 6.0,
                             backgroundColor: Colors.green[100],
-                            percent: percentage,
+                            percent: percentage >= 1.0
+                                ? 1.0
+                                : percentage < 0.0
+                                    ? 0.0
+                                    : percentage,
                             progressColor: Colors.green[800],
                             circularStrokeCap: CircularStrokeCap.round,
                             animation: true,
